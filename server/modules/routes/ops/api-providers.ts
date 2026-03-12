@@ -358,19 +358,24 @@ export function registerApiProviderRoutes({ app, db, nowMs }: RegisterApiProvide
     const updates: string[] = ["updated_at = ?"];
     const now = nowMs();
     const params: unknown[] = [now];
+    const existingPresetKey = existingPreset?.key ?? null;
+    const incomingApiKey = "api_key" in body ? (typeof body.api_key === "string" ? body.api_key.trim() : "") : null;
+    const isPresetTransition = presetKeyInput != null && presetKeyInput.presetKey !== existingPresetKey;
 
     if ("name" in body && typeof body.name === "string" && body.name.trim()) {
       updates.push("name = ?");
       params.push(body.name.trim());
     }
-    if ("api_key" in body) {
-      const apiKey = typeof body.api_key === "string" ? body.api_key.trim() : "";
-      const apiKeyError = validateOfficialPresetApiKey(officialPreset, apiKey);
+    if (officialPreset && (incomingApiKey !== null || isPresetTransition)) {
+      const retainedApiKey = row.api_key_enc ? decryptSecret(row.api_key_enc) : "";
+      const apiKeyError = validateOfficialPresetApiKey(officialPreset, incomingApiKey ?? retainedApiKey);
       if (apiKeyError) {
         return res.status(400).json({ error: apiKeyError });
       }
+    }
+    if (incomingApiKey !== null) {
       updates.push("api_key_enc = ?");
-      params.push(apiKey ? encryptSecret(apiKey) : null);
+      params.push(incomingApiKey ? encryptSecret(incomingApiKey) : null);
     }
     if ("enabled" in body) {
       updates.push("enabled = ?");

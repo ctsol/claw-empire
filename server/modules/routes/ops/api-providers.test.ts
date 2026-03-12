@@ -153,6 +153,53 @@ describe("api provider routes", () => {
     }
   });
 
+  it("rejects retained invalid keys when switching to a Bailian preset", async () => {
+    const { app, db } = await createHarness();
+
+    try {
+      const { encryptSecret } = await import("../../../oauth/helpers.ts");
+      const insertResult = db
+        .prepare(
+          `
+            INSERT INTO api_providers (id, name, type, base_url, api_key_enc, enabled, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, 1, ?, ?)
+          `,
+        )
+        .run(
+          "provider-legacy-key",
+          "Legacy",
+          "openai",
+          "https://api.openai.com/v1",
+          encryptSecret("sk-legacy-openai"),
+          1_000,
+          1_000,
+        );
+
+      expect(insertResult.changes).toBe(1);
+
+      const response = await request(app).put("/api/api-providers/provider-legacy-key").send({
+        preset_key: "alibaba-coding-plan-openai",
+      });
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toContain("sk-sp-");
+
+      const row = db
+        .prepare("SELECT preset_key, type, base_url FROM api_providers WHERE id = ?")
+        .get("provider-legacy-key") as {
+        preset_key: string | null;
+        type: string;
+        base_url: string;
+      };
+      expect(row).toMatchObject({
+        preset_key: null,
+        type: "openai",
+        base_url: "https://api.openai.com/v1",
+      });
+    } finally {
+      db.close();
+    }
+  });
   it("merges fetched models with preset fallback models during test", async () => {
     const { app, db } = await createHarness();
 
