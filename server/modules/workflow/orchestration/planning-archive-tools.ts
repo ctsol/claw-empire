@@ -1,4 +1,4 @@
-import { sendMessengerMessage } from "../../../gateway/client.ts";
+import { sendTelegramReportToChannel } from "./telegram-report-sender.ts";
 
 type CreatePlanningArchiveToolsDeps = Record<string, any>;
 
@@ -314,33 +314,13 @@ export function createPlanningArchiveTools(deps: CreatePlanningArchiveToolsDeps)
       sendAgentMessage(planningLeader, reportNotice, "report", "all", null, rootTaskId);
       broadcast("task_report", { task: { id: rootTaskId } });
 
-      // Proactively send the report summary to all configured Telegram sessions
+      // Proactively send the consolidated report to the Telegram report channel
       void (async () => {
-        try {
-          const MESSENGER_SETTINGS_KEY = "messengerChannels";
-          const row = db.prepare("SELECT value FROM settings WHERE key = ?").get(MESSENGER_SETTINGS_KEY) as
-            | { value?: unknown }
-            | undefined;
-          if (!row?.value) return;
-          const channels = JSON.parse(String(row.value)) as Record<string, unknown>;
-          const telegram = channels?.telegram as Record<string, unknown> | undefined;
-          if (!telegram || !Array.isArray(telegram.sessions)) return;
-
-          const summaryPreview = summaryMarkdown.length > 2000 ? summaryMarkdown.slice(0, 2000) + "..." : summaryMarkdown;
-          const telegramText = `${reportNotice}\n\n${summaryPreview}`;
-
-          for (const rawSession of telegram.sessions as unknown[]) {
-            const session = (rawSession ?? {}) as Record<string, unknown>;
-            if (session.enabled === false) continue;
-            const targetId = String(session.targetId ?? "").trim();
-            if (!targetId) continue;
-            await sendMessengerMessage({ channel: "telegram", targetId, text: telegramText }).catch((err: unknown) => {
-              console.warn(`[planning-archive] failed to send report to telegram ${targetId}: ${String(err)}`);
-            });
-          }
-        } catch (err) {
-          console.warn("[planning-archive] telegram report send error:", err);
-        }
+        const deptName = getDeptName ? getDeptName(planningLeader.department_id ?? "") : "";
+        const teamLabel = deptName || "Planning";
+        const summaryPreview = summaryMarkdown.length > 2000 ? `${summaryMarkdown.slice(0, 2000)}...` : summaryMarkdown;
+        const telegramText = `${reportNotice}\n\n${summaryPreview}`;
+        await sendTelegramReportToChannel(db, teamLabel, telegramText);
       })();
     } catch (err) {
       console.error("[Claw-Empire] planning archive generation error:", err);

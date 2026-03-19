@@ -440,8 +440,8 @@ export default function OfficeView({
         />
       </div>
 
-      <div className="mt-4 px-2 flex gap-3">
-        <div className="flex-1 min-w-0">
+      <div className="mt-4 px-2 flex gap-3 items-stretch">
+        <div className="flex-1 min-w-0 flex flex-col">
           <CliUsagePanel
             cliStatus={cliStatus}
             cliUsage={cliUsage}
@@ -451,7 +451,7 @@ export default function OfficeView({
             t={t}
           />
         </div>
-        <div className="flex-1 min-w-0">
+        <div className="flex-1 min-w-0 flex flex-col">
           <RecentTasksPanel
             ref={recentTasksPanelRef}
             tasks={tasks}

@@ -149,7 +149,7 @@ export default function Dashboard({ stats, agents, tasks, companyName, onPrimary
     },
     {
       id: "squad",
-      label: t({ ko: "스쿼드", en: "SQUAD", ja: "スクワッド", zh: "小队", ru: "ОТРЯД" }),
+      label: t({ ko: "스쿼드", en: "SQUAD", ja: "スクワッド", zh: "小队", ru: "Команда" }),
       value: `${activeAgents}/${totalAgents}`,
       sub: `${t({ ko: "가동률", en: "uptime", ja: "稼働率", zh: "运行率", ru: "активность" })} ${activeRate}%`,
       color: "#00f0ff",

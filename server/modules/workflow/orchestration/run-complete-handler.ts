@@ -6,6 +6,7 @@ import {
   resolveVideoArtifactSpecForTask,
 } from "../packs/video-artifact.ts";
 import { evaluateRemotionOnlyGateFromLogFiles } from "../packs/video-render-engine-gate.ts";
+import { sendTelegramReportToChannel } from "./telegram-report-sender.ts";
 
 type CreateRunCompleteHandlerDeps = Record<string, any>;
 
@@ -641,6 +642,18 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
         }
 
         sendAgentMessage(leader, reportContent, "report", "all", null, taskId);
+
+        // Send report to Telegram report channel (if configured)
+        void (async () => {
+          const deptRow = task.department_id
+            ? (db.prepare("SELECT name FROM departments WHERE id = ?").get(task.department_id) as
+                | { name?: string }
+                | undefined)
+            : undefined;
+          const teamLabel = deptRow?.name || task.department_id || "Team";
+          const preview = reportContent.length > 2000 ? `${reportContent.slice(0, 2000)}...` : reportContent;
+          await sendTelegramReportToChannel(db, teamLabel, preview);
+        })();
 
         // After another 2-3s: team leader approves → move to done
         setTimeout(() => {

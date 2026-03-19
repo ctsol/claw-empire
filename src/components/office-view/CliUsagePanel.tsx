@@ -103,8 +103,8 @@ export default function CliUsagePanel({
   if (connectedClis.length === 0) return null;
 
   return (
-    <div>
-      <div className="rounded-2xl border border-slate-700/60 bg-slate-900/80 p-4 backdrop-blur-sm">
+    <div className="flex flex-col h-full">
+      <div className="rounded-2xl border border-slate-700/60 bg-slate-900/80 p-4 backdrop-blur-sm flex-1">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-200">
             <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-cyan-500/20">

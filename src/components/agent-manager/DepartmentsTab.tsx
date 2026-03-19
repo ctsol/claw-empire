@@ -2,6 +2,7 @@ import type { DragEvent } from "react";
 import type { Agent, Department } from "../../types";
 import { localeName } from "../../i18n";
 import type { Translator } from "./types";
+import DeptIcon from "../DeptIcon";
 
 interface DepartmentsTabProps {
   tr: Translator;
@@ -122,7 +123,7 @@ export default function DepartmentsTab({
                 {index + 1}
               </div>
 
-              <span className="text-2xl">{dept.icon}</span>
+              <DeptIcon deptId={dept.id} fallback={dept.icon} size={24} />
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">

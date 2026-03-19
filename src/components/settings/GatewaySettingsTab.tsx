@@ -48,6 +48,12 @@ export default function GatewaySettingsTab({ t, form, setForm, persistSettings }
 
   const [editor, setEditor] = useState(() => createEditorState(channelsConfig));
   const [editorError, setEditorError] = useState<string | null>(null);
+
+  // Report channel state
+  const reportChannelInit = channelsConfig.telegram.reportChannel ?? {};
+  const [rcTargetId, setRcTargetId] = useState(reportChannelInit.targetId ?? "");
+  const [rcToken, setRcToken] = useState(reportChannelInit.token ?? "");
+  const [rcEnabled, setRcEnabled] = useState(reportChannelInit.enabled !== false);
   const [discordChannelsLoading, setDiscordChannelsLoading] = useState(false);
   const [discordChannelOptions, setDiscordChannelOptions] = useState<api.DiscordDiscoverableChannel[]>([]);
   const [discordChannelsError, setDiscordChannelsError] = useState<string | null>(null);
@@ -496,6 +502,28 @@ export default function GatewaySettingsTab({ t, form, setForm, persistSettings }
 
   const selectedChatTransportReady = selectedChat ? CHANNEL_META[selectedChat.channel].transportReady : false;
 
+  const saveReportChannel = () => {
+    const next = resolveChannelsConfig(form.messengerChannels);
+    next.telegram = {
+      ...next.telegram,
+      reportChannel: {
+        targetId: rcTargetId.trim(),
+        token: rcToken.trim() || undefined,
+        enabled: rcEnabled,
+      },
+    };
+    persistChannelsForm(
+      next,
+      t({
+        ko: "리포트 채널 설정 저장 완료",
+        en: "Report channel saved",
+        ja: "レポートチャンネル設定を保存しました",
+        zh: "报告频道设置已保存",
+        ru: "Канал отчётов сохранён",
+      }),
+    );
+  };
+
   return (
     <section className="space-y-4 rounded-xl border border-slate-700/50 bg-slate-800/60 p-4 sm:p-5">
       <div className="flex items-center justify-between">
@@ -514,6 +542,73 @@ export default function GatewaySettingsTab({ t, form, setForm, persistSettings }
           ru: "Здесь можно напрямую настроить каналы мессенджеров. Используйте 'Добавить чат' для регистрации мессенджера/токена/ID цели/агента.",
         })}
       </p>
+
+      {/* Telegram Report Channel */}
+      <div className="rounded-lg border border-violet-700/40 bg-violet-900/10 p-3 space-y-3">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold text-violet-200">
+            📊 {t({ ko: "텔레그램 리포트 채널", en: "Telegram Report Channel", ja: "Telegramレポートチャンネル", zh: "Telegram报告频道", ru: "Канал отчётов Telegram" })}
+          </span>
+          <span className="text-[10px] px-1.5 py-0.5 rounded bg-violet-600/20 text-violet-300">
+            {t({ ko: "선택", en: "optional", ja: "任意", zh: "可选", ru: "необязательно" })}
+          </span>
+        </div>
+        <p className="text-xs text-slate-400">
+          {t({
+            ko: "모든 팀의 작업 완료 보고가 이 채널로 전송됩니다. 일반 채팅 세션과 별도로 동작합니다.",
+            en: "Task completion reports from all teams will be sent to this channel. Works independently from regular chat sessions.",
+            ja: "全チームのタスク完了レポートがこのチャンネルに送信されます。通常のチャットセッションとは独立して動作します。",
+            zh: "所有团队的任务完成报告将发送到此频道。与常规聊天会话独立运行。",
+            ru: "Отчёты о выполнении задач от всех команд будут отправляться в этот канал. Работает независимо от обычных чат-сессий.",
+          })}
+        </p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          <div>
+            <label className="block text-xs text-slate-400 mb-1">
+              {t({ ko: "대상 ID (채팅/채널 ID)", en: "Target ID (chat/channel ID)", ja: "対象ID（チャット/チャンネル）", zh: "目标ID（聊天/频道）", ru: "ID чата/канала" })}
+            </label>
+            <input
+              type="text"
+              value={rcTargetId}
+              onChange={(e) => setRcTargetId(e.target.value)}
+              placeholder="-100123456789"
+              className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-violet-500 font-mono"
+            />
+          </div>
+          <div>
+            <label className="block text-xs text-slate-400 mb-1">
+              {t({ ko: "봇 토큰 (비워두면 기본 토큰 사용)", en: "Bot token (leave blank to use main token)", ja: "Botトークン（空白なら既定トークン使用）", zh: "Bot令牌（留空使用主令牌）", ru: "Токен бота (пусто = главный токен)" })}
+            </label>
+            <input
+              type="password"
+              value={rcToken}
+              onChange={(e) => setRcToken(e.target.value)}
+              placeholder={t({ ko: "기본 토큰 사용", en: "Use main token", ja: "既定トークン使用", zh: "使用主令牌", ru: "Использовать основной токен" })}
+              className="w-full px-3 py-2 bg-slate-700/50 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-violet-500"
+            />
+          </div>
+        </div>
+        <div className="flex items-center justify-between">
+          <label className="flex items-center gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={rcEnabled}
+              onChange={(e) => setRcEnabled(e.target.checked)}
+              className="w-4 h-4 rounded border-slate-600 bg-slate-700 text-violet-500 focus:ring-violet-500"
+            />
+            <span className="text-xs text-slate-300">
+              {t({ ko: "리포트 채널 활성화", en: "Enable report channel", ja: "レポートチャンネルを有効化", zh: "启用报告频道", ru: "Включить канал отчётов" })}
+            </span>
+          </label>
+          <button
+            onClick={saveReportChannel}
+            disabled={saving}
+            className="text-xs px-3 py-1.5 rounded-md bg-violet-600/30 text-violet-200 border border-violet-500/40 hover:bg-violet-600/40 disabled:opacity-50"
+          >
+            {t({ ko: "저장", en: "Save", ja: "保存", zh: "保存", ru: "Сохранить" })}
+          </button>
+        </div>
+      </div>
 
       <div className="rounded-lg border border-slate-700/60 bg-slate-900/40 p-3 space-y-3">
         <div className="flex items-center justify-between">

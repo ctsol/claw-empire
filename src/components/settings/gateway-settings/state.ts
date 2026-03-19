@@ -78,12 +78,21 @@ function normalizeSession(
 export function normalizeChannelsConfig(config: MessengerChannelsConfig): MessengerChannelsConfig {
   return MESSENGER_CHANNELS.reduce((acc, channel) => {
     const channelConfig = config[channel] ?? emptyChannelConfig(channel);
-    acc[channel] = {
+    const base = {
       token: channelConfig.token?.trim?.() ?? "",
       receiveEnabled:
         channel === "telegram" ? channelConfig.receiveEnabled !== false : channelConfig.receiveEnabled === true,
       sessions: (channelConfig.sessions ?? []).map((session, idx) => normalizeSession(session, channel, idx)),
     };
+    if (channel === "telegram" && channelConfig.reportChannel) {
+      const rc = channelConfig.reportChannel;
+      (base as Record<string, unknown>).reportChannel = {
+        targetId: rc.targetId?.trim() ?? "",
+        token: rc.token?.trim() || undefined,
+        enabled: rc.enabled !== false,
+      };
+    }
+    acc[channel] = base;
     return acc;
   }, {} as MessengerChannelsConfig);
 }

@@ -46,7 +46,7 @@ const RecentTasksPanel = forwardRef<RecentTasksPanelHandle, RecentTasksPanelProp
       getTaskEl: (taskId: string) => taskElsRef.current.get(taskId) ?? null,
     }));
 
-    const STATUS_ORDER: Record<string, number> = { in_progress: 0, review: 1, planned: 2, inbox: 3 };
+    const STATUS_ORDER: Record<string, number> = { inbox: 0, planned: 1, review: 2, in_progress: 9 };
     const recent = [...tasks]
       .filter((t) => t.status !== "cancelled" && t.status !== "done" && !t.source_task_id)
       .sort((a, b) => {
@@ -61,7 +61,7 @@ const RecentTasksPanel = forwardRef<RecentTasksPanelHandle, RecentTasksPanelProp
     if (recent.length === 0) return null;
 
     return (
-      <div className="rounded-2xl border border-slate-700/60 bg-slate-900/80 p-4 backdrop-blur-sm">
+      <div className="rounded-2xl border border-slate-700/60 bg-slate-900/80 p-4 backdrop-blur-sm h-full flex flex-col">
         <div className="mb-3 flex items-center gap-2">
           <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-violet-500/20">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" className="text-violet-400">
@@ -76,7 +76,7 @@ const RecentTasksPanel = forwardRef<RecentTasksPanelHandle, RecentTasksPanelProp
             {recent.length}
           </span>
         </div>
-        <div className="space-y-1.5 max-h-40 overflow-y-auto">
+        <div className="space-y-1.5 flex-1 overflow-y-auto min-h-0">
           {recent.map((task) => {
             const agent = getAgent(task.assigned_agent_id);
             const color = STATUS_COLORS[task.status] ?? "bg-slate-500/20 text-slate-400";

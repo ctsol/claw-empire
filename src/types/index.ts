@@ -347,10 +347,17 @@ export interface MessengerSessionConfig {
   workflowPackKey?: WorkflowPackKey;
 }
 
+export interface MessengerReportChannel {
+  token?: string;
+  targetId?: string;
+  enabled?: boolean;
+}
+
 export interface MessengerChannelConfig {
   token: string;
   sessions: MessengerSessionConfig[];
   receiveEnabled?: boolean;
+  reportChannel?: MessengerReportChannel;
 }
 
 export type MessengerChannelsConfig = Record<MessengerChannelType, MessengerChannelConfig>;
