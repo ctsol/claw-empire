@@ -46,13 +46,12 @@ const RecentTasksPanel = forwardRef<RecentTasksPanelHandle, RecentTasksPanelProp
       getTaskEl: (taskId: string) => taskElsRef.current.get(taskId) ?? null,
     }));
 
-    const STATUS_ORDER: Record<string, number> = { inbox: 0, planned: 1, review: 2, in_progress: 9 };
     const recent = [...tasks]
       .filter((t) => t.status !== "cancelled" && t.status !== "done" && !t.source_task_id)
       .sort((a, b) => {
-        const ao = STATUS_ORDER[a.status] ?? 9;
-        const bo = STATUS_ORDER[b.status] ?? 9;
-        if (ao !== bo) return ao - bo;
+        const aBottom = a.status === "in_progress" ? 1 : 0;
+        const bBottom = b.status === "in_progress" ? 1 : 0;
+        if (aBottom !== bBottom) return aBottom - bBottom;
         return (b.updated_at ?? 0) - (a.updated_at ?? 0);
       });
 

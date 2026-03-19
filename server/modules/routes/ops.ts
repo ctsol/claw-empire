@@ -16,6 +16,7 @@ import { registerApiDocsRoutes } from "./ops/api-docs.ts";
 import { registerCeoMeetingRoutes } from "./ops/ceo-meeting-routes.ts";
 import { registerWorkflowPackRoutes } from "./ops/workflow-packs.ts";
 import { registerRoomDesignTokenRoutes } from "./ops/room-design-tokens.ts";
+import { registerRoomSettingsRoutes } from "./ops/room-settings.ts";
 
 export function registerRoutesPartC(ctx: RuntimeContext): RouteOpsExports {
   const __ctx: RuntimeContext = ctx;
@@ -241,6 +242,11 @@ export function registerRoutesPartC(ctx: RuntimeContext): RouteOpsExports {
   // Room design tokens (admin RBAC + audit log)
   // ---------------------------------------------------------------------------
   registerRoomDesignTokenRoutes({ app, db, nowMs });
+
+  // ---------------------------------------------------------------------------
+  // Room Settings (admin RBAC + audit log)
+  // ---------------------------------------------------------------------------
+  registerRoomSettingsRoutes({ app, db, nowMs });
 
   return {
     prettyStreamJson,

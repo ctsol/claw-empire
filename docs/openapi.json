@@ -40,9 +40,6 @@
     },
     {
       "name": "docs"
-    },
-    {
-      "name": "room-design"
     }
   ],
   "components": {
@@ -17833,40 +17830,258 @@
         }
       }
     },
-    "/api/room-design/tokens": {
+    "/api/room-settings": {
       "get": {
-        "tags": ["room-design"],
-        "summary": "Get room design tokens",
-        "description": "Returns current design tokens for the requested scope. Public endpoint — no authentication required.",
-        "operationId": "getRoomDesignTokens",
-        "parameters": [
+        "tags": ["runtime"],
+        "summary": "List all room settings",
+        "security": [
           {
-            "name": "scope",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "string",
-              "enum": ["global", "office", "break_room", "meeting_room", "ceo_zone", "hallway"],
-              "default": "global"
-            },
-            "description": "Token scope (room identifier or 'global')."
+            "bearerAuth": []
           }
         ],
         "responses": {
           "200": {
-            "description": "Design tokens for the requested scope.",
+            "description": "All room settings",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["ok", "scope", "tokens"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "ok": true,
+                  "rooms": []
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
                   "properties": {
-                    "ok": { "type": "boolean" },
-                    "scope": { "type": "string" },
-                    "tokens": { "type": "object", "additionalProperties": true },
-                    "updated_by": { "type": "string", "nullable": true },
-                    "updated_at": { "type": "integer", "nullable": true }
-                  }
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "forbidden",
+                  "message": "You do not have permission to access this resource."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "too_many_requests",
+                  "message": "Rate limit exceeded."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "internal_error",
+                  "message": "Unexpected server error."
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/room-settings/{roomId}": {
+      "get": {
+        "tags": ["runtime"],
+        "summary": "Get settings for a room",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Room settings",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                },
+                "example": {
+                  "ok": true,
+                  "room_id": "ceo_zone",
+                  "settings": {}
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "forbidden",
+                  "message": "You do not have permission to access this resource."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "too_many_requests",
+                  "message": "Rate limit exceeded."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "internal_error",
+                  "message": "Unexpected server error."
                 }
               }
             }
@@ -17874,29 +18089,43 @@
         }
       },
       "put": {
-        "tags": ["room-design"],
-        "summary": "Update room design tokens",
-        "description": "Admin-only. Updates design tokens for a scope and writes an audit log entry.",
-        "operationId": "putRoomDesignTokens",
-        "security": [{ "bearerAuth": [] }],
+        "tags": ["runtime"],
+        "summary": "Update room settings (admin only)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["tokens"],
+                "required": ["settings"],
                 "properties": {
-                  "scope": {
-                    "type": "string",
-                    "enum": ["global", "office", "break_room", "meeting_room", "ceo_zone", "hallway"],
-                    "default": "global"
-                  },
-                  "tokens": {
+                  "settings": {
                     "type": "object",
                     "additionalProperties": true,
-                    "description": "Design token key-value pairs (CSS variables, animation params, etc.)"
+                    "description": "Room configuration object (animation mode, theme, etc.)"
                   }
+                }
+              },
+              "example": {
+                "settings": {
+                  "theme": "game_bright",
+                  "transition_duration_ms": 300,
+                  "particles_enabled": true
                 }
               }
             }
@@ -17904,68 +18133,136 @@
         },
         "responses": {
           "200": {
-            "description": "Tokens saved successfully.",
+            "description": "Room settings updated",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["ok", "scope", "updated_at"],
-                  "properties": {
-                    "ok": { "type": "boolean" },
-                    "scope": { "type": "string" },
-                    "updated_at": { "type": "integer" }
-                  }
+                  "additionalProperties": true
+                },
+                "example": {
+                  "ok": true,
+                  "room_id": "ceo_zone"
                 }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid scope or tokens payload.",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
               }
             }
           },
           "401": {
-            "description": "Authentication required.",
-            "content": {
-              "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/room-design/tokens/all": {
-      "get": {
-        "tags": ["room-design"],
-        "summary": "Get all room design token scopes",
-        "description": "Returns tokens for all scopes in one response. Public endpoint.",
-        "operationId": "getAllRoomDesignTokens",
-        "responses": {
-          "200": {
-            "description": "All design token scopes.",
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["ok", "scopes"],
                   "properties": {
-                    "ok": { "type": "boolean" },
-                    "scopes": {
-                      "type": "object",
-                      "additionalProperties": {
-                        "type": "object",
-                        "properties": {
-                          "tokens": { "type": "object", "additionalProperties": true },
-                          "updated_by": { "type": "string" },
-                          "updated_at": { "type": "integer" }
-                        }
-                      }
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
                     }
-                  }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "forbidden",
+                  "message": "You do not have permission to access this resource."
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "conflict",
+                  "message": "The request conflicts with current server state."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "too_many_requests",
+                  "message": "Rate limit exceeded."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "internal_error",
+                  "message": "Unexpected server error."
                 }
               }
             }
@@ -17973,65 +18270,144 @@
         }
       }
     },
-    "/api/room-design/audit": {
+    "/api/room-settings-audit": {
       "get": {
-        "tags": ["room-design"],
-        "summary": "Get room design token audit log",
-        "description": "Admin-only. Returns audit log entries for design token changes.",
-        "operationId": "getRoomDesignAudit",
-        "security": [{ "bearerAuth": [] }],
+        "tags": ["runtime"],
+        "summary": "Room settings audit log (admin only)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "parameters": [
           {
-            "name": "scope",
+            "name": "room_id",
             "in": "query",
             "required": false,
             "schema": {
-              "type": "string",
-              "enum": ["global", "office", "break_room", "meeting_room", "ceo_zone", "hallway"]
-            },
-            "description": "Filter by scope. Omit to get all scopes."
+              "type": "string"
+            }
           },
           {
             "name": "limit",
             "in": "query",
             "required": false,
-            "schema": { "type": "integer", "minimum": 1, "maximum": 200, "default": 50 },
-            "description": "Maximum number of entries to return."
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "maximum": 200
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Audit log entries.",
+            "description": "Audit log entries",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["ok", "entries"],
-                  "properties": {
-                    "ok": { "type": "boolean" },
-                    "entries": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": { "type": "integer" },
-                          "scope": { "type": "string" },
-                          "changed_by": { "type": "string" },
-                          "actor_role": { "type": "string" },
-                          "created_at": { "type": "integer" }
-                        }
-                      }
-                    }
-                  }
+                  "additionalProperties": true
+                },
+                "example": {
+                  "ok": true,
+                  "entries": []
                 }
               }
             }
           },
           "401": {
-            "description": "Authentication required.",
+            "description": "Unauthorized",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "unauthorized",
+                  "message": "Authentication is required."
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "forbidden",
+                  "message": "You do not have permission to access this resource."
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "too_many_requests",
+                  "message": "Rate limit exceeded."
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    },
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["error"],
+                  "additionalProperties": true
+                },
+                "example": {
+                  "error": "internal_error",
+                  "message": "Unexpected server error."
+                }
               }
             }
           }
