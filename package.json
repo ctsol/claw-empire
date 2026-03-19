@@ -24,6 +24,8 @@
     "arch:map": "node scripts/generate-architecture-report.mjs",
     "preflight:public": "bash scripts/preflight-public.sh",
     "audit:verify": "node scripts/verify-security-audit-log.mjs",
+    "i18n:check": "node scripts/check-i18n-completeness.mjs",
+    "i18n:check:strict": "node scripts/check-i18n-completeness.mjs --strict",
     "test:comm:llm": "node scripts/qa/llm-comm-test.mjs",
     "test:comm:oauth": "node scripts/qa/oauth-comm-test.mjs",
     "test:comm:api": "node scripts/qa/api-comm-test.mjs",

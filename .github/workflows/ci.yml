@@ -98,6 +98,9 @@ jobs:
       - name: Run lint
         run: pnpm run lint
 
+      - name: Run i18n completeness check
+        run: pnpm run i18n:check
+
       - name: Run OpenAPI contract check
         run: pnpm run openapi:check
 
