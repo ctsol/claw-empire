@@ -348,6 +348,7 @@ function renderAgentHeader(
     room.addChild(tipContainer);
     bangBg.on("pointerenter", () => { tipContainer.visible = true; });
     bangBg.on("pointerleave", () => { tipContainer.visible = false; });
+    bangBg.on("pointerdown", () => { cbRef.current.onSelectAgent(agent); });
   }
 
   const roleText = new Text({

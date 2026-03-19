@@ -1,3 +1,5 @@
+import { sendMessengerMessage } from "../../../gateway/client.ts";
+
 type CreatePlanningArchiveToolsDeps = Record<string, any>;
 
 export function createPlanningArchiveTools(deps: CreatePlanningArchiveToolsDeps) {
@@ -297,25 +299,49 @@ export function createPlanningArchiveTools(deps: CreatePlanningArchiveToolsDeps)
         "system",
         `Planning consolidated archive updated (${planningLeader.name}, chars=${summaryMarkdown.length})`,
       );
-      sendAgentMessage(
-        planningLeader,
-        pickL(
-          l(
-            ["대표님, 기획팀장 최종 취합본을 생성해 아카이빙했습니다. 보고서 팝업에서 확인하실 수 있습니다."],
-            [
-              "CEO, the planning lead consolidated final report has been generated and archived. You can review it from the report popup.",
-            ],
-            ["CEO、企画リード最終統合レポートを生成し、アーカイブしました。レポートポップアップから確認できます。"],
-            ["CEO，规划负责人最终汇总报告已生成并归档，可在报告弹窗中查看。"],
-          ),
-          lang,
+      const reportNotice = pickL(
+        l(
+          ["대표님, 기획팀장 최종 취합본을 생성해 아카이빙했습니다. 보고서 팝업에서 확인하실 수 있습니다."],
+          [
+            "CEO, the planning lead consolidated final report has been generated and archived. You can review it from the report popup.",
+          ],
+          ["CEO、企画リード最終統合レポートを生成し、アーカイブしました。レポートポップアップから確認できます。"],
+          ["CEO，规划负责人最终汇总报告已生成并归档，可在报告弹窗中查看。"],
+          ["Руководитель: итоговый отчёт сформирован и сохранён. Вы можете просмотреть его в попапе отчётов."],
         ),
-        "report",
-        "all",
-        null,
-        rootTaskId,
+        lang,
       );
+      sendAgentMessage(planningLeader, reportNotice, "report", "all", null, rootTaskId);
       broadcast("task_report", { task: { id: rootTaskId } });
+
+      // Proactively send the report summary to all configured Telegram sessions
+      void (async () => {
+        try {
+          const MESSENGER_SETTINGS_KEY = "messengerChannels";
+          const row = db.prepare("SELECT value FROM settings WHERE key = ?").get(MESSENGER_SETTINGS_KEY) as
+            | { value?: unknown }
+            | undefined;
+          if (!row?.value) return;
+          const channels = JSON.parse(String(row.value)) as Record<string, unknown>;
+          const telegram = channels?.telegram as Record<string, unknown> | undefined;
+          if (!telegram || !Array.isArray(telegram.sessions)) return;
+
+          const summaryPreview = summaryMarkdown.length > 2000 ? summaryMarkdown.slice(0, 2000) + "..." : summaryMarkdown;
+          const telegramText = `${reportNotice}\n\n${summaryPreview}`;
+
+          for (const rawSession of telegram.sessions as unknown[]) {
+            const session = (rawSession ?? {}) as Record<string, unknown>;
+            if (session.enabled === false) continue;
+            const targetId = String(session.targetId ?? "").trim();
+            if (!targetId) continue;
+            await sendMessengerMessage({ channel: "telegram", targetId, text: telegramText }).catch((err: unknown) => {
+              console.warn(`[planning-archive] failed to send report to telegram ${targetId}: ${String(err)}`);
+            });
+          }
+        } catch (err) {
+          console.warn("[planning-archive] telegram report send error:", err);
+        }
+      })();
     } catch (err) {
       console.error("[Claw-Empire] planning archive generation error:", err);
     }

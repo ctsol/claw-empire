@@ -63,6 +63,7 @@ interface AppOverlaysProps {
   onCloseTaskPanel: () => void;
   taskReport: TaskReportDetail | null;
   onCloseTaskReport: () => void;
+  onOpenTaskReport: (taskId: string) => void;
   showReportHistory: boolean;
   onCloseReportHistory: () => void;
   showAgentStatus: boolean;
@@ -110,6 +111,7 @@ export default function AppOverlays({
   onCloseTaskPanel,
   taskReport,
   onCloseTaskReport,
+  onOpenTaskReport,
   showReportHistory,
   onCloseReportHistory,
   showAgentStatus,
@@ -133,6 +135,7 @@ export default function AppOverlays({
           onSendAnnouncement={onSendAnnouncement}
           onSendDirective={onSendDirective}
           onClearMessages={onClearMessages}
+          onViewReport={onOpenTaskReport}
           onClose={onCloseChat}
         />
       )}

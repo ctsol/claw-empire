@@ -28,6 +28,7 @@ interface ChatMessageListProps {
   onDecisionManualDraft: (option: DecisionOption) => void;
   streamingMessage?: StreamingMessageLike | null;
   messagesEndRef: RefObject<HTMLDivElement | null>;
+  onViewReport?: (taskId: string) => void;
 }
 
 function formatTime(ts: number, locale: string): string {
@@ -94,6 +95,7 @@ export default function ChatMessageList({
   onDecisionManualDraft,
   streamingMessage,
   messagesEndRef,
+  onViewReport,
 }: ChatMessageListProps) {
   const isStreamingForAgent = Boolean(
     streamingMessage && selectedAgent && streamingMessage.agent_id === selectedAgent.id,
@@ -143,13 +145,28 @@ export default function ChatMessageList({
             const decisionRequest = decisionRequestByMessage.get(msg.id);
 
             if (msg.sender_type === "agent" && msg.receiver_type === "all") {
+              const isReport = msg.message_type === "report";
+              const reportTaskId = isReport && msg.task_id ? msg.task_id : null;
               return (
                 <div key={msg.id} className="flex items-end gap-2">
                   <AgentAvatar agent={senderAgent} spriteMap={spriteMap} size={28} />
                   <div className="flex max-w-[75%] flex-col gap-1">
                     <span className="px-1 text-xs text-gray-500">{senderName}</span>
-                    <div className="announcement-reply-bubble rounded-2xl rounded-bl-sm border border-yellow-500/20 bg-gray-700/70 px-4 py-2.5 text-sm text-gray-100 shadow-md">
+                    <div className={`announcement-reply-bubble rounded-2xl rounded-bl-sm border px-4 py-2.5 text-sm text-gray-100 shadow-md ${isReport ? "border-emerald-500/30 bg-emerald-900/30" : "border-yellow-500/20 bg-gray-700/70"}`}>
                       <MessageContent content={msg.content} />
+                      {reportTaskId && onViewReport && (
+                        <button
+                          type="button"
+                          onClick={() => onViewReport(reportTaskId)}
+                          className="mt-2 flex items-center gap-1 rounded-lg bg-emerald-500/20 px-2.5 py-1 text-[11px] font-medium text-emerald-300 transition hover:bg-emerald-500/30"
+                        >
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                            <polyline points="14 2 14 8 20 8" />
+                          </svg>
+                          {tr("보고서 보기", "View Report", "レポートを見る", "查看报告", "Открыть отчёт")}
+                        </button>
+                      )}
                     </div>
                     {decisionRequest && (
                       <div className="rounded-xl border border-indigo-500/30 bg-indigo-500/10 px-2 py-2">

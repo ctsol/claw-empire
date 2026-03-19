@@ -538,6 +538,9 @@ export default function App() {
         onCloseTaskPanel={() => setTaskPanel(null)}
         taskReport={taskReport}
         onCloseTaskReport={() => setTaskReport(null)}
+        onOpenTaskReport={(taskId) => {
+          api.getTaskReportDetail(taskId).then((d) => setTaskReport(d)).catch(console.error);
+        }}
         showReportHistory={showReportHistory}
         onCloseReportHistory={() => setShowReportHistory(false)}
         showAgentStatus={showAgentStatus}

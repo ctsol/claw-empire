@@ -46,10 +46,15 @@ const RecentTasksPanel = forwardRef<RecentTasksPanelHandle, RecentTasksPanelProp
       getTaskEl: (taskId: string) => taskElsRef.current.get(taskId) ?? null,
     }));
 
+    const STATUS_ORDER: Record<string, number> = { in_progress: 0, review: 1, planned: 2, inbox: 3 };
     const recent = [...tasks]
-      .filter((t) => t.status !== "cancelled" && !t.source_task_id)
-      .sort((a, b) => (b.updated_at ?? 0) - (a.updated_at ?? 0))
-      .slice(0, 8);
+      .filter((t) => t.status !== "cancelled" && t.status !== "done" && !t.source_task_id)
+      .sort((a, b) => {
+        const ao = STATUS_ORDER[a.status] ?? 9;
+        const bo = STATUS_ORDER[b.status] ?? 9;
+        if (ao !== bo) return ao - bo;
+        return (b.updated_at ?? 0) - (a.updated_at ?? 0);
+      });
 
     const getAgent = (id: string | null) => id ? agents.find((a) => a.id === id) : undefined;
 
@@ -71,7 +76,7 @@ const RecentTasksPanel = forwardRef<RecentTasksPanelHandle, RecentTasksPanelProp
             {recent.length}
           </span>
         </div>
-        <div className="space-y-1.5 max-h-48 overflow-y-auto">
+        <div className="space-y-1.5 max-h-40 overflow-y-auto">
           {recent.map((task) => {
             const agent = getAgent(task.assigned_agent_id);
             const color = STATUS_COLORS[task.status] ?? "bg-slate-500/20 text-slate-400";

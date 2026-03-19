@@ -46,6 +46,7 @@ interface ChatPanelProps {
     },
   ) => void;
   onClearMessages?: (agentId?: string) => void;
+  onViewReport?: (taskId: string) => void;
   onClose: () => void;
 }
 
@@ -58,6 +59,7 @@ export function ChatPanel({
   onSendAnnouncement,
   onSendDirective,
   onClearMessages,
+  onViewReport,
   onClose,
 }: ChatPanelProps) {
   const [input, setInput] = useState("");
@@ -451,6 +453,7 @@ export function ChatPanel({
         onDecisionManualDraft={handleDecisionManualDraft}
         streamingMessage={streamingMessage}
         messagesEndRef={messagesEndRef}
+        onViewReport={onViewReport}
       />
 
       <ProjectFlowDialog

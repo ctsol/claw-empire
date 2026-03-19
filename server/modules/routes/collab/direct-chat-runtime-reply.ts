@@ -301,7 +301,7 @@ export function createDirectReplyRuntime(deps: DirectReplyRuntimeDeps) {
                 flags: "w",
               });
               const controller = new AbortController();
-              const timeout = setTimeout(() => controller.abort(), 180_000);
+              const timeout = setTimeout(() => controller.abort(), options.messengerChannel ? 600_000 : 180_000);
               try {
                 await deps.executeApiProviderAgent(
                   built.prompt,
@@ -371,7 +371,7 @@ export function createDirectReplyRuntime(deps: DirectReplyRuntimeDeps) {
                 flags: "w",
               });
               const controller = new AbortController();
-              const timeout = setTimeout(() => controller.abort(), 180_000);
+              const timeout = setTimeout(() => controller.abort(), options.messengerChannel ? 600_000 : 180_000);
               const streamCb = (text: string) => {
                 fullText += text;
                 logStream.write(text);
@@ -436,7 +436,7 @@ export function createDirectReplyRuntime(deps: DirectReplyRuntimeDeps) {
             return;
           }
 
-          const run = await deps.runAgentOneShot(agent, built.prompt, { projectPath, rawOutput: true, noTools: messageType === "btw" });
+          const run = await deps.runAgentOneShot(agent, built.prompt, { projectPath, rawOutput: true, noTools: messageType === "btw", timeoutMs: options.messengerChannel ? 600_000 : 180_000 });
           const reply = normalizeAgentReply(deps.chooseSafeReply(run, built.lang, "direct", agent));
           deps.sendAgentMessage(agent, reply);
           void relayReplyToMessenger(options, agent, reply).catch((err) => {
