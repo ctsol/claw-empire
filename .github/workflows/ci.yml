@@ -98,6 +98,9 @@ jobs:
       - name: Run lint
         run: pnpm run lint
 
+      - name: Run locale guard (no non-RU/EN locale codes)
+        run: pnpm run locale:guard
+
       - name: Run i18n completeness check
         run: pnpm run i18n:check
 
