@@ -26,6 +26,7 @@
     "audit:verify": "node scripts/verify-security-audit-log.mjs",
     "i18n:check": "node scripts/check-i18n-completeness.mjs",
     "i18n:check:strict": "node scripts/check-i18n-completeness.mjs --strict",
+    "locale:guard": "node scripts/check-locale-guard.mjs",
     "test:comm:llm": "node scripts/qa/llm-comm-test.mjs",
     "test:comm:oauth": "node scripts/qa/oauth-comm-test.mjs",
     "test:comm:api": "node scripts/qa/api-comm-test.mjs",
