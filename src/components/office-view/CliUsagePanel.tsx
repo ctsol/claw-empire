@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 import type { CliUsageEntry, CliUsageWindow } from "../../api";
-import type { UiLanguage } from "../../i18n";
+import type { LangText, UiLanguage } from "../../i18n";
 import type { CliStatusMap } from "../../types";
 import { formatReset } from "./drawing-furniture-b";
 import { LOCALE_TEXT } from "./themes-locale";
 
-type TFunction = (messages: Record<UiLanguage, string>) => string;
+type TFunction = (messages: LangText) => string;
 
 interface CliUsagePanelProps {
   cliStatus: CliStatusMap | null;
@@ -103,7 +103,7 @@ export default function CliUsagePanel({
   if (connectedClis.length === 0) return null;
 
   return (
-    <div className="mt-4 px-2">
+    <div>
       <div className="rounded-2xl border border-slate-700/60 bg-slate-900/80 p-4 backdrop-blur-sm">
         <div className="mb-3 flex items-center justify-between">
           <h3 className="flex items-center gap-2 text-sm font-semibold text-slate-200">

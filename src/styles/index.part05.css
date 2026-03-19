@@ -257,3 +257,11 @@ header.app-header-bar {
   border-radius: 0 2px 2px 0;
   background: var(--th-accent-primary);
 }
+
+/* Envelope fly-to-agent animation */
+@keyframes envelope-fly {
+  0%   { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+  30%  { transform: translate(calc(-50% + var(--env-dx) * 0.2), calc(-50% + var(--env-dy) * 0.2)) scale(1.2) rotate(-8deg); opacity: 1; }
+  80%  { transform: translate(calc(-50% + var(--env-dx) * 0.85), calc(-50% + var(--env-dy) * 0.85)) scale(0.8) rotate(6deg); opacity: 0.9; }
+  100% { transform: translate(calc(-50% + var(--env-dx)), calc(-50% + var(--env-dy))) scale(0.4) rotate(0deg); opacity: 0; }
+}

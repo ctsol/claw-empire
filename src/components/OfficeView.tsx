@@ -11,6 +11,7 @@ import {
 import { useI18n } from "../i18n";
 import { useTheme, type ThemeMode } from "../ThemeContext";
 import CliUsagePanel from "./office-view/CliUsagePanel";
+import RecentTasksPanel, { type RecentTasksPanelHandle } from "./office-view/RecentTasksPanel";
 import VirtualPadOverlay from "./office-view/VirtualPadOverlay";
 import {
   type OfficeViewProps,
@@ -129,6 +130,37 @@ export default function OfficeView({
   localeRef.current = language;
   const themeHighlightTargetIdRef = useRef<string | null>(themeHighlightTargetId ?? null);
   themeHighlightTargetIdRef.current = themeHighlightTargetId ?? null;
+
+  // Envelope animation state
+  type EnvelopeAnim = { id: string; x: number; y: number; toX: number; toY: number; startTs: number };
+  const [envelopes, setEnvelopes] = useState<EnvelopeAnim[]>([]);
+  const recentTasksPanelRef = useRef<RecentTasksPanelHandle>(null);
+  const taskStatusRef = useRef<Map<string, string>>(new Map());
+  // Track tasks going in_progress and trigger envelope animation
+  useEffect(() => {
+    tasks.forEach((task) => {
+      const prev = taskStatusRef.current.get(task.id);
+      if (prev && prev !== "in_progress" && task.status === "in_progress" && task.assigned_agent_id) {
+        const taskEl = recentTasksPanelRef.current?.getTaskEl(task.id);
+        const canvasEl = containerRef.current;
+        const agentPos = agentPosRef.current.get(task.assigned_agent_id);
+        if (taskEl && canvasEl && agentPos) {
+          const taskRect = taskEl.getBoundingClientRect();
+          const canvasRect = canvasEl.getBoundingClientRect();
+          const fromX = taskRect.left + taskRect.width / 2;
+          const fromY = taskRect.top + taskRect.height / 2;
+          // Scale canvas coords (PixiJS internal coords) to screen
+          const scaleX = canvasRect.width / (agentPosRef.current.size > 0 ? (officeWRef.current || canvasRect.width) : canvasRect.width);
+          const toX = canvasRect.left + agentPos.x * scaleX;
+          const toY = canvasRect.top + (agentPos.y / totalHRef.current) * canvasRect.height;
+          const id = `${task.id}-${Date.now()}`;
+          setEnvelopes((prev) => [...prev, { id, x: fromX, y: fromY, toX, toY, startTs: Date.now() }]);
+          setTimeout(() => setEnvelopes((prev) => prev.filter((e) => e.id !== id)), 1200);
+        }
+      }
+      taskStatusRef.current.set(task.id, task.status);
+    });
+  }, [tasks]);
 
   // Latest data via refs (avoids stale closures)
   const dataRef = useRef({ departments, agents, tasks, subAgents, unreadAgentIds, meetingPresence, customDeptThemes });
@@ -408,14 +440,48 @@ export default function OfficeView({
         />
       </div>
 
-      <CliUsagePanel
-        cliStatus={cliStatus}
-        cliUsage={cliUsage}
-        language={language}
-        refreshing={refreshing}
-        onRefreshUsage={handleRefreshUsage}
-        t={t}
-      />
+      <div className="mt-4 px-2 flex gap-3">
+        <div className="flex-1 min-w-0">
+          <CliUsagePanel
+            cliStatus={cliStatus}
+            cliUsage={cliUsage}
+            language={language}
+            refreshing={refreshing}
+            onRefreshUsage={handleRefreshUsage}
+            t={t}
+          />
+        </div>
+        <div className="flex-1 min-w-0">
+          <RecentTasksPanel
+            ref={recentTasksPanelRef}
+            tasks={tasks}
+            agents={agents}
+            language={language}
+            t={t}
+          />
+        </div>
+      </div>
+
+      {/* Envelope fly-to-agent animations */}
+      {envelopes.map((env) => (
+        <div
+          key={env.id}
+          style={{
+            position: "fixed",
+            left: env.x,
+            top: env.y,
+            fontSize: 22,
+            pointerEvents: "none",
+            zIndex: 9999,
+            transform: "translate(-50%, -50%)",
+            animation: "envelope-fly 1.1s cubic-bezier(0.25,0.46,0.45,0.94) forwards",
+            "--env-dx": `${env.toX - env.x}px`,
+            "--env-dy": `${env.toY - env.y}px`,
+          } as React.CSSProperties}
+        >
+          📨
+        </div>
+      ))}
     </div>
   );
 }
