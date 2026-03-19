@@ -11,6 +11,7 @@ import {
   pickLang,
   useI18n,
   type LangText,
+  type UiLanguage,
 } from "./i18n";
 
 const ORIGINAL_LANGUAGE = window.navigator.language;
@@ -75,6 +76,39 @@ describe("i18n helpers", () => {
     expect(localeFromLanguage("en")).toBe("en-US");
     expect(localeFromLanguage("ja")).toBe("ja-JP");
     expect(localeFromLanguage("zh")).toBe("zh-CN");
+  });
+
+  // QA characterization: Russian locale is NOT yet supported (2026-03-19)
+  // This test documents the current state. When "ru" is added to UiLanguage,
+  // update this suite to cover Russian translation coverage.
+  it("[QA] Russian (ru) is not in UiLanguage — normalizeLanguage falls back to en", () => {
+    // "ru" is not a valid UiLanguage value; any ru-* locale normalizes to "en"
+    expect(normalizeLanguage("ru")).toBe("en");
+    expect(normalizeLanguage("ru-RU")).toBe("en");
+  });
+
+  it("[QA] localeFromLanguage has no Russian case — unsupported input returns en-US", () => {
+    // Type-cast to bypass compile-time check, simulating a runtime edge case
+    expect(localeFromLanguage("ru" as UiLanguage)).toBe("en-US");
+  });
+
+  it("[QA] pickLang has no Russian case — falls back to en for unsupported locales", () => {
+    const text: LangText = { ko: "안녕", en: "hello", ja: "こんにちは", zh: "你好" };
+    // "ru" is not a valid UiLanguage; runtime would fall through to default (en)
+    expect(pickLang("ru" as UiLanguage, text)).toBe("hello");
+  });
+
+  it("[QA] detectBrowserLanguage ignores ru-RU and falls back to next candidate", () => {
+    Object.defineProperty(window.navigator, "languages", {
+      configurable: true,
+      value: ["ru-RU", "en-US"],
+    });
+    Object.defineProperty(window.navigator, "language", {
+      configurable: true,
+      value: "ru-RU",
+    });
+    // ru-RU is not recognised; falls through to en-US
+    expect(detectBrowserLanguage()).toBe("en");
   });
 
   it("useI18n은 override 언어가 있으면 Provider 언어보다 override를 우선한다", () => {
