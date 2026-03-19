@@ -22,7 +22,7 @@ export default function ApiAssignModal({ t, localeTag, apiState }: ApiAssignModa
     ["development", "novel", "report", "video_preprod", "web_research_report", "roleplay"].includes(value)
       ? (value as WorkflowPackKey)
       : "development";
-  const ROLE_LABELS: Record<string, Record<string, string>> = {
+  const ROLE_LABELS: Record<string, { ko: string; en: string; ja?: string; zh?: string; ru?: string }> = {
     team_leader: { ko: "팀장", en: "Team Leader", ja: "チームリーダー", zh: "组长", ru: "Руководитель" },
     senior: { ko: "시니어", en: "Senior", ja: "シニア", zh: "高级", ru: "Старший" },
     junior: { ko: "주니어", en: "Junior", ja: "ジュニア", zh: "初级", ru: "Младший" },
@@ -31,7 +31,7 @@ export default function ApiAssignModal({ t, localeTag, apiState }: ApiAssignModa
 
   const roleBadge = (role: string) => {
     const label = ROLE_LABELS[role];
-    const text = label ? t(label as Record<"ko" | "en" | "ja" | "zh", string>) : role;
+    const text = label ? t(label) : role;
     const color =
       role === "team_leader"
         ? "text-amber-400 bg-amber-500/15"

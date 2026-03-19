@@ -50,7 +50,7 @@ export function usePathHelperMessages(t: TFunction) {
   );
 
   const resolvePathHelperErrorMessage = useCallback(
-    (error: unknown, fallback: Record<Locale, string>) => {
+    (error: unknown, fallback: import("../../../i18n").LangText) => {
       if (!isApiRequestError(error)) return t(fallback);
 
       if (error.status === 404) {

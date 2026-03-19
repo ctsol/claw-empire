@@ -125,7 +125,7 @@ export interface DecisionStateHelpers {
   recordProjectReviewDecisionEvent(input: ProjectReviewDecisionEventInput): void;
 }
 
-export type LocalizedTextBuilder = (ko: string[], en: string[], ja: string[], zh: string[]) => unknown;
+export type LocalizedTextBuilder = (ko: string[], en: string[], ja: string[], zh: string[], ru?: string[]) => unknown;
 
 export type PickLocalizedText = (localized: unknown, lang: string) => string;
 

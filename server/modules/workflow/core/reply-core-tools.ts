@@ -209,9 +209,18 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
   function buildAgentReplyText(
     lang: string,
     agent: AgentRow | undefined,
-    messages: { ko: string; en: string; ja: string; zh: string },
+    messages: { ko: string; en: string; ja: string; zh: string; ru?: string },
   ): string {
-    const body = lang === "en" ? messages.en : lang === "ja" ? messages.ja : lang === "zh" ? messages.zh : messages.ko;
+    const body =
+      lang === "ru" && messages.ru
+        ? messages.ru
+        : lang === "en"
+          ? messages.en
+          : lang === "ja"
+            ? messages.ja
+            : lang === "zh"
+              ? messages.zh
+              : messages.ko;
     const name = agent ? getAgentDisplayName(agent, lang) : "";
     return name ? `${name}: ${body}` : body;
   }
@@ -269,6 +278,7 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
         en: "The requested operation was blocked by a file-access permission. Please check the project directory settings.",
         ja: "ファイルアクセス権限により操作がブロックされました。プロジェクトディレクトリ設定を確認してください。",
         zh: "操作因文件访问权限被阻止，请检查项目目录设置。",
+        ru: "Операция заблокирована правами доступа к файлу. Проверьте настройки директории проекта.",
       });
     }
     if (kind === "stale_file") {
@@ -277,6 +287,7 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
         en: "The file changed after it was read, so the operation was stopped. Please re-read the file and retry.",
         ja: "読み取り後にファイルが変更されたため、処理が停止しました。再読込して再試行してください。",
         zh: "文件在读取后被修改，操作已中止。请重新读取该文件后再试。",
+        ru: "Файл изменился после чтения, операция остановлена. Перечитайте файл и повторите попытку.",
       });
     }
     if (kind === "tool_calls_only") {
@@ -285,6 +296,7 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
         en: "The run ended at tool-calls without producing a final reply. Please retry.",
         ja: "ツール呼び出し段階で終了し、最終回答が生成されませんでした。再試行してください。",
         zh: "执行在工具调用阶段结束，未生成最终回复。请重试。",
+        ru: "Выполнение завершилось на этапе вызова инструментов без финального ответа. Повторите попытку.",
       });
     }
     if (kind === "timeout") {
@@ -293,6 +305,7 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
         en: "Response generation timed out, so the run was stopped. Please try again shortly.",
         ja: "応答生成がタイムアウトしたため処理を停止しました。しばらくして再試行してください。",
         zh: "回复生成超时，任务已中止。请稍后重试。",
+        ru: "Время генерации ответа истекло, выполнение остановлено. Попробуйте ещё раз.",
       });
     }
     const suffix = detail ? ` (${detail})` : "";
@@ -301,6 +314,7 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
       en: `CLI execution failed${suffix}.`,
       ja: `CLI 実行中にエラーが発生しました${suffix}。`,
       zh: `CLI 执行失败${suffix}。`,
+      ru: `Ошибка выполнения CLI${suffix}.`,
     });
   }
 

@@ -552,7 +552,7 @@ function buildSeedPersonality(params: {
   role: AgentRole;
   locale: UiLanguageLike;
   defaultPrefix: Localized;
-  departmentName: { ko: string; en: string; ja: string; zh: string };
+  departmentName: { ko: string; en: string; ja: string; zh: string; ru?: string };
 }): string | null {
   if (params.packKey === "development") return null;
   const tone = PACK_SEED_PROFILE[params.packKey]?.tone;
@@ -583,12 +583,19 @@ function buildSeedPersonality(params: {
       junior: "初级成员",
       intern: "实习成员",
     },
+    ru: {
+      team_leader: "тимлид",
+      senior: "старший",
+      junior: "младший",
+      intern: "стажёр",
+    },
   };
   const focusByLocale: Record<UiLanguageLike, string> = {
     ko: params.defaultPrefix.ko?.trim() || `${params.departmentName.ko} 담당`,
     en: params.defaultPrefix.en?.trim() || `${params.departmentName.en} coverage`,
     ja: params.defaultPrefix.ja?.trim() || `${params.departmentName.ja}担当`,
     zh: params.defaultPrefix.zh?.trim() || `${params.departmentName.zh}职责`,
+    ru: params.defaultPrefix.ru?.trim() || `${params.departmentName.ru ?? params.departmentName.en}`,
   };
   const roleLabel = roleLabelMap[locale][params.role];
   const focus = focusByLocale[locale];

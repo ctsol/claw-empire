@@ -9,7 +9,7 @@ type AnnouncementReplyDeps = {
   resolveLang: (text?: string, fallback?: Lang) => Lang;
   getDeptName: (deptId: string) => string;
   getRoleLabel: (role: string, lang: Lang) => string;
-  l: (ko: string[], en: string[], ja?: string[], zh?: string[]) => L10n;
+  l: (ko: string[], en: string[], ja?: string[], zh?: string[], ru?: string[]) => L10n;
   pickL: (pool: L10n, lang: Lang) => string;
   sendAgentMessage: (
     agent: AgentRow,

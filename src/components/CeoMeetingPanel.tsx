@@ -569,7 +569,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                               <button
                                 key={opt}
                                 onClick={() => toggleOption(msg.id, opt)}
-                                disabled={isSent || isPending || meetingState === "done"}
+                                disabled={isSent || isPending}
                                 className="text-xs px-2.5 py-1 rounded-lg transition-all disabled:opacity-50"
                                 style={{
                                   background: isChosen ? "#3b82f6" : isSent ? "var(--th-bg-hover)" : "var(--th-bg-surface)",
@@ -683,7 +683,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
             )}
 
             {/* CEO input — always visible when meeting is active */}
-            {isActive && meetingState !== "done" && (
+            {isActive && (
               <div
                 className="shrink-0 p-3"
                 style={{ borderTop: "1px solid var(--th-border)", background: "var(--th-bg-surface)" }}

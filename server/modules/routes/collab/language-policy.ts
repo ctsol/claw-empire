@@ -312,7 +312,7 @@ export function initializeCollabLanguagePolicy(deps: LanguagePolicyDeps) {
       ],
     };
 
-    const langIdx = { ko: 0, en: 1, ja: 2, zh: 3 }[lang];
+    const langIdx = { ko: 0, en: 1, ja: 2, zh: 3, ru: 4 }[lang];
     void langIdx;
 
     const result: Record<string, boolean> = {};

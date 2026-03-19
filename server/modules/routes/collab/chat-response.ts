@@ -12,7 +12,7 @@ type ChatResponseDeps = {
   pickRandom: <T>(arr: T[]) => T;
   getFlairs: (agentName: string, lang: Lang) => string[];
   classifyIntent: (msg: string, lang: Lang) => Record<string, boolean>;
-  l: (ko: string[], en: string[], ja?: string[], zh?: string[]) => L10n;
+  l: (ko: string[], en: string[], ja?: string[], zh?: string[], ru?: string[]) => L10n;
   pickL: (pool: L10n, lang: Lang) => string;
 };
 

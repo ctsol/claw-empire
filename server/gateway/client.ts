@@ -24,7 +24,7 @@ const execFileAsync = promisify(execFile);
 const wakeDebounce = new Map<string, number>();
 let cachedMessengerConfig: { loadedAt: number; value: MessengerRuntimeConfig } | null = null;
 
-type GatewayLang = "ko" | "en" | "ja" | "zh";
+type GatewayLang = "ko" | "en" | "ja" | "zh" | "ru";
 export type { MessengerChannel };
 
 type PersistedSession = {
@@ -931,15 +931,17 @@ function detectGatewayLang(text: string): GatewayLang {
   const ko = text.match(/[\uAC00-\uD7AF\u1100-\u11FF\u3130-\u318F]/g)?.length ?? 0;
   const ja = text.match(/[\u3040-\u309F\u30A0-\u30FF]/g)?.length ?? 0;
   const zh = text.match(/[\u4E00-\u9FFF]/g)?.length ?? 0;
+  const ru = text.match(/[\u0400-\u04FF]/g)?.length ?? 0;
   const total = text.replace(/\s/g, "").length || 1;
   if (ko / total > 0.15) return "ko";
   if (ja / total > 0.15) return "ja";
   if (zh / total > 0.3) return "zh";
+  if (ru / total > 0.15) return "ru";
   return "en";
 }
 
 function normalizeGatewayLang(lang: string | null | undefined, title: string): GatewayLang {
-  if (lang === "ko" || lang === "en" || lang === "ja" || lang === "zh") return lang;
+  if (lang === "ko" || lang === "en" || lang === "ja" || lang === "zh" || lang === "ru") return lang;
   if (title.trim()) return detectGatewayLang(title);
   return "en";
 }
