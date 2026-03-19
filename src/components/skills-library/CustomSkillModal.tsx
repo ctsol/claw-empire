@@ -53,7 +53,7 @@ export default function CustomSkillModal({
           <div>
             <h3 className="text-base font-semibold text-white flex items-center gap-2">
               <span>✏️</span>
-              {t({ ko: "커스텀 스킬 추가", en: "Add Custom Skill", ja: "カスタムスキル追加", zh: "添加自定义技能" })}
+              {t({ ko: "커스텀 스킬 추가", en: "Add Custom Skill", ja: "カスタムスキル追加", zh: "添加自定义技能", ru: "Добавить пользовательский навык" })}
             </h3>
             <div className="mt-1 text-xs text-slate-400">
               {t({
@@ -61,6 +61,7 @@ export default function CustomSkillModal({
                 en: "Attach a skills.md file and select CLI representatives",
                 ja: "skills.md ファイルを添付し、CLI代表を選択してください",
                 zh: "附加 skills.md 文件并选择 CLI 代表",
+                ru: "Прикрепите файл skills.md и выберите CLI-представителей",
               })}
             </div>
           </div>
@@ -69,14 +70,14 @@ export default function CustomSkillModal({
             disabled={customSkillSubmitting}
             className="rounded-lg border border-slate-600 px-2.5 py-1 text-xs text-slate-300 hover:bg-slate-800 transition-all"
           >
-            {t({ ko: "닫기", en: "Close", ja: "閉じる", zh: "关闭" })}
+            {t({ ko: "닫기", en: "Close", ja: "閉じる", zh: "关闭", ru: "Закрыть" })}
           </button>
         </div>
 
         <div className="space-y-4 overflow-y-auto px-5 py-4 max-h-[calc(90vh-72px)]">
           <div>
             <label className="block text-xs text-slate-400 mb-1.5">
-              {t({ ko: "스킬명", en: "Skill Name", ja: "スキル名", zh: "技能名称" })}
+              {t({ ko: "스킬명", en: "Skill Name", ja: "スキル名", zh: "技能名称", ru: "Название навыка" })}
             </label>
             <input
               type="text"
@@ -87,6 +88,7 @@ export default function CustomSkillModal({
                 en: "e.g. my-custom-skill",
                 ja: "例: my-custom-skill",
                 zh: "例如: my-custom-skill",
+                ru: "напр. my-custom-skill",
               })}
               className="w-full bg-slate-900/60 border border-slate-600/50 rounded-lg px-3 py-2 text-sm text-white placeholder-slate-500 focus:outline-none focus:border-violet-500/50 focus:ring-1 focus:ring-violet-500/25"
             />
@@ -96,13 +98,14 @@ export default function CustomSkillModal({
                 en: "Only alphanumeric, dash (-), underscore (_) allowed",
                 ja: "英数字、ハイフン(-)、アンダースコア(_)のみ使用可能",
                 zh: "仅允许字母数字、短划线(-)或下划线(_)",
+                ru: "Допустимы только буквы, цифры, дефис (-) и нижнее подчёркивание (_)",
               })}
             </div>
           </div>
 
           <div>
             <label className="block text-xs text-slate-400 mb-1.5">
-              {t({ ko: "skills.md 파일", en: "skills.md File", ja: "skills.md ファイル", zh: "skills.md 文件" })}
+              {t({ ko: "skills.md 파일", en: "skills.md File", ja: "skills.md ファイル", zh: "skills.md 文件", ru: "Файл skills.md" })}
             </label>
             <div className="flex items-center gap-2">
               <button
@@ -110,7 +113,7 @@ export default function CustomSkillModal({
                 className="flex items-center gap-1.5 px-3 py-2 text-xs bg-slate-800/60 border border-slate-600/50 rounded-lg text-slate-300 hover:bg-slate-700/60 transition-all"
               >
                 <span>📎</span>
-                {t({ ko: "파일 선택", en: "Choose File", ja: "ファイル選択", zh: "选择文件" })}
+                {t({ ko: "파일 선택", en: "Choose File", ja: "ファイル選択", zh: "选择文件", ru: "Выбрать файл" })}
               </button>
               <input
                 ref={customFileInputRef}
@@ -140,6 +143,7 @@ export default function CustomSkillModal({
                 en: "CLI Representatives to Train",
                 ja: "学習させるCLI代表",
                 zh: "要培训的 CLI 代表",
+                ru: "CLI-представители для обучения",
               })}
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -150,7 +154,7 @@ export default function CustomSkillModal({
                   ? preferKoreanName
                     ? row.agent.name_ko || row.agent.name
                     : row.agent.name || row.agent.name_ko
-                  : t({ ko: "없음", en: "None", ja: "なし", zh: "无" });
+                  : t({ ko: "없음", en: "None", ja: "なし", zh: "无", ru: "Нет" });
                 return (
                   <button
                     key={`custom-${row.provider}`}
@@ -196,7 +200,7 @@ export default function CustomSkillModal({
               disabled={customSkillSubmitting}
               className="px-3 py-1.5 rounded-lg text-xs border border-slate-600 text-slate-300 hover:bg-slate-800 transition-all"
             >
-              {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消" })}
+              {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消", ru: "Отмена" })}
             </button>
             <button
               onClick={onSubmit}
@@ -215,12 +219,12 @@ export default function CustomSkillModal({
               {customSkillSubmitting ? (
                 <>
                   <span className="animate-spin w-3 h-3 border border-violet-400 border-t-transparent rounded-full" />
-                  {t({ ko: "등록중...", en: "Submitting...", ja: "登録中...", zh: "提交中..." })}
+                  {t({ ko: "등록중...", en: "Submitting...", ja: "登録中...", zh: "提交中...", ru: "Отправка..." })}
                 </>
               ) : (
                 <>
                   <span>🎓</span>
-                  {t({ ko: "학습 시작", en: "Start Training", ja: "学習開始", zh: "开始培训" })}
+                  {t({ ko: "학습 시작", en: "Start Training", ja: "学習開始", zh: "开始培训", ru: "Начать обучение" })}
                 </>
               )}
             </button>

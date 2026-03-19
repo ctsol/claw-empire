@@ -69,7 +69,9 @@ function localeInstructionForDirect(lang: Lang): string {
   if (lang === "en") return "Respond in English.";
   if (lang === "ja") return "Respond in Japanese.";
   if (lang === "zh") return "Respond in Chinese.";
-  return "Respond in Korean.";
+  if (lang === "ru") return "Respond in Russian.";
+  if (lang === "ko") return "Respond in Korean.";
+  return "Respond in English.";
 }
 
 export function createDirectReplyRuntime(deps: DirectReplyRuntimeDeps) {
@@ -434,7 +436,7 @@ export function createDirectReplyRuntime(deps: DirectReplyRuntimeDeps) {
             return;
           }
 
-          const run = await deps.runAgentOneShot(agent, built.prompt, { projectPath, rawOutput: true });
+          const run = await deps.runAgentOneShot(agent, built.prompt, { projectPath, rawOutput: true, noTools: messageType === "btw" });
           const reply = normalizeAgentReply(deps.chooseSafeReply(run, built.lang, "direct", agent));
           deps.sendAgentMessage(agent, reply);
           void relayReplyToMessenger(options, agent, reply).catch((err) => {

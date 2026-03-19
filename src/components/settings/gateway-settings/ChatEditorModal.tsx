@@ -61,21 +61,21 @@ export default function ChatEditorModal({
         <div className="flex items-center justify-between">
           <h4 className="text-sm font-semibold text-slate-100">
             {editor.mode === "create"
-              ? t({ ko: "새 채팅 추가", en: "Add Chat", ja: "チャット追加", zh: "新增聊天" })
-              : t({ ko: "채팅 편집", en: "Edit Chat", ja: "チャット編集", zh: "编辑聊天" })}
+              ? t({ ko: "새 채팅 추가", en: "Add Chat", ja: "チャット追加", zh: "新増聊天", ru: "Добавить чат" })
+              : t({ ko: "채팅 편집", en: "Edit Chat", ja: "チャット編집", zh: "编辑聊天", ru: "Редактировать чат" })}
           </h4>
           <button
             onClick={closeEditorModal}
             className="px-2 py-1 text-xs rounded border border-slate-600 text-slate-300 hover:bg-slate-800"
           >
-            {t({ ko: "닫기", en: "Close", ja: "閉じる", zh: "关闭" })}
+            {t({ ko: "닫기", en: "Close", ja: "閉じる", zh: "关闭", ru: "Закрыть" })}
           </button>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs text-slate-400 mb-1">
-              {t({ ko: "메신저", en: "Messenger", ja: "メッセンジャー", zh: "消息渠道" })}
+              {t({ ko: "메신저", en: "Messenger", ja: "メッセンジャー", zh: "消息渠道", ru: "Мессенджер" })}
             </label>
             <select
               value={editor.channel}
@@ -100,7 +100,7 @@ export default function ChatEditorModal({
 
           <div>
             <label className="block text-xs text-slate-400 mb-1">
-              {t({ ko: "활성 여부", en: "Enabled", ja: "有効", zh: "启用" })}
+              {t({ ko: "활성 여부", en: "Enabled", ja: "有効", zh: "启用", ru: "Включён" })}
             </label>
             <label className="inline-flex items-center gap-2 text-xs text-slate-300 h-[38px]">
               <input
@@ -110,15 +110,15 @@ export default function ChatEditorModal({
                 className="accent-blue-500"
               />
               {editor.enabled
-                ? t({ ko: "활성", en: "Enabled", ja: "有効", zh: "启用" })
-                : t({ ko: "비활성", en: "Disabled", ja: "無効", zh: "禁用" })}
+                ? t({ ko: "활성", en: "Enabled", ja: "有効", zh: "启用", ru: "Включён" })
+                : t({ ko: "비활성", en: "Disabled", ja: "無効", zh: "禁用", ru: "Отключён" })}
             </label>
           </div>
         </div>
 
         <div>
           <label className="block text-xs text-slate-400 mb-1">
-            {t({ ko: "토큰", en: "Token", ja: "トークン", zh: "令牌" })}
+            {t({ ko: "토큰", en: "Token", ja: "トークン", zh: "令牌", ru: "Токен" })}
           </label>
           <input
             type="password"
@@ -129,6 +129,7 @@ export default function ChatEditorModal({
               en: `Enter ${CHANNEL_META[editor.channel].label} token`,
               ja: `${CHANNEL_META[editor.channel].label} トークンを入力`,
               zh: `输入 ${CHANNEL_META[editor.channel].label} 令牌`,
+              ru: `Введите токен ${CHANNEL_META[editor.channel].label}`,
             })}
             className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
           />
@@ -137,7 +138,7 @@ export default function ChatEditorModal({
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
             <label className="block text-xs text-slate-400 mb-1">
-              {t({ ko: "채팅 이름", en: "Chat Name", ja: "チャット名", zh: "聊天名称" })}
+              {t({ ko: "채팅 이름", en: "Chat Name", ja: "チャット名", zh: "聊天名称", ru: "Название чата" })}
             </label>
             <input
               value={editor.name}
@@ -147,6 +148,7 @@ export default function ChatEditorModal({
                 en: "e.g. Design Alerts",
                 ja: "例: デザイン通知",
                 zh: "例如：设计组通知",
+                ru: "Например: уведомления дизайна",
               })}
               className="w-full px-3 py-2 bg-slate-800 border border-slate-600 rounded-lg text-white text-sm focus:outline-none focus:border-blue-500"
             />
@@ -154,7 +156,7 @@ export default function ChatEditorModal({
 
           <div>
             <label className="block text-xs text-slate-400 mb-1">
-              {t({ ko: "채널/대상 ID", en: "Channel/Target ID", ja: "チャンネル/対象 ID", zh: "频道/目标 ID" })}
+              {t({ ko: "채널/대상 ID", en: "Channel/Target ID", ja: "チャンネル/対象 ID", zh: "频道/目标 ID", ru: "ID канала/получателя" })}
             </label>
             {editor.channel === "discord" && discordChannels.length > 0 && (
               <select
@@ -178,6 +180,7 @@ export default function ChatEditorModal({
                     en: "Choose detected Discord channel (optional)",
                     ja: "検出されたDiscordチャネルを選択（任意）",
                     zh: "选择检测到的 Discord 频道（可选）",
+                    ru: "Выбрать найденный канал Discord (необязательно)",
                   })}
                 </option>
                 {discordChannels.map((entry) => (
@@ -215,6 +218,7 @@ export default function ChatEditorModal({
                       en: "Loading Discord channels...",
                       ja: "Discordチャネルを読み込み中...",
                       zh: "正在加载 Discord 频道...",
+                      ru: "Загрузка каналов Discord...",
                     })}
                   </div>
                 )}
@@ -226,12 +230,14 @@ export default function ChatEditorModal({
                           en: `Loaded ${discordChannels.length} channels automatically.`,
                           ja: `${discordChannels.length} 件のチャネルを自動取得しました。`,
                           zh: `已自动加载 ${discordChannels.length} 个频道。`,
+                          ru: `Автоматически загружено ${discordChannels.length} каналов.`,
                         })
                       : t({
                           ko: "조회된 Discord 채널이 없습니다. Bot 권한/서버 참여 상태를 확인하세요.",
                           en: "No Discord channels found. Check bot permissions and server membership.",
                           ja: "取得できるDiscordチャネルがありません。Bot権限とサーバー参加状態を確認してください。",
                           zh: "未找到可用 Discord 频道。请检查 Bot 权限和服务器加入状态。",
+                          ru: "Каналы Discord не найдены. Проверьте права бота и членство в сервере.",
                         })}
                   </div>
                 )}
@@ -243,7 +249,7 @@ export default function ChatEditorModal({
 
         <div>
           <label className="block text-xs text-slate-400 mb-1">
-            {t({ ko: "대화 Agent", en: "Conversation Agent", ja: "担当Agent", zh: "对话 Agent" })}
+            {t({ ko: "대화 Agent", en: "Conversation Agent", ja: "担当Agent", zh: "对话 Agent", ru: "Агент разговора" })}
           </label>
           <AgentSelect
             agents={agents}
@@ -252,8 +258,9 @@ export default function ChatEditorModal({
             placeholder={t({
               ko: "대화 Agent 선택",
               en: "Select Agent",
-              ja: "担当エージェント選択",
+              ja: "担당エージェント選択",
               zh: "选择对话 Agent",
+              ru: "Выбрать агента",
             })}
             className={agentsLoading ? "pointer-events-none opacity-60" : ""}
           />
@@ -261,7 +268,7 @@ export default function ChatEditorModal({
 
         <div>
           <label className="block text-xs text-slate-400 mb-1">
-            {t({ ko: "워크플로우 팩", en: "Workflow Pack", ja: "ワークフローパック", zh: "工作流包" })}
+            {t({ ko: "워크플로우 팩", en: "Workflow Pack", ja: "ワークフローパック", zh: "工作流包", ru: "Пакет рабочих процессов" })}
           </label>
           <select
             value={editor.workflowPackKey}
@@ -276,7 +283,7 @@ export default function ChatEditorModal({
             {workflowPackOptions.map((pack) => (
               <option key={pack.key} value={pack.key} disabled={!pack.enabled && pack.key !== editor.workflowPackKey}>
                 {pack.name}
-                {!pack.enabled ? ` (${t({ ko: "비활성", en: "disabled", ja: "無効", zh: "禁用" })})` : ""}
+                {!pack.enabled ? ` (${t({ ko: "비활성", en: "disabled", ja: "無効", zh: "禁用", ru: "отключён" })})` : ""}
               </option>
             ))}
           </select>
@@ -287,6 +294,7 @@ export default function ChatEditorModal({
                 en: "Loading packs...",
                 ja: "パックを読み込み中...",
                 zh: "正在加载工作流包...",
+                ru: "Загрузка пакетов...",
               })}
             </div>
           )}
@@ -305,6 +313,7 @@ export default function ChatEditorModal({
               en: "Enable direct Telegram receive",
               ja: "Telegram 直接受信を有効化",
               zh: "启用 Telegram 直接接收",
+              ru: "Включить прямой прием Telegram",
             })}
           </label>
         )}
@@ -316,13 +325,13 @@ export default function ChatEditorModal({
             onClick={closeEditorModal}
             className="px-3 py-1.5 text-xs rounded border border-slate-600 text-slate-300 hover:bg-slate-800"
           >
-            {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消" })}
+            {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消", ru: "Отмена" })}
           </button>
           <button
             onClick={handleSaveEditor}
             className="px-3 py-1.5 text-xs rounded bg-blue-600 text-white hover:bg-blue-500"
           >
-            {t({ ko: "확인", en: "Confirm", ja: "確認", zh: "确认" })}
+            {t({ ko: "확인", en: "Confirm", ja: "確認", zh: "确认", ru: "Подтвердить" })}
           </button>
         </div>
       </div>

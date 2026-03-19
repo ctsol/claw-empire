@@ -76,6 +76,7 @@ export function useProjectSaveHandler({
                 en: "This path is not a directory. Please enter a directory path.",
                 ja: "このパスはフォルダではありません。ディレクトリパスを入力してください。",
                 zh: "该路径不是文件夹，请输入目录路径。",
+                ru: "Этот путь не является директорией. Введите путь к директории.",
               }),
             });
             return;
@@ -103,6 +104,7 @@ export function useProjectSaveHandler({
                 en: "Failed to verify project path.",
                 ja: "プロジェクトパスの確認に失敗しました。",
                 zh: "项目路径校验失败。",
+                ru: "Не удалось проверить путь проекта.",
               }),
             });
             return;
@@ -163,8 +165,11 @@ export function useProjectSaveHandler({
                 ? `このパスは既に '${existingProjectName}' に登録されています。(${existingProjectPath || "path"})`
                 : "このパスは既に別のプロジェクトに登録されています。",
               zh: existingProjectName
-                ? `该路径已被‘${existingProjectName}’注册。(${existingProjectPath || "path"})`
+                ? `该路径已被’${existingProjectName}’注册。(${existingProjectPath || "path"})`
                 : "该路径已被其他项目注册。",
+              ru: existingProjectName
+                ? `Этот путь уже зарегистрирован проектом ‘${existingProjectName}’. (${existingProjectPath || "path"})`
+                : "Этот путь уже зарегистрирован другим проектом.",
             }),
           });
           return;
@@ -191,6 +196,7 @@ export function useProjectSaveHandler({
             en: "Failed to save project. Please check your inputs.",
             ja: "プロジェクト保存に失敗しました。入力値を確認してください。",
             zh: "项目保存失败，请检查输入值。",
+            ru: "Не удалось сохранить проект. Проверьте введённые данные.",
           }),
         });
       } finally {

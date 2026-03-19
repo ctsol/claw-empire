@@ -113,6 +113,7 @@ export default function GitHubImportPanel({ onComplete, onCancel }: GitHubImport
               en: `Cannot access repository ${repo.full_name}. Register your own GitHub OAuth App in Settings → OAuth tab for private repo access, or enter a PAT below.`,
               ja: `リポジトリ ${repo.full_name} にアクセスできません。設定 → OAuth タブで自前の GitHub OAuth App を登録するとプライベートリポにアクセスできます。または下に PAT を入力してください。`,
               zh: `无法访问仓库 ${repo.full_name}。在设置 → OAuth 标签中注册自己的 GitHub OAuth App 即可访问私有仓库，或在下方输入 PAT。`,
+              ru: `Нет доступа к репозиторию ${repo.full_name}. Зарегистрируйте собственное GitHub OAuth App в Настройках → OAuth для доступа к приватным репо, или введите PAT ниже.`,
             }),
           );
         } else if (message.includes("token_invalid")) {
@@ -122,6 +123,7 @@ export default function GitHubImportPanel({ onComplete, onCancel }: GitHubImport
               en: "PAT is invalid or expired. Please check and try again.",
               ja: "PAT が無効か期限切れです。確認して再試行してください。",
               zh: "PAT 无效或已过期，请检查后重试。",
+              ru: "PAT недействителен или истёк. Проверьте и попробуйте снова.",
             }),
           );
         } else {
@@ -145,6 +147,7 @@ export default function GitHubImportPanel({ onComplete, onCancel }: GitHubImport
           en: "Format: owner/repo or GitHub URL",
           ja: "形式: owner/repo または GitHub URL",
           zh: "格式：owner/repo 或 GitHub URL",
+          ru: "Формат: owner/repo или GitHub URL",
         }),
       );
       return;
@@ -276,7 +279,7 @@ export default function GitHubImportPanel({ onComplete, onCancel }: GitHubImport
     return (
       <div className="flex items-center justify-center p-8">
         <p className="text-sm text-slate-400">
-          {t({ ko: "확인 중...", en: "Checking...", ja: "確認中...", zh: "检查中..." })}
+          {t({ ko: "확인 중...", en: "Checking...", ja: "確認中...", zh: "检查中...", ru: "Проверка..." })}
         </p>
       </div>
     );

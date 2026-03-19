@@ -117,26 +117,43 @@ export function buildDepartmentRooms({
     doorG.rect(rx + roomW / 2 - 16, ry - 2, 32, 5).fill(0xf5f0e8);
     room.addChild(doorG);
 
-    const signW = 84;
+    const signW = 102;
+    const signH = 26;
+    const signX = rx + roomW / 2 - signW / 2;
+    const signY = ry - 8;
     const signBg = new Graphics();
-    signBg.roundRect(rx + roomW / 2 - signW / 2 + 1, ry - 3, signW, 18, 4).fill({ color: 0x000000, alpha: 0.12 });
-    signBg.roundRect(rx + roomW / 2 - signW / 2, ry - 4, signW, 18, 4).fill(theme.accent);
+    // Drop shadow
+    signBg.roundRect(signX + 1.5, signY + 2, signW, signH, 5).fill({ color: 0x000000, alpha: 0.18 });
+    // Main background
+    signBg.roundRect(signX, signY, signW, signH, 5).fill(theme.accent);
+    // Inner highlight line
+    signBg.roundRect(signX + 1, signY + 1, signW - 2, signH - 2, 4).stroke({ width: 1, color: 0xffffff, alpha: 0.18 });
     signBg.eventMode = "static";
     signBg.cursor = "pointer";
     signBg.on("pointerdown", () => cbRef.current.onSelectDepartment(dept));
     room.addChild(signBg);
+    // Icon — rendered bigger and separately
+    const signIcon = new Text({
+      text: dept.icon || "🏢",
+      style: new TextStyle({ fontSize: 11, fontFamily: "system-ui, sans-serif" }),
+    });
+    signIcon.anchor.set(0, 0.5);
+    signIcon.position.set(signX + 7, signY + signH / 2);
+    room.addChild(signIcon);
+    // Department name
     const signTxt = new Text({
-      text: `${dept.icon || "🏢"} ${localeName(activeLocale, dept)}`,
+      text: localeName(activeLocale, dept),
       style: new TextStyle({
-        fontSize: 9,
+        fontSize: 10,
         fill: 0xffffff,
-        fontWeight: "bold",
-        fontFamily: "system-ui, sans-serif",
-        dropShadow: { alpha: 0.2, distance: 1, color: 0x000000 },
+        fontWeight: "700",
+        fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
+        dropShadow: { alpha: 0.45, blur: 1.5, distance: 1, color: 0x000000 },
+        letterSpacing: 0.3,
       }),
     });
-    signTxt.anchor.set(0.5, 0.5);
-    signTxt.position.set(rx + roomW / 2, ry + 5);
+    signTxt.anchor.set(0, 0.5);
+    signTxt.position.set(signX + 23, signY + signH / 2);
     room.addChild(signTxt);
 
     drawCeilingAndDecor(room, rx, ry, roomW, roomH, theme, deptIdx, wallClocksRef);
@@ -269,16 +286,20 @@ function renderAgentHeader(
   const nameText = new Text({
     text: localeName(activeLocale, agent),
     style: new TextStyle({
-      fontSize: 7,
-      fill: 0x3a3a4a,
-      fontWeight: "bold",
-      fontFamily: "system-ui, sans-serif",
+      fontSize: 8.5,
+      fill: 0x1e1e2e,
+      fontWeight: "700",
+      fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
     }),
   });
   nameText.anchor.set(0.5, 0);
-  const nameTagW = nameText.width + 6;
+  const nameTagW = nameText.width + 8;
   const nameTagBg = new Graphics();
-  nameTagBg.roundRect(ax - nameTagW / 2, nameY, nameTagW, 12, 3).fill({ color: 0xffffff, alpha: 0.85 });
+  // Shadow
+  nameTagBg.roundRect(ax - nameTagW / 2 + 1, nameY + 1, nameTagW, 13, 3).fill({ color: 0x000000, alpha: 0.1 });
+  // Background
+  nameTagBg.roundRect(ax - nameTagW / 2, nameY, nameTagW, 13, 3).fill({ color: 0xffffff, alpha: 0.92 });
+  nameTagBg.roundRect(ax - nameTagW / 2, nameY, nameTagW, 13, 3).stroke({ width: 0.5, color: accent, alpha: 0.3 });
   room.addChild(nameTagBg);
   nameText.position.set(ax, nameY + 2);
   room.addChild(nameText);
@@ -309,17 +330,18 @@ function renderAgentHeader(
       },
     ),
     style: new TextStyle({
-      fontSize: 6,
+      fontSize: 7,
       fill: contrastTextColor(accent),
-      fontFamily: "system-ui, sans-serif",
+      fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
+      letterSpacing: 0.2,
     }),
   });
   roleText.anchor.set(0.5, 0.5);
-  const roleTagW = roleText.width + 5;
+  const roleTagW = roleText.width + 6;
   const roleTagBg = new Graphics();
-  roleTagBg.roundRect(ax - roleTagW / 2, nameY + 13, roleTagW, 9, 2).fill({ color: accent, alpha: 0.82 });
+  roleTagBg.roundRect(ax - roleTagW / 2, nameY + 14, roleTagW, 10, 3).fill({ color: accent, alpha: 0.9 });
   room.addChild(roleTagBg);
-  roleText.position.set(ax, nameY + 17.5);
+  roleText.position.set(ax, nameY + 19);
   room.addChild(roleText);
 }
 

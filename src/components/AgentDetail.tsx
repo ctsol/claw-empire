@@ -112,17 +112,18 @@ export default function AgentDetail({
     (effort: string, fallback?: string) => {
       switch (effort) {
         case "low":
-          return t({ ko: "빠름, 낮은 깊이", en: "Faster, lower depth", ja: "高速・浅い推論", zh: "更快，较浅推理" });
+          return t({ ko: "빠름, 낮은 깊이", en: "Faster, lower depth", ja: "高速・浅い推論", zh: "更快，较浅推理", ru: "Быстрее, меньшая глубина" });
         case "medium":
-          return t({ ko: "균형 기본값", en: "Balanced default", ja: "バランス既定", zh: "均衡默认" });
+          return t({ ko: "균형 기본값", en: "Balanced default", ja: "バランス既定", zh: "均衡默认", ru: "Сбалансированный" });
         case "high":
-          return t({ ko: "높은 추론 깊이", en: "Higher reasoning depth", ja: "高い推論深度", zh: "更高推理深度" });
+          return t({ ko: "높은 추론 깊이", en: "Higher reasoning depth", ja: "高い推論深度", zh: "更高推理深度", ru: "Высокая глубина рассуждений" });
         case "xhigh":
           return t({
             ko: "최대 추론 깊이",
             en: "Maximum reasoning depth",
             ja: "最大推論深度",
             zh: "最高推理深度",
+            ru: "Максимальная глубина рассуждений",
           });
         default:
           return fallback || "";
@@ -263,17 +264,17 @@ export default function AgentDetail({
     (packKey: WorkflowPackKey) => {
       switch (packKey) {
         case "development":
-          return t({ ko: "개발", en: "Development", ja: "開発", zh: "开发" });
+          return t({ ko: "개발", en: "Development", ja: "開発", zh: "开发", ru: "Разработка" });
         case "novel":
-          return t({ ko: "소설", en: "Novel", ja: "小説", zh: "小说" });
+          return t({ ko: "소설", en: "Novel", ja: "小説", zh: "小说", ru: "Роман" });
         case "report":
-          return t({ ko: "리포트", en: "Report", ja: "レポート", zh: "报告" });
+          return t({ ko: "리포트", en: "Report", ja: "レポート", zh: "报告", ru: "Отчёт" });
         case "video_preprod":
-          return t({ ko: "영상 프리프로덕션", en: "Video Pre-production", ja: "動画プリプロ", zh: "视频前期" });
+          return t({ ko: "영상 프리프로덕션", en: "Video Pre-production", ja: "動画プリプロ", zh: "视频前期", ru: "Видео Препродакшн" });
         case "web_research_report":
-          return t({ ko: "웹 리서치 리포트", en: "Web Research Report", ja: "Webリサーチ", zh: "网页调研报告" });
+          return t({ ko: "웹 리서치 리포트", en: "Web Research Report", ja: "Webリサーチ", zh: "网页调研报告", ru: "Веб-исследование" });
         case "roleplay":
-          return t({ ko: "역할놀이", en: "Roleplay", ja: "ロールプレイ", zh: "角色扮演" });
+          return t({ ko: "역할놀이", en: "Roleplay", ja: "ロールプレイ", zh: "角色扮演", ru: "Ролевая игра" });
         default:
           return packKey;
       }
@@ -308,7 +309,7 @@ export default function AgentDetail({
           const existingLeaderName = String(
             details.existing_leader?.name_ko ||
               details.existing_leader?.name ||
-              t({ ko: "기존 리더", en: "current leader" }),
+              t({ ko: "기존 리더", en: "current leader", ru: "текущий руководитель" }),
           ).trim();
           const packKey = details.pack_key ?? activeOfficeWorkflowPack;
           const packLabel = resolvePackLabel(packKey);
@@ -318,6 +319,7 @@ export default function AgentDetail({
               en: `${existingLeaderName} is already the leader for the ${packLabel} office pack. Change leader?`,
               ja: `${existingLeaderName}さんが既に${packLabel}オフィスパックのリーダーです。変更しますか？`,
               zh: `${existingLeaderName} 已是 ${packLabel} 办公包负责人。要变更吗？`,
+              ru: `${existingLeaderName} уже является руководителем для пакета ${packLabel}. Сменить руководителя?`,
             }),
           );
           if (confirmed) {
@@ -418,11 +420,12 @@ export default function AgentDetail({
                       en: "Lead (Planning lead)",
                       ja: "Lead（企画リード）",
                       zh: "Lead（企划负责人）",
+                      ru: "Lead (Ответственный за планирование)",
                     })}
                   </span>
                   {savingPlanningLead && (
                     <span className="text-[10px] text-slate-400">
-                      {t({ ko: "저장중...", en: "Saving...", ja: "保存中...", zh: "保存中..." })}
+                      {t({ ko: "저장중...", en: "Saving...", ja: "保存中...", zh: "保存中...", ru: "Сохранение..." })}
                     </span>
                   )}
                 </label>
@@ -455,6 +458,7 @@ export default function AgentDetail({
                               en: "Loading models...",
                               ja: "モデル読み込み中...",
                               zh: "正在加载模型...",
+                              ru: "Загрузка моделей...",
                             })}
                           </span>
                         ) : selectedCliModelOptions.length > 0 ? (
@@ -475,6 +479,7 @@ export default function AgentDetail({
                                   en: "Default (Settings model)",
                                   ja: "デフォルト（設定モデル）",
                                   zh: "默认（设置中的模型）",
+                                  ru: "По умолчанию (модель из настроек)",
                                 })}
                               </option>
                               {selectedCliModelOptions.map((model) => (
@@ -495,6 +500,7 @@ export default function AgentDetail({
                                     en: "Default (Settings reasoning)",
                                     ja: "デフォルト（設定推論）",
                                     zh: "默认（设置中的推理）",
+                                    ru: "По умолчанию (рассуждения из настроек)",
                                   })}
                                 </option>
                                 {codexReasoningOptions.map((level) => (
@@ -515,6 +521,7 @@ export default function AgentDetail({
                               en: "No model list available",
                               ja: "モデル一覧がありません",
                               zh: "暂无模型列表",
+                              ru: "Список моделей недоступен",
                             })}
                           </span>
                         )}
@@ -526,6 +533,7 @@ export default function AgentDetail({
                             en: "Sub-agent model follows Settings",
                             ja: "サブエージェントモデルは設定値を使用",
                             zh: "子代理模型沿用设置值",
+                            ru: "Модель суб-агентов берётся из настроек",
                           })}
                         </span>
                         <button
@@ -535,13 +543,13 @@ export default function AgentDetail({
                           }}
                           className="text-[10px] px-1.5 py-0.5 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors disabled:opacity-50"
                         >
-                          {savingCli ? "..." : t({ ko: "저장", en: "Save", ja: "保存", zh: "保存" })}
+                          {savingCli ? "..." : t({ ko: "저장", en: "Save", ja: "保存", zh: "保存", ru: "Сохранить" })}
                         </button>
                         <button
                           onClick={handleCancelCliEdit}
                           className="text-[10px] px-1.5 py-0.5 bg-slate-600 hover:bg-slate-500 text-slate-300 rounded transition-colors"
                         >
-                          {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消" })}
+                          {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消", ru: "Отмена" })}
                         </button>
                       </div>
                     </div>
@@ -571,6 +579,7 @@ export default function AgentDetail({
                               en: "Loading accounts...",
                               ja: "アカウント読み込み中...",
                               zh: "正在加载账号...",
+                              ru: "Загрузка аккаунтов...",
                             })}
                           </span>
                         ) : activeOAuthAccounts.length > 0 ? (
@@ -591,7 +600,8 @@ export default function AgentDetail({
                               ko: "활성 OAuth 계정 없음",
                               en: "No active OAuth account",
                               ja: "有効な OAuth アカウントなし",
-                              zh: "没有可用的 OAuth 账号",
+                              zh: "没有可용的 OAuth 账号",
+                              ru: "Нет активного OAuth аккаунта",
                             })}
                           </span>
                         ))}
@@ -602,6 +612,7 @@ export default function AgentDetail({
                             en: "⚙️ Assign models in Settings > API tab",
                             ja: "⚙️ 設定 > API タブでモデルを割り当ててください",
                             zh: "⚙️ 请在设置 > API 标签页中分配模型",
+                            ru: "⚙️ Назначьте модели в Настройки > вкладка API",
                           })}
                         </span>
                       )}
@@ -613,6 +624,7 @@ export default function AgentDetail({
                               en: "Loading models...",
                               ja: "モデル読み込み中...",
                               zh: "正在加载模型...",
+                              ru: "Загрузка моделей...",
                             })}
                           </span>
                         ) : selectedCliModelOptions.length > 0 ? (
@@ -631,6 +643,7 @@ export default function AgentDetail({
                                   en: "Default (Settings model)",
                                   ja: "デフォルト（設定モデル）",
                                   zh: "默认（设置中的模型）",
+                                  ru: "По умолчанию (модель из настроек)",
                                 })}
                               </option>
                               {selectedCliModelOptions.map((model) => (
@@ -644,7 +657,8 @@ export default function AgentDetail({
                                 ko: "알바생 모델은 설정창 값을 따릅니다",
                                 en: "Sub-agent model follows Settings",
                                 ja: "サブエージェントモデルは設定値を使用",
-                                zh: "子代理模型沿用设置值",
+                                zh: "子代리모型沿用设置値",
+                                ru: "Модель суб-агентов берётся из настроек",
                               })}
                             </span>
                           </>
@@ -655,6 +669,7 @@ export default function AgentDetail({
                               en: "No model list available",
                               ja: "モデル一覧がありません",
                               zh: "暂无模型列表",
+                              ru: "Список моделей недоступен",
                             })}
                           </span>
                         ))}
@@ -665,13 +680,13 @@ export default function AgentDetail({
                         }}
                         className="text-[10px] px-1.5 py-0.5 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors disabled:opacity-50"
                       >
-                        {savingCli ? "..." : t({ ko: "저장", en: "Save", ja: "保存", zh: "保存" })}
+                        {savingCli ? "..." : t({ ko: "저장", en: "Save", ja: "保存", zh: "保存", ru: "Сохранить" })}
                       </button>
                       <button
                         onClick={handleCancelCliEdit}
                         className="text-[10px] px-1.5 py-0.5 bg-slate-600 hover:bg-slate-500 text-slate-300 rounded transition-colors"
                       >
-                        {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消" })}
+                        {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消", ru: "Отмена" })}
                       </button>
                     </div>
                   )
@@ -684,6 +699,7 @@ export default function AgentDetail({
                       en: "Click to change CLI",
                       ja: "クリックして CLI を変更",
                       zh: "点击更改 CLI",
+                      ru: "Нажмите для смены CLI",
                     })}
                   >
                     🔧{" "}
@@ -717,14 +733,14 @@ export default function AgentDetail({
 
         <div className="flex border-b border-slate-700">
           {[
-            { key: "info", label: t({ ko: "정보", en: "Info", ja: "情報", zh: "信息" }) },
+            { key: "info", label: t({ ko: "정보", en: "Info", ja: "情報", zh: "信息", ru: "Инфо" }) },
             {
               key: "tasks",
-              label: `${t({ ko: "업무", en: "Tasks", ja: "タスク", zh: "任务" })} (${agentTasks.length})`,
+              label: `${t({ ko: "업무", en: "Tasks", ja: "タスク", zh: "任务", ru: "Задачи" })} (${agentTasks.length})`,
             },
             {
               key: "alba",
-              label: `${t({ ko: "알바생", en: "Sub-agents", ja: "サブエージェント", zh: "子代理" })} (${agentSubAgents.length})`,
+              label: `${t({ ko: "알바생", en: "Sub-agents", ja: "サブエージェント", zh: "子代理", ru: "Суб-агенты" })} (${agentSubAgents.length})`,
             },
           ].map((tabItem) => (
             <button

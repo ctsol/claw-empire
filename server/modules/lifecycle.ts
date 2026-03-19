@@ -46,6 +46,8 @@ export function startLifecycle(ctx: RuntimeContext): void {
     runInTransaction,
     stopProgressTimer,
     stopRequestedTasks,
+    startTaskExecutionForAgent,
+    getDeptName,
     wsClients,
     logsDir,
   } = ctx as any;
@@ -383,6 +385,41 @@ export function startLifecycle(ctx: RuntimeContext): void {
     });
   }
 
+  // Auto-start planned tasks for idle agents (batch, max 3 at a time to avoid overload)
+  function startPlannedTasks(): void {
+    const rows = db
+      .prepare(
+        `
+        SELECT t.id, t.title, t.assigned_agent_id, t.department_id
+        FROM tasks t
+        JOIN agents a ON a.id = t.assigned_agent_id
+        WHERE t.status = 'planned'
+          AND a.status = 'idle'
+          AND t.assigned_agent_id IS NOT NULL
+        ORDER BY t.created_at ASC
+        LIMIT 3
+      `,
+      )
+      .all() as Array<{ id: string; title: string; assigned_agent_id: string; department_id: string | null }>;
+
+    rows.forEach((row, idx) => {
+      setTimeout(() => {
+        const current = db.prepare("SELECT status FROM tasks WHERE id = ?").get(row.id) as
+          | { status: string }
+          | undefined;
+        const agent = db.prepare("SELECT * FROM agents WHERE id = ?").get(row.assigned_agent_id) as
+          | { status: string }
+          | undefined;
+        if (!current || current.status !== "planned") return;
+        if (!agent || agent.status !== "idle") return;
+        const deptId = row.department_id ?? null;
+        const deptName = getDeptName ? getDeptName(deptId) : (deptId ?? "Unassigned");
+        console.log(`[lifecycle] auto-starting planned task: ${row.title.slice(0, 50)}`);
+        startTaskExecutionForAgent(row.id, agent, deptId, deptName);
+      }, idx * 1200);
+    });
+  }
+
   function sweepPendingSubtaskDelegations(): void {
     const parents = db
       .prepare(
@@ -459,6 +496,9 @@ export function startLifecycle(ctx: RuntimeContext): void {
   setInterval(() => recoverOrphanWorkingAgents("interval"), IN_PROGRESS_ORPHAN_SWEEP_MS);
   setTimeout(sweepPendingSubtaskDelegations, 4_000);
   setInterval(sweepPendingSubtaskDelegations, SUBTASK_DELEGATION_SWEEP_MS);
+  // Auto-start planned tasks: check every 30s, initial check after 6s
+  setTimeout(startPlannedTasks, 6_000);
+  setInterval(startPlannedTasks, 30_000);
   setTimeout(autoAssignAgentProviders, 4_000);
   const telegramReceiver = startTelegramReceiver({ db });
   const discordReceiver = startDiscordReceiver({ db });

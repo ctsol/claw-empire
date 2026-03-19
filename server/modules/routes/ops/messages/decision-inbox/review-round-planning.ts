@@ -110,7 +110,7 @@ export function createReviewRoundPlanningHelpers(deps: ReviewRoundPlanningDeps):
             input.optionNotes.length > 0
               ? input.optionNotes.map((note, idx) => `${idx + 1}) ${clip(note, 320)}`).join("\n")
               : pickL(
-                  l(["- 라운드 의견 없음"], ["- No round opinions"], ["- ラウンド意見なし"], ["- 无轮次意见"]),
+                  l(["- 라운드 의견 없음"], ["- No round opinions"], ["- ラウンド意見なし"], ["- 无轮次意见"], ["- Нет комментариев к раунду"]),
                   input.lang,
                 );
           const prompt = [

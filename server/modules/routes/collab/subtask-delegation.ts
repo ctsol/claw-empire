@@ -490,7 +490,7 @@ export function initializeSubtaskDelegation(deps: SubtaskDelegationDeps) {
     subtaskDelegationCompletionNoticeSent.add(parentTaskId);
     const subtaskProgressSummary = formatTaskSubtaskProgressSummary(parentTaskId, lang);
     const progressSuffix = subtaskProgressSummary
-      ? `\n${pickL(l(["보완/협업 완료 현황"], ["Remediation/Collaboration completion"], ["補完/協業 完了状況"], ["整改/协作完成情况"]), lang)}\n${subtaskProgressSummary}`
+      ? `\n${pickL(l(["보완/협업 완료 현황"], ["Remediation/Collaboration completion"], ["補完/協業 完了状況"], ["整改/协作完成情况"], ["Статус завершения задач/сотрудничества"]), lang)}\n${subtaskProgressSummary}`
       : "";
     notifyCeo(
       pickL(
@@ -541,7 +541,7 @@ export function initializeSubtaskDelegation(deps: SubtaskDelegationDeps) {
 
     const lang = getPreferredLanguage();
     const blockedReason = pickL(
-      l(["위임 작업 실패"], ["Delegated task failed"], ["委任タスク失敗"], ["委派任务失败"]),
+      l(["위임 작업 실패"], ["Delegated task failed"], ["委任タスク失敗"], ["委派任务失败"], ["Делегированная задача провалена"]),
       lang,
     );
     const doneAt = nowMs();

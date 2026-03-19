@@ -85,7 +85,7 @@ export function createSubtaskDelegationPromptBuilder(deps: PromptDeps) {
           ? getDeptName(st.target_department_id, parentDept?.workflow_pack_key ?? null)
           : getDeptName(parentDept?.department_id ?? "", parentDept?.workflow_pack_key ?? null);
         const marker = assignedIds.has(st.id)
-          ? pickL(l([" ← 당신의 담당"], [" <- assigned to you"], [" ← あなたの担당"], [" <- 你的负责项"]), lang)
+          ? pickL(l([" ← 당신의 담당"], [" <- assigned to you"], [" ← あなたの担당"], [" <- 你的负责项"], [" ← ваша задача"]), lang)
           : "";
         return `${icon} ${st.title} (${dept} - ${st.status})${marker}`;
       })
@@ -232,10 +232,10 @@ export function createSubtaskDelegationPromptBuilder(deps: PromptDeps) {
       ),
       lang,
     );
-    const originalTaskLabel = pickL(l(["원본 업무"], ["Original task"], ["元タスク"], ["原始任务"]), lang);
-    const ceoRequestLabel = pickL(l(["CEO 요청"], ["CEO request"], ["CEO依頼"], ["CEO指示"]), lang);
+    const originalTaskLabel = pickL(l(["원본 업무"], ["Original task"], ["元タスク"], ["原始任务"], ["Исходная задача"]), lang);
+    const ceoRequestLabel = pickL(l(["CEO 요청"], ["CEO request"], ["CEO依頼"], ["CEO指示"], ["Запрос CEO"]), lang);
     const allSubtasksLabel = pickL(
-      l(["전체 서브태스크 현황"], ["All subtask status"], ["全サブタスク状況"], ["全部 SubTask 状态"]),
+      l(["전체 서브태스크 현황"], ["All subtask status"], ["全サブタスク状況"], ["全部 SubTask 状态"], ["Статус всех подзадач"]),
       lang,
     );
     const deptOwnedLabel = pickL(
@@ -248,7 +248,7 @@ export function createSubtaskDelegationPromptBuilder(deps: PromptDeps) {
       lang,
     );
     const checklistLabel = pickL(
-      l(["순차 실행 체크리스트"], ["Sequential execution checklist"], ["順次実行チェックリスト"], ["顺序执行清单"]),
+      l(["순차 실행 체크리스트"], ["Sequential execution checklist"], ["順次実行チェックリスト"], ["顺序执行清单"], ["Контрольный список выполнения"]),
       lang,
     );
     const finalInstruction = pickL(
@@ -261,6 +261,7 @@ export function createSubtaskDelegationPromptBuilder(deps: PromptDeps) {
         ],
         ["上記チェックリストを1番から順番に実行し、分割せず1回の作業フローで完了してください。"],
         ["请按 1 到末尾顺序执行清单，不要拆分为多次请求，在一次连续流程中完成。"],
+        ["Выполните контрольный список по порядку от 1 до конца, завершив всё в одном непрерывном потоке."],
       ),
       lang,
     );

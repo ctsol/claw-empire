@@ -139,6 +139,7 @@ export function createDirectTaskFlow(deps: TaskFlowDeps) {
         ["Understood. I will register this as a task and start right away."],
         ["指示を確認しました。タスクとして登録し、すぐ着手します。"],
         ["已确认指示。我会先登记任务并立即开始执行。"],
+        ["Понял. Регистрирую как задачу и немедленно приступаю."],
       ),
       lang,
     );
@@ -177,6 +178,7 @@ export function createDirectTaskFlow(deps: TaskFlowDeps) {
           ["Project confirmed. I will escalate this into a task and proceed now."],
           ["プロジェクトを確認しました。タスクに昇格して進めます。"],
           ["已确认项目。将立即升级为任务并执行。"],
+          ["Проект подтверждён. Регистрирую задачу и начинаю выполнение."],
         ),
         lang,
       );

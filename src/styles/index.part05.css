@@ -1,5 +1,5 @@
 [data-theme="light"] .chat-header::after {
-  background: linear-gradient(90deg, transparent, rgba(37, 99, 235, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(9, 105, 218, 0.15), transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -13,22 +13,149 @@
   }
 }
 
-/* ─── Sidebar nav item active indicator ─── */
-.sidebar-nav-active {
+/* ─── Sidebar nav items ─── */
+.sidebar-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  padding: 0.5rem 0.625rem;
+  border-radius: 8px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  width: 100%;
+  transition:
+    background-color 0.12s ease,
+    color 0.12s ease;
+  color: var(--th-text-secondary);
+  letter-spacing: -0.01em;
   position: relative;
 }
-.sidebar-nav-active::before {
+.sidebar-nav-item:hover {
+  background: var(--th-bg-surface);
+  color: var(--th-text-primary);
+}
+.sidebar-nav-item.active {
+  background: var(--th-bg-surface);
+  color: var(--th-text-heading);
+}
+[data-theme="dark"] .sidebar-nav-item.active {
+  background: rgba(88, 166, 255, 0.08);
+  color: #58a6ff;
+}
+[data-theme="dark"] .sidebar-nav-item.active::before {
   content: "";
   position: absolute;
   left: 0;
-  top: 25%;
-  height: 50%;
-  width: 3px;
-  border-radius: 0 3px 3px 0;
-  background: #3b82f6;
+  top: 20%;
+  height: 60%;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  background: #58a6ff;
+  box-shadow: 0 0 6px rgba(88, 166, 255, 0.5);
 }
-[data-theme="light"] .sidebar-nav-active::before {
-  background: #2563eb;
+[data-theme="light"] .sidebar-nav-item.active {
+  background: rgba(9, 105, 218, 0.07);
+  color: #0969da;
+}
+[data-theme="light"] .sidebar-nav-item.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  background: #0969da;
+}
+
+/* ─── Sidebar: smoother transitions ─── */
+.sidebar-dept-row {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.375rem;
+  border-radius: 6px;
+  font-size: 0.6875rem;
+  transition: background-color 0.12s ease;
+  color: var(--th-text-secondary);
+}
+.sidebar-dept-row:hover {
+  background: var(--th-bg-surface-hover);
+}
+
+/* ─── Header ─── */
+header.app-header-bar {
+  background: var(--th-bg-header);
+  border-bottom: 1px solid var(--th-border);
+  box-shadow: 0 1px 0 var(--th-header-glow);
+}
+[data-theme="dark"] header.app-header-bar::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(88, 166, 255, 0.12), transparent);
+  pointer-events: none;
+}
+
+/* ─── Cards & panels ─── */
+.empire-card {
+  background: var(--th-card-bg);
+  border: 1px solid var(--th-card-border);
+  border-radius: 10px;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+.empire-card:hover {
+  background: var(--th-card-bg-hover);
+  border-color: var(--th-border-strong);
+}
+[data-theme="dark"] .empire-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+[data-theme="light"] .empire-card {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 1px rgba(0, 0, 0, 0.03);
+}
+
+/* ─── Buttons ─── */
+.btn-primary {
+  background: var(--th-accent-primary);
+  color: #ffffff;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 0.4375rem 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition:
+    filter 0.12s ease,
+    box-shadow 0.12s ease;
+}
+.btn-primary:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+[data-theme="dark"] .btn-primary {
+  box-shadow: 0 0 0 1px rgba(88, 166, 255, 0.2), 0 4px 12px -4px rgba(88, 166, 255, 0.25);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--th-text-primary);
+  border: 1px solid var(--th-border-strong);
+  border-radius: 8px;
+  padding: 0.4375rem 0.875rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  transition:
+    background 0.12s ease,
+    border-color 0.12s ease;
+}
+.btn-secondary:hover:not(:disabled) {
+  background: var(--th-bg-surface);
+  border-color: var(--th-border-strong);
 }
 
 /* ─── Settings toggle switch improvements ─── */
@@ -39,22 +166,94 @@
   transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* ─── Sidebar: smoother transitions ─── */
-.sidebar-dept-row {
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  padding: 0.25rem 0.375rem;
-  border-radius: 0.375rem;
-  font-size: 0.75rem;
-  transition: background-color 0.15s ease;
-  color: var(--th-text-secondary);
-}
-.sidebar-dept-row:hover {
-  background: var(--th-bg-surface-hover);
-}
-
 /* ─── Task card hover enhancement ─── */
+.task-card-hover {
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+.task-card-hover:hover {
+  border-color: var(--th-border-strong) !important;
+}
+[data-theme="dark"] .task-card-hover:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+}
 [data-theme="light"] .task-card-hover:hover {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+/* ─── Badge styles ─── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem 0.5rem;
+  border-radius: 20px;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+.badge-blue {
+  background: rgba(88, 166, 255, 0.12);
+  color: #58a6ff;
+  border: 1px solid rgba(88, 166, 255, 0.2);
+}
+.badge-green {
+  background: rgba(63, 185, 80, 0.12);
+  color: #3fb950;
+  border: 1px solid rgba(63, 185, 80, 0.2);
+}
+.badge-amber {
+  background: rgba(240, 180, 41, 0.12);
+  color: #f0b429;
+  border: 1px solid rgba(240, 180, 41, 0.2);
+}
+.badge-red {
+  background: rgba(248, 81, 73, 0.12);
+  color: #f85149;
+  border: 1px solid rgba(248, 81, 73, 0.2);
+}
+[data-theme="light"] .badge-blue {
+  background: rgba(9, 105, 218, 0.08);
+  color: #0969da;
+  border-color: rgba(9, 105, 218, 0.18);
+}
+[data-theme="light"] .badge-green {
+  background: rgba(26, 127, 55, 0.08);
+  color: #1a7f37;
+  border-color: rgba(26, 127, 55, 0.18);
+}
+
+/* ─── Input fields ─── */
+.empire-input {
+  background: var(--th-input-bg);
+  border: 1px solid var(--th-input-border);
+  border-radius: 8px;
+  color: var(--th-text-primary);
+  font-size: 0.875rem;
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease;
+}
+.empire-input:focus {
+  outline: none;
+  border-color: var(--th-focus-ring);
+  box-shadow: 0 0 0 3px var(--th-focus-ring-shadow);
+}
+.empire-input::placeholder {
+  color: var(--th-text-muted);
+}
+
+/* ─── Sidebar nav item active indicator (legacy compat) ─── */
+.sidebar-nav-active {
+  position: relative;
+}
+.sidebar-nav-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 20%;
+  height: 60%;
+  width: 2px;
+  border-radius: 0 2px 2px 0;
+  background: var(--th-accent-primary);
 }

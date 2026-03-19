@@ -13,6 +13,7 @@ import { registerModelRoutes } from "./ops/models-routes.ts";
 import { registerOAuthRoutes } from "./ops/oauth/routes.ts";
 import { registerSkillRoutes } from "./ops/skills/routes.ts";
 import { registerApiDocsRoutes } from "./ops/api-docs.ts";
+import { registerCeoMeetingRoutes } from "./ops/ceo-meeting-routes.ts";
 import { registerWorkflowPackRoutes } from "./ops/workflow-packs.ts";
 
 export function registerRoutesPartC(ctx: RuntimeContext): RouteOpsExports {
@@ -233,6 +234,7 @@ export function registerRoutesPartC(ctx: RuntimeContext): RouteOpsExports {
   });
 
   registerTaskReportRoutes(__ctx);
+  registerCeoMeetingRoutes(__ctx);
 
   return {
     prettyStreamJson,

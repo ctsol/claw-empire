@@ -239,8 +239,15 @@ export function createReportRoutingTools(deps: ReportRoutingDeps) {
     const assigneeDeptId = reportAssignee.department_id || "planning";
     const assigneeDeptName = REPORT_DEPT_LABELS[assigneeDeptId] || assigneeDeptId || "Planning";
     const requestPreview = cleanRequest.length > 64 ? `${cleanRequest.slice(0, 61).trimEnd()}...` : cleanRequest;
-    const taskTitle =
-      outputFormat === "ppt" ? `보고 자료(PPT) 작성: ${requestPreview}` : `보고 문서(MD) 작성: ${requestPreview}`;
+    const taskTitle = pickL(
+      l(
+        [outputFormat === "ppt" ? `보고 자료(PPT) 작성: ${requestPreview}` : `보고 문서(MD) 작성: ${requestPreview}`],
+        [outputFormat === "ppt" ? `PPT Report: ${requestPreview}` : `MD Report: ${requestPreview}`],
+        [outputFormat === "ppt" ? `PPTレポート作成: ${requestPreview}` : `MDレポート作成: ${requestPreview}`],
+        [outputFormat === "ppt" ? `PPT报告: ${requestPreview}` : `MD报告: ${requestPreview}`],
+      ),
+      lang,
+    );
     const detectedPath = detectProjectPath(cleanRequest);
     const fileStamp = new Date().toISOString().replace(/[:]/g, "-").slice(0, 16);
     const outputPath =

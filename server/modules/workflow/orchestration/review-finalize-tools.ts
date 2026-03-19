@@ -111,7 +111,7 @@ export function createReviewFinalizeTools(deps: CreateReviewFinalizeToolsDeps) {
 
     const lang = getPreferredLanguage();
     const blockedReason = pickL(
-      l(["위임 작업 실패"], ["Delegated task failed"], ["委任タスク失敗"], ["委派任务失败"]),
+      l(["위임 작업 실패"], ["Delegated task failed"], ["委任タスク失敗"], ["委派任务失败"], ["Делегированная задача провалена"]),
       lang,
     );
     for (const sub of linked) {
@@ -553,14 +553,14 @@ export function createReviewFinalizeTools(deps: CreateReviewFinalizeToolsDeps) {
                 ),
                 lang,
               )
-            : pickL(l([" (병합 완료)"], [" (merged)"], [" (マージ完了)"], ["（已合并）"]), lang);
+            : pickL(l([" (병합 완료)"], [" (merged)"], [" (マージ完了)"], ["（已合并）"], [" (слито)"]), lang);
         } else {
           appendTaskLog(taskId, "system", `Git merge failed: ${mergeResult.message}`);
 
           const conflictLeader = findTeamLeader(latestTask.department_id);
           const conflictLeaderName = conflictLeader
             ? getAgentDisplayName(conflictLeader, lang)
-            : pickL(l(["팀장"], ["Team Lead"], ["チームリーダー"], ["组长"]), lang);
+            : pickL(l(["팀장"], ["Team Lead"], ["チームリーダー"], ["组长"], ["Руководитель"]), lang);
           const conflictFiles = mergeResult.conflicts?.length
             ? pickL(
                 l(
@@ -628,10 +628,10 @@ export function createReviewFinalizeTools(deps: CreateReviewFinalizeToolsDeps) {
       const leader = findTeamLeader(latestTask.department_id);
       const leaderName = leader
         ? getAgentDisplayName(leader, lang)
-        : pickL(l(["팀장"], ["Team Lead"], ["チームリーダー"], ["组长"]), lang);
+        : pickL(l(["팀장"], ["Team Lead"], ["チームリーダー"], ["组长"], ["Руководитель"]), lang);
       const subtaskProgressSummary = formatTaskSubtaskProgressSummary(taskId, lang);
       const progressSuffix = subtaskProgressSummary
-        ? `\n${pickL(l(["보완/협업 완료 현황"], ["Remediation/Collaboration completion"], ["補完/協業 完了状況"], ["整改/协作完成情况"]), lang)}\n${subtaskProgressSummary}`
+        ? `\n${pickL(l(["보완/협업 완료 현황"], ["Remediation/Collaboration completion"], ["補完/協業 完了状況"], ["整改/协作完成情况"], ["Статус завершения задач/сотрудничества"]), lang)}\n${subtaskProgressSummary}`
         : "";
       notifyCeo(
         pickL(
@@ -640,6 +640,7 @@ export function createReviewFinalizeTools(deps: CreateReviewFinalizeToolsDeps) {
             [`${leaderName}: Final approval completed for '${taskTitle}'.${mergeNote}${progressSuffix}`],
             [`${leaderName}: '${taskTitle}' の最終承認が完了しました。${mergeNote}${progressSuffix}`],
             [`${leaderName}：'${taskTitle}' 最终审批已完成。${mergeNote}${progressSuffix}`],
+            [`${leaderName}: Финальное утверждение '${taskTitle}' завершено.${mergeNote}${progressSuffix}`],
           ),
           lang,
         ),

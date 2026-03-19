@@ -180,7 +180,7 @@ export function createWorktreeMergeTools(deps: CreateWorktreeMergeToolsDeps) {
       return {
         success: false,
         message: pickL(
-          l([`병합 실패: ${msg}`], [`Merge failed: ${msg}`], [`マージ失敗: ${msg}`], [`合并失败: ${msg}`]),
+          l([`병합 실패: ${msg}`], [`Merge failed: ${msg}`], [`マージ失敗: ${msg}`], [`合并失败: ${msg}`], [`Ошибка слияния: ${msg}`]),
           lang,
         ),
       };

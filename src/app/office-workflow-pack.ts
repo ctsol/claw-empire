@@ -1,8 +1,8 @@
 import type { Agent, AgentRole, CliProvider, Department, RoomTheme, WorkflowPackKey } from "../types";
 
-export type UiLanguageLike = "ko" | "en" | "ja" | "zh";
+export type UiLanguageLike = "ko" | "en" | "ja" | "zh" | "ru";
 
-type Localized = { ko: string; en: string; ja: string; zh: string };
+type Localized = { ko: string; en: string; ja: string; zh: string; ru?: string };
 type DeptPreset = {
   name: Localized;
   icon: string;
@@ -173,12 +173,14 @@ const PACK_PRESETS: Record<WorkflowPackKey, PackPreset> = {
       en: "Development Office",
       ja: "開発オフィス",
       zh: "开发办公室",
+      ru: "Офис разработки",
     },
     summary: {
       ko: "기본 개발 조직 구조",
       en: "Default engineering organization",
       ja: "標準の開発組織",
       zh: "默认开发组织",
+      ru: "Стандартная инженерная организация",
     },
     roomThemes: DEV_THEMES,
     departments: {},
@@ -191,12 +193,14 @@ const PACK_PRESETS: Record<WorkflowPackKey, PackPreset> = {
       en: "Report Office",
       ja: "レポートオフィス",
       zh: "报告办公室",
+      ru: "Офис отчётов",
     },
     summary: {
       ko: "리서치/문서화 중심 팀 구성",
       en: "Research and documentation focused crew",
       ja: "調査・文書化中心の構成",
       zh: "以调研与文档为核心的团队",
+      ru: "Команда с фокусом на исследования и документацию",
     },
     roomThemes: {
       ceoOffice: { floor1: 0xf0e8dc, floor2: 0xebdfce, wall: 0x8f7a63, accent: 0xbd8b57 },
@@ -246,12 +250,14 @@ const PACK_PRESETS: Record<WorkflowPackKey, PackPreset> = {
       en: "Web Research Office",
       ja: "Web調査オフィス",
       zh: "网页调研办公室",
+      ru: "Офис веб-исследований",
     },
     summary: {
       ko: "소스 수집과 근거 검증 중심",
       en: "Source collection and citation verification",
       ja: "情報源収集と根拠検証中心",
       zh: "以来源收集与证据校验为核心",
+      ru: "Сбор источников и проверка ссылок",
     },
     roomThemes: {
       ceoOffice: { floor1: 0xddebf1, floor2: 0xd2e3eb, wall: 0x4e6f7f, accent: 0x3d90b5 },
@@ -295,12 +301,14 @@ const PACK_PRESETS: Record<WorkflowPackKey, PackPreset> = {
       en: "Novel Studio",
       ja: "小説スタジオ",
       zh: "小说工作室",
+      ru: "Студия романов",
     },
     summary: {
       ko: "세계관/캐릭터/서사 중심 구성",
       en: "Worldbuilding, character and narrative setup",
       ja: "世界観・キャラ・物語中心",
       zh: "世界观/角色/叙事导向",
+      ru: "Мироздание, персонажи и нарратив",
     },
     roomThemes: {
       ceoOffice: { floor1: 0xefe3d8, floor2: 0xe7d6c9, wall: 0x7c5d4b, accent: 0xb86b45 },
@@ -350,12 +358,14 @@ const PACK_PRESETS: Record<WorkflowPackKey, PackPreset> = {
       en: "Video Pre-production",
       ja: "映像プリプロ",
       zh: "视频前期策划",
+      ru: "Видеопредпродакшн",
     },
     summary: {
       ko: "콘티/샷리스트/편집 노트 중심",
       en: "Storyboard and shot-list focused setup",
       ja: "コンテ・ショットリスト中心",
       zh: "分镜与镜头清单导向",
+      ru: "Раскадровки и списки сцен",
     },
     roomThemes: {
       ceoOffice: { floor1: 0x1f1f25, floor2: 0x17171c, wall: 0x343748, accent: 0xd18d35 },
@@ -405,12 +415,14 @@ const PACK_PRESETS: Record<WorkflowPackKey, PackPreset> = {
       en: "Roleplay Studio",
       ja: "ロールプレイスタジオ",
       zh: "角色扮演工作室",
+      ru: "Студия ролевых игр",
     },
     summary: {
       ko: "캐릭터 연기와 대사 몰입 중심",
       en: "Character role and dialogue immersion",
       ja: "キャラ演技と会話没入",
       zh: "角色演绎与对话沉浸",
+      ru: "Погружение в роль и диалог",
     },
     roomThemes: {
       ceoOffice: { floor1: 0xf3e7dc, floor2: 0xebdbc9, wall: 0x7d5c4d, accent: 0xbe6f53 },

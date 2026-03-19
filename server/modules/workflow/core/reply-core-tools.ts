@@ -75,9 +75,12 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
         return "Respond in Chinese.";
       case "en":
         return "Respond in English.";
+      case "ru":
+        return "Respond in Russian.";
       case "ko":
-      default:
         return "Respond in Korean.";
+      default:
+        return "Respond in English.";
     }
   }
 

@@ -81,9 +81,9 @@ export function createProjectReviewPlanningHelpers(deps: ProjectReviewPlanningDe
       if (!normalized) return "";
       return normalized.length > max ? `${normalized.slice(0, max - 3).trimEnd()}...` : normalized;
     };
-    const taskLabel = pickL(l(["작업"], ["Task"], ["タスク"], ["任务"]), lang);
-    const selectedLabel = pickL(l(["선택"], ["Picked"], ["選択"], ["已选"]), lang);
-    const noteLabel = pickL(l(["추가의견"], ["Note"], ["追加意見"], ["追加意见"]), lang);
+    const taskLabel = pickL(l(["작업"], ["Task"], ["タスク"], ["任务"], ["Задача"]), lang);
+    const selectedLabel = pickL(l(["선택"], ["Picked"], ["選択"], ["已选"], ["Выбрано"]), lang);
+    const noteLabel = pickL(l(["추가의견"], ["Note"], ["追加意見"], ["追加意见"], ["Примечание"]), lang);
     const out: string[] = [];
     const seen = new Set<string>();
 
@@ -203,7 +203,7 @@ export function createProjectReviewPlanningHelpers(deps: ProjectReviewPlanningDe
           | undefined)
       : undefined;
     const picked = stateAgent ?? fallbackLead;
-    const defaultName = pickL(l(["기획팀장"], ["Planning Lead"], ["企画リード"], ["规划负责人"]), lang);
+    const defaultName = pickL(l(["기획팀장"], ["Planning Lead"], ["企画リード"], ["规划负责人"], ["Руководитель планирования"]), lang);
     const normalizePlanningLeadAvatar = (rawAvatar: string | null | undefined): string => {
       const avatar = String(rawAvatar ?? "").trim();
       if (!avatar || avatar === "🧠") return "🧑‍💼";

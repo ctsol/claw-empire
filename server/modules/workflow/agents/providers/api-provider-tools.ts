@@ -116,6 +116,24 @@ export function createApiProviderTools(deps: CreateApiProviderToolsDeps) {
     return url;
   }
 
+  function buildSystemPrompt(projectPath: string): string {
+    return [
+      "<role>",
+      "You are a software development specialist working on a coding project.",
+      "Your goal is to complete the assigned task thoroughly and produce high-quality code.",
+      "</role>",
+      "<context>",
+      `Project path: ${projectPath}`,
+      "</context>",
+      "<instructions>",
+      "- Read and understand the task description carefully before starting.",
+      "- Make precise, minimal changes unless a broader refactor is explicitly required.",
+      "- Follow the project's existing code style and conventions.",
+      "- Commit your work when the task is complete.",
+      "</instructions>",
+    ].join("\n");
+  }
+
   function buildApiProviderRequest(
     provider: ApiProviderRow,
     model: string,
@@ -124,6 +142,7 @@ export function createApiProviderTools(deps: CreateApiProviderToolsDeps) {
   ): { url: string; headers: Record<string, string>; body: string } {
     const apiKey = provider.api_key_enc ? decryptSecret(provider.api_key_enc) : "";
     const baseUrl = normalizeApiBaseUrl(provider.base_url);
+    const systemPrompt = buildSystemPrompt(projectPath);
 
     if (provider.type === "anthropic") {
       const messagesUrl = baseUrl.endsWith("/v1") ? `${baseUrl}/messages` : `${baseUrl}/v1/messages`;
@@ -136,10 +155,10 @@ export function createApiProviderTools(deps: CreateApiProviderToolsDeps) {
         },
         body: JSON.stringify({
           model,
-          max_tokens: 16384,
+          max_tokens: 32000,
           stream: true,
           messages: [{ role: "user", content: prompt }],
-          system: `You are a coding assistant. Project path: ${projectPath}`,
+          system: systemPrompt,
         }),
       };
     }
@@ -154,7 +173,7 @@ export function createApiProviderTools(deps: CreateApiProviderToolsDeps) {
         },
         body: JSON.stringify({
           contents: [{ role: "user", parts: [{ text: prompt }] }],
-          systemInstruction: { parts: [{ text: `You are a coding assistant. Project path: ${projectPath}` }] },
+          systemInstruction: { parts: [{ text: systemPrompt }] },
         }),
       };
     }
@@ -177,7 +196,7 @@ export function createApiProviderTools(deps: CreateApiProviderToolsDeps) {
       body: JSON.stringify({
         model,
         messages: [
-          { role: "system", content: `You are a coding assistant. Project path: ${projectPath}` },
+          { role: "system", content: systemPrompt },
           { role: "user", content: prompt },
         ],
         stream: true,

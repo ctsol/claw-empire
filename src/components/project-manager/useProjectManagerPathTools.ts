@@ -65,6 +65,7 @@ export function useProjectManagerPathTools({
         en: "This server does not support path helper APIs. Enter the path manually.",
         ja: "現在のサーバーではパス補助 API をサポートしていません。手入力してください。",
         zh: "当前服务器不支持路径辅助 API，请手动输入路径。",
+        ru: "Этот сервер не поддерживает API помощника пути. Введите путь вручную.",
       }),
     [t],
   );
@@ -76,6 +77,7 @@ export function useProjectManagerPathTools({
         en: "OS folder picker is unavailable in this environment. Use in-app browser or manual input.",
         ja: "この環境では OS フォルダ選択が利用できません。アプリ内閲覧または手入力を使ってください。",
         zh: "当前环境无法使用系统文件夹选择器，请使用应用内浏览或手动输入。",
+        ru: "Системный выбор папки недоступен. Используйте встроенный браузер или ввод вручную.",
       }),
     [t],
   );
@@ -88,6 +90,7 @@ export function useProjectManagerPathTools({
           en: "Path is outside allowed project roots.",
           ja: "許可されたプロジェクトパス範囲外です。",
           zh: "路径超出允许的项目根目录范围。",
+          ru: "Путь выходит за пределы разрешённых корневых директорий.",
         });
       }
       return t({
@@ -123,6 +126,7 @@ export function useProjectManagerPathTools({
           en: "This path is not a directory. Please enter a directory path.",
           ja: "このパスはフォルダではありません。ディレクトリパスを入力してください。",
           zh: "该路径不是文件夹，请输入目录路径。",
+          ru: "Этот путь не является директорией. Введите путь к директории.",
         });
       }
       if (err.code === "project_path_not_found") {
@@ -131,6 +135,7 @@ export function useProjectManagerPathTools({
           en: "Path not found.",
           ja: "パスが見つかりません。",
           zh: "找不到该路径。",
+          ru: "Путь не найден.",
         });
       }
       return t(fallback);

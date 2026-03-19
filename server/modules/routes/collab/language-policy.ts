@@ -1,6 +1,6 @@
 import { isLang, type Lang } from "../../../types/lang.ts";
 
-export type L10n = Record<Lang, string[]>;
+export type L10n = Record<Lang, string[]> & { ru: string[] };
 
 export type DirectivePolicy = {
   skipDelegation: boolean;
@@ -21,10 +21,10 @@ const ROLE_LABEL: Record<string, string> = {
 };
 
 const ROLE_LABEL_L10N: Record<string, Record<Lang, string>> = {
-  team_leader: { ko: "팀장", en: "Team Lead", ja: "チームリーダー", zh: "组长" },
-  senior: { ko: "시니어", en: "Senior", ja: "シニア", zh: "高级" },
-  junior: { ko: "주니어", en: "Junior", ja: "ジュニア", zh: "初级" },
-  intern: { ko: "인턴", en: "Intern", ja: "インターン", zh: "实习生" },
+  team_leader: { ko: "팀장", en: "Team Lead", ja: "チームリーダー", zh: "组长", ru: "Тимлид" },
+  senior: { ko: "시니어", en: "Senior", ja: "シニア", zh: "高级", ru: "Старший" },
+  junior: { ko: "주니어", en: "Junior", ja: "ジュニア", zh: "初级", ru: "Младший" },
+  intern: { ko: "인턴", en: "Intern", ja: "インターン", zh: "实习生", ru: "Стажёр" },
 };
 
 const DEPT_KEYWORDS: Record<string, string[]> = {
@@ -130,12 +130,13 @@ export function initializeCollabLanguagePolicy(deps: LanguagePolicyDeps) {
     return fallback ?? getPreferredLanguage();
   }
 
-  function l(ko: string[], en: string[], ja?: string[], zh?: string[]): L10n {
+  function l(ko: string[], en: string[], ja?: string[], zh?: string[], ru?: string[]): L10n {
     return {
       ko,
       en,
       ja: ja ?? en.map((s) => s),
       zh: zh ?? en.map((s) => s),
+      ru: ru ?? en.map((s) => s),
     };
   }
 
@@ -145,7 +146,7 @@ export function initializeCollabLanguagePolicy(deps: LanguagePolicyDeps) {
   }
 
   function getFlairs(agentName: string, lang: Lang): string[] {
-    const flairs: Record<string, Record<Lang, string[]>> = {
+    const flairs: Record<string, Partial<Record<Lang, string[]>> & { en: string[] }> = {
       Aria: {
         ko: ["코드 리뷰 중에", "리팩토링 구상하면서", "PR 체크하면서"],
         en: ["reviewing code", "planning a refactor", "checking PRs"],
@@ -232,6 +233,7 @@ export function initializeCollabLanguagePolicy(deps: LanguagePolicyDeps) {
       en: ["working on tasks", "making progress", "getting things done"],
       ja: ["業務処理中", "作業進行中", "仕事しながら"],
       zh: ["处理业务中", "推进工作时", "忙着干活时"],
+      ru: ["работая над задачами", "продвигаясь вперёд", "занимаясь делами"],
     };
     return defaults[lang];
   }

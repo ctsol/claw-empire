@@ -138,7 +138,7 @@ export function handleProjectReviewDecisionReply(input: ProjectReviewReplyInput)
     }
     const lang = getPreferredLanguage();
     const followupTitlePrefix = pickL(
-      l(["[의사결정 추가요청]"], ["[Decision Follow-up]"], ["[意思決定追加要請]"], ["[决策追加请求]"]),
+      l(["[의사결정 추가요청]"], ["[Decision Follow-up]"], ["[意思決定追加要請]"], ["[决策追加请求]"], ["[Уточнение решения]"]),
       lang,
     );
     const targetTaskIdInput = normalizeTextField(req.body?.target_task_id);

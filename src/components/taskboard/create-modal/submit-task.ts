@@ -127,6 +127,7 @@ export async function submitTaskWithProjectHandling(
         en: "The selected project was not found. Please select again.",
         ja: "選択したプロジェクトが見つかりません。再度選択してください。",
         zh: "找不到所选项目，请重新选择。",
+        ru: "Выбранный проект не найден. Выберите снова.",
       }),
     });
     return;
@@ -139,7 +140,8 @@ export async function submitTaskWithProjectHandling(
         ko: "입력한 프로젝트를 확정할 수 없습니다. 목록에서 선택하거나 비워두고 진행해주세요.",
         en: "Could not resolve the typed project. Pick from the list or clear it to continue.",
         ja: "入力したプロジェクトを特定できません。リストから選択するか、空欄で続行してください。",
-        zh: "无法确定输入的项目。请从列表选择，或清空后继续。",
+        zh: "无法确定输入的项目。请从列表选择，或清空후继续。",
+        ru: "Не удалось определить введённый проект. Выберите из списка или очистите поле.",
       }),
     });
     setProjectDropdownOpen(true);
@@ -155,8 +157,9 @@ export async function submitTaskWithProjectHandling(
         message: t({
           ko: "신규 프로젝트명을 입력해주세요.",
           en: "Please enter a new project name.",
-          ja: "新規プロジェクト名を入力してください。",
+          ja: "新規プロジェクト名を入력してください。",
           zh: "请输入新项目名称。",
+          ru: "Введите название нового проекта.",
         }),
       });
       return;
@@ -168,7 +171,8 @@ export async function submitTaskWithProjectHandling(
           ko: "신규 프로젝트 경로를 입력해주세요.",
           en: "Please enter a new project path.",
           ja: "新規プロジェクトのパスを入力してください。",
-          zh: "请输入新项目路径。",
+          zh: "请输入新항目路径。",
+          ru: "Введите путь к новому проекту.",
         }),
       });
       return;
@@ -180,7 +184,8 @@ export async function submitTaskWithProjectHandling(
           ko: "신규 프로젝트 생성 시 설명은 필수이며, 프로젝트 핵심 목표로 저장됩니다.",
           en: "Description is required for new project creation and will be saved as the project core goal.",
           ja: "新規プロジェクト作成時は説明が必須で、プロジェクトのコア目標として保存されます。",
-          zh: "创建新项目时说明为必填，并会保存为项目核心目标。",
+          zh: "创建新项目时说明为必填，并会保存为项目核心목标。",
+          ru: "Описание обязательно при создании нового проекта и будет сохранено как основная цель проекта.",
         }),
       });
       return;
@@ -207,6 +212,7 @@ export async function submitTaskWithProjectHandling(
               en: "The path is not a directory. Please enter a directory path.",
               ja: "入力したパスはフォルダではありません。ディレクトリパスを指定してください。",
               zh: "该路径不是文件夹，请输入目录路径。",
+              ru: "Этот путь не является директорией. Введите путь к директории.",
             }),
           });
           return;
@@ -234,6 +240,7 @@ export async function submitTaskWithProjectHandling(
               en: "Failed to verify project path.",
               ja: "プロジェクトパスの確認に失敗しました。",
               zh: "项目路径校验失败。",
+              ru: "Не удалось проверить путь проекта.",
             }),
           });
           return;
@@ -299,7 +306,10 @@ export async function submitTaskWithProjectHandling(
               : "このパスは既存プロジェクトで使用中です。既存プロジェクトを選択してください。",
             zh: existingProjectName
               ? `该路径已被‘${existingProjectName}’使用，请选择已有项目。`
-              : "该路径已被现有项目使用，请选择已有项目。",
+              : "该路径已被现有项目使用，请选择已有项목。",
+            ru: existingProjectName
+              ? `Этот путь уже используется проектом '${existingProjectName}'. Используйте существующий проект.`
+              : "Этот путь уже используется другим проектом. Используйте существующий проект.",
           }),
         });
         return;
@@ -327,6 +337,7 @@ export async function submitTaskWithProjectHandling(
           en: "Failed to create a new project. Please check name/path.",
           ja: "新規プロジェクトの作成に失敗しました。名前/パスを確認してください。",
           zh: "新项目创建失败，请检查名称/路径。",
+          ru: "Не удалось создать новый проект. Проверьте название/путь.",
         }),
       });
       return;
@@ -363,7 +374,8 @@ export async function submitTaskWithProjectHandling(
         ko: "업무 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.",
         en: "Failed to create task. Please try again shortly.",
         ja: "タスク作成中にエラーが発生しました。しばらくしてから再試行してください。",
-        zh: "创建任务时发生错误，请稍后重试。",
+        zh: "创建任务时发생错误，请稍后重试。",
+        ru: "Ошибка при создании задачи. Попробуйте снова.",
       }),
     });
   } finally {

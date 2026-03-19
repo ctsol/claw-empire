@@ -2,8 +2,8 @@ import type { KeyboardEvent, RefObject } from "react";
 import type { Agent } from "../../types";
 import ChatModeHint from "./ChatModeHint";
 
-type ChatMode = "chat" | "task" | "announcement" | "report";
-type Tr = (ko: string, en: string, ja?: string, zh?: string) => string;
+type ChatMode = "chat" | "task" | "announcement" | "report" | "btw";
+type Tr = (ko: string, en: string, ja?: string, zh?: string, ru?: string) => string;
 
 interface ChatComposerProps {
   mode: ChatMode;
@@ -36,7 +36,7 @@ export default function ChatComposer({
 }: ChatComposerProps) {
   return (
     <>
-      <div className="flex flex-shrink-0 gap-2 border-t border-gray-700/50 px-4 pb-1 pt-3">
+      <div className="flex flex-shrink-0 gap-1.5 border-t border-gray-700/50 px-4 pb-1 pt-3">
         <button
           onClick={() => onModeChange(mode === "task" ? "chat" : "task")}
           disabled={!selectedAgent}
@@ -47,7 +47,7 @@ export default function ChatComposer({
           }`}
         >
           <span>📋</span>
-          <span>{tr("업무 지시", "Task", "タスク指示", "任务指示")}</span>
+          <span>{tr("업무 지시", "Task", "タスク指示", "任务指示", "Задача")}</span>
         </button>
 
         <button
@@ -57,7 +57,7 @@ export default function ChatComposer({
           }`}
         >
           <span>📢</span>
-          <span>{tr("전사 공지", "Announcement", "全体告知", "全员公告")}</span>
+          <span>{tr("전사 공지", "Announce", "全体告知", "全员公告", "Объявление")}</span>
         </button>
 
         <button
@@ -70,7 +70,20 @@ export default function ChatComposer({
           }`}
         >
           <span>📊</span>
-          <span>{tr("보고 요청", "Report", "レポート依頼", "报告请求")}</span>
+          <span>{tr("보고 요청", "Report", "レポート依頼", "报告请求", "Отчёт")}</span>
+        </button>
+
+        <button
+          onClick={() => onModeChange(mode === "btw" ? "chat" : "btw")}
+          disabled={!selectedAgent}
+          className={`flex flex-1 items-center justify-center gap-1 rounded-lg px-2 py-1.5 text-xs font-medium transition-colors ${
+            mode === "btw"
+              ? "bg-purple-600 text-white"
+              : "bg-gray-700 text-gray-300 hover:bg-gray-600 disabled:cursor-not-allowed disabled:opacity-40"
+          }`}
+        >
+          <span>💬</span>
+          <span>{tr("빠른 질문", "Ask", "クイック質問", "快速提问", "Спросить")}</span>
         </button>
       </div>
 
@@ -116,7 +129,16 @@ export default function ChatComposer({
                         "Write a report request...",
                         "レポート依頼内容を入力してください...",
                         "请输入报告请求内容...",
+                        "Введите запрос на отчёт...",
                       )
+                    : mode === "btw"
+                      ? tr(
+                          "빠른 질문 내용...",
+                          "Ask a quick question (no work, just answer)...",
+                          "クイック質問を入力...",
+                          "输入快速问题...",
+                          "Быстрый вопрос (без задач, только ответ)...",
+                        )
                     : selectedAgent
                       ? tr(
                           `${getAgentName(selectedAgent)}에게 메시지 보내기...`,
@@ -153,7 +175,9 @@ export default function ChatComposer({
                       ? "bg-blue-600 text-white hover:bg-blue-500"
                       : mode === "report"
                         ? "bg-emerald-600 text-white hover:bg-emerald-500"
-                        : "bg-blue-600 text-white hover:bg-blue-500"
+                        : mode === "btw"
+                          ? "bg-purple-600 text-white hover:bg-purple-500"
+                          : "bg-blue-600 text-white hover:bg-blue-500"
                 : "cursor-not-allowed bg-gray-700 text-gray-600"
             }`}
             aria-label={tr("전송", "Send", "送信", "发送")}

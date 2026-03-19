@@ -86,25 +86,36 @@ export function buildCeoAndHallway({
     .stroke({ width: 1, color: blendColor(ceoTheme.accent, 0xffffff, 0.2), alpha: 0.35 });
   ceoLayer.addChild(ceoBorder);
 
+  const ceoSignW = 118;
+  const ceoSignH = 26;
+  const ceoSignX = 10;
+  const ceoSignY = 6;
+  const ceoLabelBg = new Graphics();
+  ceoLabelBg.roundRect(ceoSignX + 1.5, ceoSignY + 2, ceoSignW, ceoSignH, 5).fill({ color: 0x000000, alpha: 0.2 });
+  ceoLabelBg.roundRect(ceoSignX, ceoSignY, ceoSignW, ceoSignH, 5).fill(blendColor(ceoTheme.accent, ceoTheme.wall, 0.35));
+  ceoLabelBg.roundRect(ceoSignX + 1, ceoSignY + 1, ceoSignW - 2, ceoSignH - 2, 4).stroke({ width: 1, color: blendColor(ceoTheme.accent, 0xffffff, 0.25), alpha: 0.7 });
+  ceoLayer.addChild(ceoLabelBg);
+  // CEO icon
+  const ceoSignIcon = new Text({
+    text: "👑",
+    style: new TextStyle({ fontSize: 11, fontFamily: "system-ui, sans-serif" }),
+  });
+  ceoSignIcon.anchor.set(0, 0.5);
+  ceoSignIcon.position.set(ceoSignX + 7, ceoSignY + ceoSignH / 2);
+  ceoLayer.addChild(ceoSignIcon);
   const ceoLabel = new Text({
     text: pickLocale(activeLocale, LOCALE_TEXT.ceoOffice),
     style: new TextStyle({
       fontSize: 10,
       fill: 0xffffff,
-      fontWeight: "bold",
-      fontFamily: "monospace",
-      letterSpacing: 2,
+      fontWeight: "700",
+      fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
+      dropShadow: { alpha: 0.5, blur: 1.5, distance: 1, color: 0x000000 },
+      letterSpacing: 0.3,
     }),
   });
-  const ceoLabelBg = new Graphics();
-  ceoLabelBg
-    .roundRect(10, 6, ceoLabel.width + 8, 14, 3)
-    .fill({ color: blendColor(ceoTheme.accent, ceoTheme.wall, 0.35), alpha: 1 });
-  ceoLabelBg
-    .roundRect(10, 6, ceoLabel.width + 8, 14, 3)
-    .stroke({ width: 1, color: blendColor(ceoTheme.accent, 0xffffff, 0.2), alpha: 0.8 });
-  ceoLabel.position.set(12, 8);
-  ceoLayer.addChild(ceoLabelBg);
+  ceoLabel.anchor.set(0, 0.5);
+  ceoLabel.position.set(ceoSignX + 23, ceoSignY + ceoSignH / 2);
   ceoLayer.addChild(ceoLabel);
   drawBunting(
     ceoLayer,

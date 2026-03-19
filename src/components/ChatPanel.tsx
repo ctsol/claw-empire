@@ -68,7 +68,7 @@ export function ChatPanel({
   const { t, locale } = useI18n();
   const isKorean = locale.startsWith("ko");
 
-  const tr = (ko: string, en: string, ja = en, zh = en) => t({ ko, en, ja, zh });
+  const tr = (ko: string, en: string, ja = en, zh = en, ru = en) => t({ ko, en, ja, zh, ru });
 
   const getAgentName = (agent: Agent | null | undefined) => {
     if (!agent) return "";
@@ -330,9 +330,11 @@ export function ChatPanel({
     } else if (mode === "report" && selectedAgent) {
       action = {
         kind: "report",
-        content: `[${tr("보고 요청", "Report Request", "レポート依頼", "报告请求")}] ${trimmed}`,
+        content: `[${tr("보고 요청", "Report Request", "レポート依頼", "报告请求", "Запрос отчёта")}] ${trimmed}`,
         receiverId: selectedAgent.id,
       };
+    } else if (mode === "btw" && selectedAgent) {
+      action = { kind: "btw", content: trimmed, receiverId: selectedAgent.id };
     } else if (selectedAgent) {
       action = { kind: "chat", content: trimmed, receiverId: selectedAgent.id };
     } else {
@@ -340,6 +342,13 @@ export function ChatPanel({
     }
 
     const requiresProject = action.kind === "directive" || action.kind === "task" || action.kind === "report";
+    // btw = quick question, no project needed, send immediately
+    if (action.kind === "btw") {
+      onSendMessage(action.content, "agent", action.receiverId, "btw");
+      setInput("");
+      textareaRef.current?.focus();
+      return;
+    }
 
     if (requiresProject) {
       openProjectBranch(action);

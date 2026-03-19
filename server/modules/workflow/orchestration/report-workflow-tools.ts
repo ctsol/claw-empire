@@ -198,7 +198,7 @@ export function createReportWorkflowTools(deps: CreateReportWorkflowToolsDeps) {
     const leader = findTeamLeader(task.department_id);
     const leaderName = leader
       ? getAgentDisplayName(leader, lang)
-      : pickL(l(["팀장"], ["Team Lead"], ["チームリーダー"], ["组长"]), lang);
+      : pickL(l(["팀장"], ["Team Lead"], ["チームリーダー"], ["组长"], ["Руководитель"]), lang);
     notifyCeo(
       pickL(
         l(

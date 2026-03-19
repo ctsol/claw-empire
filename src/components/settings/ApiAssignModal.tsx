@@ -23,10 +23,10 @@ export default function ApiAssignModal({ t, localeTag, apiState }: ApiAssignModa
       ? (value as WorkflowPackKey)
       : "development";
   const ROLE_LABELS: Record<string, Record<string, string>> = {
-    team_leader: { ko: "팀장", en: "Team Leader", ja: "チームリーダー", zh: "组长" },
-    senior: { ko: "시니어", en: "Senior", ja: "シニア", zh: "高级" },
-    junior: { ko: "주니어", en: "Junior", ja: "ジュニア", zh: "初级" },
-    intern: { ko: "인턴", en: "Intern", ja: "インターン", zh: "实习生" },
+    team_leader: { ko: "팀장", en: "Team Leader", ja: "チームリーダー", zh: "组长", ru: "Руководитель" },
+    senior: { ko: "시니어", en: "Senior", ja: "シニア", zh: "高级", ru: "Старший" },
+    junior: { ko: "주니어", en: "Junior", ja: "ジュニア", zh: "初级", ru: "Младший" },
+    intern: { ko: "인턴", en: "Intern", ja: "インターン", zh: "实习生", ru: "Стажёр" },
   };
 
   const roleBadge = (role: string) => {
@@ -122,6 +122,7 @@ export default function ApiAssignModal({ t, localeTag, apiState }: ApiAssignModa
               en: "Assign Model to Agent",
               ja: "エージェントにモデル割当",
               zh: "分配模型给代理",
+              ru: "Назначить модель агенту",
             })}
           </h4>
           <p className="text-[11px] text-slate-400 mt-0.5 font-mono truncate">{apiAssignTarget.model}</p>
@@ -135,6 +136,7 @@ export default function ApiAssignModal({ t, localeTag, apiState }: ApiAssignModa
                 en: "Loading agents...",
                 ja: "エージェント読み込み中...",
                 zh: "正在加载代理...",
+                ru: "Загрузка агентов...",
               })}
             </p>
           ) : (
@@ -163,7 +165,7 @@ export default function ApiAssignModal({ t, localeTag, apiState }: ApiAssignModa
                       <div className="flex items-center gap-1.5 px-2 py-1.5 border-b border-slate-700/40">
                         <span className="text-sm">📁</span>
                         <span className="text-[11px] font-semibold text-slate-500 tracking-wide">
-                          {t({ ko: "미배정", en: "Unassigned", ja: "未配属", zh: "未分配" })}
+                          {t({ ko: "미배정", en: "Unassigned", ja: "未配属", zh: "未分配", ru: "Без назначения" })}
                         </span>
                       </div>
                       {unassigned.map(renderAgentRow)}
@@ -180,7 +182,7 @@ export default function ApiAssignModal({ t, localeTag, apiState }: ApiAssignModa
             onClick={() => setApiAssignTarget(null)}
             className="text-xs px-3 py-1.5 bg-slate-600 hover:bg-slate-500 text-slate-300 rounded-lg transition-colors"
           >
-            {t({ ko: "닫기", en: "Close", ja: "閉じる", zh: "关闭" })}
+            {t({ ko: "닫기", en: "Close", ja: "閉じる", zh: "关闭", ru: "Закрыть" })}
           </button>
         </div>
       </div>

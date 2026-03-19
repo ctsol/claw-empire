@@ -41,10 +41,10 @@ const TASK_MESSENGER_ROUTE_PREFIX = "[messenger-route]";
 const DECISION_NOTICE_CACHE_MAX = 1024;
 const DECISION_NOTICE_CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
 const DECISION_NOTICE_SENT_KEY_PREFIX = "decision_notice_sent:";
-const DECISION_REPLY_MARKER_RE = /\[(의사결정\s*회신|decision\s*reply|意思決定返信|决策回复)\]/i;
+const DECISION_REPLY_MARKER_RE = /\[(의사결정\s*회신|decision\s*reply|意思決定返信|决策回复|ответ\s*на\s*решение)\]/i;
 const DECISION_TOKEN_RE = /\[DECISION:([A-Za-z0-9_-]{6,128})\]/i;
 const DECISION_APPROVE_WORD_RE =
-  /^(승인|진행|go|ok|okay|yes|yep|approve|approved|확인|동의|承認|進行|はい|同意|通过|批准|好的|可以|行)$/i;
+  /^(승인|진행|go|ok|okay|yes|yep|approve|approved|확인|동의|承認|進行|はい|同意|通过|批准|好的|可以|行|да|принять|принято|подтвердить|ок|ладно)$/i;
 const DECISION_NOTE_RE = /(?:추가\s*(?:코멘트|의견|메모)|note|비고|备注)\s*[:：]\s*(.+)$/i;
 
 export function createDecisionInboxMessengerBridge(deps: DecisionBridgeDeps) {

@@ -18,7 +18,7 @@ export function createReviewRoundDecisionItems(deps: ReviewRoundDecisionItemDeps
   } = deps;
 
   function getReviewDecisionFallbackLabel(lang: string): string {
-    return pickL(l(["기존 작업 이어서 진행"], ["Continue Existing Work"], ["既存作業を継続"], ["继续现有工作"]), lang);
+    return pickL(l(["기존 작업 이어서 진행"], ["Continue Existing Work"], ["既存作業を継続"], ["继续现有工作"], ["Продолжить текущую работу"]), lang);
   }
 
   function getReviewDecisionNotes(taskId: string, reviewRound: number, limit = 6): string[] {

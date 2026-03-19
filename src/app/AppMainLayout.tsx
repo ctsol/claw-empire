@@ -6,6 +6,7 @@ import TaskBoard from "../components/TaskBoard";
 import AgentManager from "../components/AgentManager";
 import SkillsLibrary from "../components/SkillsLibrary";
 import SettingsPanel from "../components/SettingsPanel";
+import CeoMeetingPanel from "../components/CeoMeetingPanel";
 import { I18nProvider } from "../i18n";
 import type {
   Agent,
@@ -195,7 +196,7 @@ export default function AppMainLayout({
   children,
 }: AppMainLayoutProps) {
   const uiLanguage =
-    labels.uiLanguage === "ko" || labels.uiLanguage === "ja" || labels.uiLanguage === "zh" ? labels.uiLanguage : "en";
+    labels.uiLanguage === "ko" || labels.uiLanguage === "ja" || labels.uiLanguage === "zh" || labels.uiLanguage === "ru" ? labels.uiLanguage : "en";
   const officePackKey = normalizeOfficeWorkflowPack(activeOfficeWorkflowPack);
   const officePackOptions = useMemo(() => listOfficePackOptions(uiLanguage), [uiLanguage]);
   const officePackLabel =
@@ -205,12 +206,15 @@ export default function AppMainLayout({
         ? "オフィスパック"
         : labels.uiLanguage === "zh"
           ? "办公室包"
-          : "Office Pack";
+          : labels.uiLanguage === "ru"
+            ? "Офисный пакет"
+            : "Office Pack";
   const officePackBootstrappingMessage = useMemo(() => {
     if (!officePackBootstrappingLabel) return null;
     if (uiLanguage === "ko") return `${officePackBootstrappingLabel} 오피스 팩 배치중...`;
     if (uiLanguage === "ja") return `${officePackBootstrappingLabel} オフィスパックを配置中...`;
     if (uiLanguage === "zh") return `${officePackBootstrappingLabel} 办公室包部署中...`;
+    if (uiLanguage === "ru") return `Развёртывание офисного пакета ${officePackBootstrappingLabel}...`;
     return `Deploying ${officePackBootstrappingLabel} office pack...`;
   }, [officePackBootstrappingLabel, uiLanguage]);
   const generatedOfficePresentation = useMemo(
@@ -407,6 +411,8 @@ export default function AppMainLayout({
             onToggleTheme={toggleTheme}
             onToggleMobileHeaderMenu={() => setMobileHeaderMenuOpen(!mobileHeaderMenuOpen)}
             onCloseMobileHeaderMenu={() => setMobileHeaderMenuOpen(false)}
+            onOpenCeoMeeting={() => setView("ceo-meeting")}
+            meetingLabel={uiLanguage === "ru" ? "Совещание" : uiLanguage === "ko" ? "회의" : "Meeting"}
           />
 
           {officePackBootstrappingMessage && (
@@ -465,6 +471,15 @@ export default function AppMainLayout({
                   </button>
                 </div>
               </div>
+            </div>
+          )}
+
+          {view === "ceo-meeting" && (
+            <div className="flex flex-col" style={{ height: "calc(100vh - 56px)" }}>
+              <CeoMeetingPanel
+                onBack={() => setView("office")}
+                lang={uiLanguage}
+              />
             </div>
           )}
 

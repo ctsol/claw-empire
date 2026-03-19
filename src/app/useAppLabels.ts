@@ -31,12 +31,14 @@ export function useAppLabels({
     en: "Loading Claw-Empire...",
     ja: "Claw-Empireを読み込み中...",
     zh: "Claw-Empire 加载中...",
+    ru: "Загрузка Claw-Empire...",
   });
   const loadingSubtitle = pickLang(uiLanguage, {
     ko: "AI 에이전트 제국을 준비하고 있습니다",
     en: "Preparing your AI agent empire",
     ja: "AIエージェント帝国を準備しています",
     zh: "正在准备你的 AI 代理帝国",
+    ru: "Подготовка вашей империи ИИ-агентов",
   });
   const viewTitle = (() => {
     switch (view) {
@@ -46,6 +48,7 @@ export function useAppLabels({
           en: "Office",
           ja: "オフィス",
           zh: "办公室",
+          ru: "Офис",
         })}`;
       case "dashboard":
         return `📊 ${pickLang(uiLanguage, {
@@ -53,6 +56,7 @@ export function useAppLabels({
           en: "Dashboard",
           ja: "ダッシュボード",
           zh: "仪表盘",
+          ru: "Панель управления",
         })}`;
       case "tasks":
         return `📋 ${pickLang(uiLanguage, {
@@ -60,6 +64,7 @@ export function useAppLabels({
           en: "Tasks",
           ja: "タスク管理",
           zh: "任务管理",
+          ru: "Задачи",
         })}`;
       case "agents":
         return `${pickLang(uiLanguage, {
@@ -67,6 +72,7 @@ export function useAppLabels({
           en: "Agents",
           ja: "社員管理",
           zh: "员工管理",
+          ru: "Агенты",
         })}`;
       case "skills":
         return `📚 ${pickLang(uiLanguage, {
@@ -74,6 +80,7 @@ export function useAppLabels({
           en: "Skills",
           ja: "スキル資料室",
           zh: "技能库",
+          ru: "Навыки",
         })}`;
       case "settings":
         return `⚙️ ${pickLang(uiLanguage, {
@@ -81,23 +88,34 @@ export function useAppLabels({
           en: "Settings",
           ja: "設定",
           zh: "设置",
+          ru: "Настройки",
+        })}`;
+      case "ceo-meeting":
+        return `📋 ${pickLang(uiLanguage, {
+          ko: "심층 회의",
+          en: "Advanced Meeting",
+          ja: "高度な会議",
+          zh: "高级会议",
+          ru: "Совещание",
         })}`;
       default:
         return "";
     }
   })();
-  const announcementLabel = `📢 ${pickLang(uiLanguage, {
+  const announcementLabel = pickLang(uiLanguage, {
     ko: "전사 공지",
     en: "Announcement",
     ja: "全社告知",
     zh: "全员公告",
-  })}`;
-  const roomManagerLabel = `🏢 ${pickLang(uiLanguage, {
+    ru: "Объявление",
+  });
+  const roomManagerLabel = pickLang(uiLanguage, {
     ko: "사무실 관리",
     en: "Office Manager",
     ja: "オフィス管理",
     zh: "办公室管理",
-  })}`;
+    ru: "Управление офисом",
+  });
   const roomManagerDepartments = useMemo(
     () => [
       {
@@ -107,6 +125,7 @@ export function useAppLabels({
           en: "CEO Office",
           ja: "CEOオフィス",
           zh: "CEO办公室",
+          ru: "Офис генерального директора",
         }),
       },
       ...departments,
@@ -117,34 +136,39 @@ export function useAppLabels({
           en: "Break Room",
           ja: "休憩室",
           zh: "休息室",
+          ru: "Комната отдыха",
         }),
       },
     ],
     [departments, uiLanguage],
   );
-  const reportLabel = `📋 ${pickLang(uiLanguage, {
+  const reportLabel = pickLang(uiLanguage, {
     ko: "보고서",
     en: "Reports",
     ja: "レポート",
     zh: "报告",
-  })}`;
+    ru: "Отчёты",
+  });
   const tasksPrimaryLabel = pickLang(uiLanguage, {
     ko: "업무",
     en: "Tasks",
     ja: "タスク",
     zh: "任务",
+    ru: "Задачи",
   });
   const agentStatusLabel = pickLang(uiLanguage, {
     ko: "에이전트",
     en: "Agents",
     ja: "エージェント",
     zh: "代理",
+    ru: "Агенты",
   });
   const decisionLabel = pickLang(uiLanguage, {
     ko: "의사결정",
     en: "Decisions",
     ja: "意思決定",
     zh: "决策",
+    ru: "Решения",
   });
   const effectiveUpdateStatus = forceUpdateBanner
     ? {
@@ -173,6 +197,7 @@ export function useAppLabels({
         en: `New version v${effectiveUpdateStatus?.latest_version} is available (current v${effectiveUpdateStatus?.current_version}).`,
         ja: `新しいバージョン v${effectiveUpdateStatus?.latest_version} が利用可能です（現在 v${effectiveUpdateStatus?.current_version}）。`,
         zh: `发现新版本 v${effectiveUpdateStatus?.latest_version}（当前 v${effectiveUpdateStatus?.current_version}）。`,
+        ru: `Доступна новая версия v${effectiveUpdateStatus?.latest_version} (текущая v${effectiveUpdateStatus?.current_version}).`,
       })
     : "";
   const updateHint =
@@ -182,24 +207,28 @@ export function useAppLabels({
           en: "In Windows PowerShell, run `git pull; pnpm install`, then restart the server.",
           ja: "Windows PowerShell で `git pull; pnpm install` を実行し、サーバーを再起動してください。",
           zh: "在 Windows PowerShell 中执行 `git pull; pnpm install`，然后重启服务。",
+          ru: "В Windows PowerShell выполните `git pull; pnpm install`, затем перезапустите сервер.",
         })
       : pickLang(uiLanguage, {
           ko: "macOS/Linux에서 `git pull && pnpm install` 실행 후 서버를 재시작하세요.",
           en: "On macOS/Linux, run `git pull && pnpm install`, then restart the server.",
           ja: "macOS/Linux で `git pull && pnpm install` を実行し、サーバーを再起動してください。",
           zh: "在 macOS/Linux 上执行 `git pull && pnpm install`，然后重启服务。",
+          ru: "На macOS/Linux выполните `git pull && pnpm install`, затем перезапустите сервер.",
         });
   const updateReleaseLabel = pickLang(uiLanguage, {
     ko: "릴리즈 노트",
     en: "Release Notes",
     ja: "リリースノート",
     zh: "发布说明",
+    ru: "Примечания к выпуску",
   });
   const updateDismissLabel = pickLang(uiLanguage, {
     ko: "나중에",
     en: "Dismiss",
     ja: "後で",
     zh: "稍后",
+    ru: "Позже",
   });
   const autoUpdateNoticeVisible = Boolean(settings.autoUpdateNoticePending);
   const autoUpdateNoticeTitle = pickLang(uiLanguage, {
@@ -207,18 +236,21 @@ export function useAppLabels({
     en: "Update notice: Auto Update toggle has been added.",
     ja: "更新のお知らせ: Auto Update トグルが追加されました。",
     zh: "更新提示：已新增 Auto Update 开关。",
+    ru: "Уведомление об обновлении: добавлен переключатель автообновления.",
   });
   const autoUpdateNoticeHint = pickLang(uiLanguage, {
     ko: "기존 설치(1.1.3 이하)에서는 기본값이 OFF입니다. Settings > General에서 필요 시 ON으로 전환할 수 있습니다.",
     en: "For existing installs (v1.1.3 and below), the default remains OFF. You can enable it in Settings > General when needed.",
     ja: "既存インストール（v1.1.3 以下）では既定値は OFF のままです。必要に応じて Settings > General で ON にできます。",
     zh: "对于现有安装（v1.1.3 及以下），默认仍为 OFF。可在 Settings > General 中按需开启。",
+    ru: "Для существующих установок (v1.1.3 и ниже) значение по умолчанию остаётся ВЫКЛ. При необходимости включите в Настройки > Основные.",
   });
   const autoUpdateNoticeActionLabel = pickLang(uiLanguage, {
     ko: "확인",
     en: "Got it",
     ja: "確認",
     zh: "知道了",
+    ru: "Понятно",
   });
   const autoUpdateNoticeContainerClass =
     theme === "light"
@@ -237,6 +269,7 @@ export function useAppLabels({
         en: "Test display mode is on. Remove `?force_update_banner=1` to return to normal behavior.",
         ja: "テスト表示モードです。`?force_update_banner=1` を外すと通常動作に戻ります。",
         zh: "当前为测试显示模式。移除 `?force_update_banner=1` 即可恢复正常行为。",
+        ru: "Включён режим тестового отображения. Удалите `?force_update_banner=1` для возврата к обычному поведению.",
       })
     : "";
 

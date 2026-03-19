@@ -141,7 +141,11 @@ export async function inferProjectKindWithModel(
         ? "Respond in Japanese."
         : lang === "zh"
           ? "Respond in Chinese."
-          : "Respond in Korean.";
+          : lang === "ru"
+            ? "Respond in Russian."
+            : lang === "ko"
+              ? "Respond in Korean."
+              : "Respond in English.";
 
   const prompt = [
     "[Project Kind Classifier]",
@@ -209,6 +213,7 @@ function projectPathLabel(lang: Lang): string {
   if (lang === "en") return "Path";
   if (lang === "ja") return "パス";
   if (lang === "zh") return "路径";
+  if (lang === "ru") return "Путь";
   return "경로";
 }
 
@@ -216,6 +221,7 @@ function projectNameLabel(lang: Lang): string {
   if (lang === "en") return "Name";
   if (lang === "ja") return "名前";
   if (lang === "zh") return "名称";
+  if (lang === "ru") return "Название";
   return "이름";
 }
 

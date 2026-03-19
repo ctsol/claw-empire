@@ -135,6 +135,7 @@ export default function App() {
     if (lang === "ko") return label.ko || label.en;
     if (lang === "ja") return label.ja || label.en;
     if (lang === "zh") return label.zh || label.en;
+    if (lang === "ru") return label.ru || label.en;
     return label.en;
   };
 

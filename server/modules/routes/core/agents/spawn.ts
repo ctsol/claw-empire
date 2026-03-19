@@ -207,8 +207,8 @@ export function registerAgentSpawnRoute(ctx: RuntimeContext): void {
         task.description ? `\n${task.description}` : "",
         workflowPackGuidance ? `\n[Workflow Pack Execution Rules]\n${workflowPackGuidance}` : "",
         `NOTE: You are working in an isolated Git worktree branch (climpire/${taskId.slice(0, 8)}). Commit your changes normally.`,
-        `Agent: ${agent.name} (${roleLabel}, ${agent.department_name || "Unassigned"})`,
-        agent.personality ? `Personality: ${agent.personality}` : "",
+        `Role: ${roleLabel} (${agent.department_name || "Unassigned"})`,
+        agent.personality ? `Work style: ${agent.personality}` : "",
         deptConstraint,
         departmentPromptBlock,
         pickL(

@@ -30,6 +30,7 @@ export default function MissingPathPromptDialog({
               en: "Confirm Project Path",
               ja: "プロジェクトパス確認",
               zh: "确认项目路径",
+              ru: "Подтвердить путь проекта",
             })}
           </h3>
         </div>
@@ -40,6 +41,7 @@ export default function MissingPathPromptDialog({
               en: "This path does not exist. Create it now?",
               ja: "このパスは存在しません。作成しますか？",
               zh: "该路径不存在。现在创建吗？",
+              ru: "Этот путь не существует. Создать его?",
             })}
           </p>
           <p className="break-all rounded-md border border-slate-700 bg-slate-800/70 px-2.5 py-2 text-xs text-slate-200">
@@ -52,6 +54,7 @@ export default function MissingPathPromptDialog({
                 en: `Base folder: ${prompt.nearestExistingParent}`,
                 ja: `基準フォルダ: ${prompt.nearestExistingParent}`,
                 zh: `基准目录：${prompt.nearestExistingParent}`,
+                ru: `Базовая папка: ${prompt.nearestExistingParent}`,
               })}
             </p>
           )}
@@ -62,6 +65,7 @@ export default function MissingPathPromptDialog({
                 en: "This path is not creatable with current permissions. Choose another path.",
                 ja: "現在の権限ではこのパスを作成できません。別のパスを指定してください。",
                 zh: "当前权限无法创建此路径，请选择其他路径。",
+                ru: "Создание этого пути невозможно с текущими правами. Выберите другой путь.",
               })}
             </p>
           )}
@@ -72,7 +76,7 @@ export default function MissingPathPromptDialog({
             onClick={onCancel}
             className="rounded-md border border-slate-600 px-3 py-1.5 text-xs font-semibold text-slate-200 transition hover:bg-slate-800"
           >
-            {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消" })}
+            {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消", ru: "Отмена" })}
           </button>
           <button
             type="button"
@@ -80,7 +84,7 @@ export default function MissingPathPromptDialog({
             onClick={onConfirmCreate}
             className="rounded-md bg-emerald-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-emerald-500 disabled:cursor-not-allowed disabled:opacity-40"
           >
-            {t({ ko: "예", en: "Yes", ja: "はい", zh: "是" })}
+            {t({ ko: "예", en: "Yes", ja: "はい", zh: "是", ru: "Да" })}
           </button>
         </div>
       </div>

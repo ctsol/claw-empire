@@ -56,7 +56,7 @@ export function DashboardHeroHeader({
             <h1 className="dashboard-title-gradient text-2xl font-black tracking-tight sm:text-3xl">{companyName}</h1>
             <span className="flex items-center gap-1.5 rounded-full border border-emerald-400/40 bg-emerald-500/15 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-widest text-emerald-300">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-              {t({ ko: "실시간", en: "LIVE", ja: "ライブ", zh: "实时" })}
+              {t({ ko: "실시간", en: "LIVE", ja: "ライブ", zh: "实时", ru: "ПРЯМОЙ ЭФИР" })}
             </span>
           </div>
           <p className="text-xs" style={{ color: "var(--th-text-muted)" }}>
@@ -65,6 +65,7 @@ export function DashboardHeroHeader({
               en: "Agents are executing missions in real time",
               ja: "エージェントがリアルタイムでミッションを実行中です",
               zh: "代理正在实时执行任务",
+              ru: "Агенты выполняют миссии в реальном времени",
             })}
           </p>
         </div>
@@ -84,8 +85,8 @@ export function DashboardHeroHeader({
           </div>
           {reviewQueue > 0 && (
             <span className="flex items-center gap-1.5 rounded-lg border border-orange-400/30 bg-orange-500/15 px-3 py-1.5 text-xs font-bold text-orange-300 animate-neon-pulse-orange">
-              🔔 {t({ ko: "대기", en: "Queued", ja: "待機", zh: "待处理" })} {numberFormatter.format(reviewQueue)}
-              {t({ ko: "건", en: "", ja: "件", zh: "项" })}
+              🔔 {t({ ko: "대기", en: "Queued", ja: "待機", zh: "待处理", ru: "В очереди" })} {numberFormatter.format(reviewQueue)}
+              {t({ ko: "건", en: "", ja: "件", zh: "项", ru: "" })}
             </span>
           )}
         </div>
@@ -198,7 +199,7 @@ export function DashboardRankingBoard({
           </span>
           <div>
             <h2 className="dashboard-ranking-gradient text-lg font-black uppercase tracking-wider">
-              {t({ ko: "랭킹 보드", en: "RANKING BOARD", ja: "ランキングボード", zh: "排行榜" })}
+              {t({ ko: "랭킹 보드", en: "RANKING BOARD", ja: "ランキングボード", zh: "排行榜", ru: "ТАБЛИЦА ЛИДЕРОВ" })}
             </h2>
             <p className="text-[10px]" style={{ color: "var(--th-text-muted)" }}>
               {t({
@@ -206,6 +207,7 @@ export function DashboardRankingBoard({
                 en: "Agent ranking by XP",
                 ja: "XP 基準のエージェント順位",
                 zh: "按 XP 排名",
+                ru: "Рейтинг агентов по XP",
               })}
             </p>
           </div>
@@ -227,6 +229,7 @@ export function DashboardRankingBoard({
               en: "No agents registered",
               ja: "登録されたエージェントがいません",
               zh: "暂无已注册代理",
+              ru: "Нет зарегистрированных агентов",
             })}
           </p>
           <p className="text-[10px]">
@@ -235,6 +238,7 @@ export function DashboardRankingBoard({
               en: "Add agents and start missions",
               ja: "エージェントを追加してミッションを開始しましょう",
               zh: "添加代理并开始任务",
+              ru: "Добавьте агентов и начните миссии",
             })}
           </p>
         </div>
@@ -345,7 +349,7 @@ export function DashboardRankingBoard({
                         {agent.name}
                       </p>
                       <p className="text-[10px]" style={{ color: "var(--th-text-muted)" }}>
-                        {agent.department || t({ ko: "미지정", en: "Unassigned", ja: "未指定", zh: "未指定" })}
+                        {agent.department || t({ ko: "미지정", en: "Unassigned", ja: "未指定", zh: "未指定", ru: "Не назначено" })}
                       </p>
                     </div>
                     <div className="hidden w-28 sm:block">
@@ -390,7 +394,7 @@ export function DashboardRankingBoard({
                       {agent.name}
                     </p>
                     <p className="text-xs" style={{ color: "var(--th-text-muted)" }}>
-                      {agent.department || t({ ko: "미지정", en: "Unassigned", ja: "未指定", zh: "未指定" })}
+                      {agent.department || t({ ko: "미지정", en: "Unassigned", ja: "未指定", zh: "未指定", ru: "Не назначено" })}
                     </p>
                   </div>
                   <div className="text-right">

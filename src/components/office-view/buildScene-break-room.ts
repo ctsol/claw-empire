@@ -109,24 +109,40 @@ export function buildBreakRoom({
   wallClocksRef.current.push(drawWallClock(breakRoom, brx + brw / 2 + 30, bry + 18));
   drawTrashCan(breakRoom, furnitureBaseX + 24, bry + brh - 14);
 
-  const brSignW = 84;
+  const brSignW = 102;
+  const brSignH = 26;
+  const brSignX = brx + brw / 2 - brSignW / 2;
+  const brSignY = bry - 8;
   const brSignBg = new Graphics();
-  brSignBg.roundRect(brx + brw / 2 - brSignW / 2 + 1, bry - 3, brSignW, 18, 4).fill({ color: 0x000000, alpha: 0.12 });
-  brSignBg.roundRect(brx + brw / 2 - brSignW / 2, bry - 4, brSignW, 18, 4).fill(breakTheme.accent);
+  // Drop shadow
+  brSignBg.roundRect(brSignX + 1.5, brSignY + 2, brSignW, brSignH, 5).fill({ color: 0x000000, alpha: 0.18 });
+  // Main background
+  brSignBg.roundRect(brSignX, brSignY, brSignW, brSignH, 5).fill(breakTheme.accent);
+  // Inner highlight
+  brSignBg.roundRect(brSignX + 1, brSignY + 1, brSignW - 2, brSignH - 2, 4).stroke({ width: 1, color: 0xffffff, alpha: 0.18 });
   breakRoom.addChild(brSignBg);
-  const breakSignTextColor = isDark ? 0xffffff : contrastTextColor(breakTheme.accent);
+  // Icon
+  const brSignIcon = new Text({
+    text: "🛋️",
+    style: new TextStyle({ fontSize: 11, fontFamily: "system-ui, sans-serif" }),
+  });
+  brSignIcon.anchor.set(0, 0.5);
+  brSignIcon.position.set(brSignX + 7, brSignY + brSignH / 2);
+  breakRoom.addChild(brSignIcon);
+  // Name text
   const brSignTxt = new Text({
     text: pickLocale(activeLocale, LOCALE_TEXT.breakRoom),
     style: new TextStyle({
-      fontSize: 9,
-      fill: breakSignTextColor,
-      fontWeight: "bold",
-      fontFamily: "system-ui, sans-serif",
-      dropShadow: isDark ? { alpha: 0.6, blur: 2, distance: 1, color: 0x000000 } : undefined,
+      fontSize: 10,
+      fill: 0xffffff,
+      fontWeight: "700",
+      fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
+      dropShadow: { alpha: 0.45, blur: 1.5, distance: 1, color: 0x000000 },
+      letterSpacing: 0.3,
     }),
   });
-  brSignTxt.anchor.set(0.5, 0.5);
-  brSignTxt.position.set(brx + brw / 2, bry + 5);
+  brSignTxt.anchor.set(0, 0.5);
+  brSignTxt.position.set(brSignX + 23, brSignY + brSignH / 2);
   breakRoom.addChild(brSignTxt);
 
   drawRug(breakRoom, brx + brw / 2, bry + brh / 2 + 10, brw * 0.5, brh * 0.45, breakTheme.accent);
@@ -183,14 +199,21 @@ export function buildBreakRoom({
 
     const nameTag = new Text({
       text: localeName(activeLocale, agent),
-      style: new TextStyle({ fontSize: 6, fill: 0x4a3a2a, fontFamily: "system-ui, sans-serif" }),
+      style: new TextStyle({
+        fontSize: 8,
+        fill: 0x1e1e2e,
+        fontWeight: "700",
+        fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
+      }),
     });
     nameTag.anchor.set(0.5, 0);
-    const ntW = nameTag.width + 4;
+    const ntW = nameTag.width + 8;
     const ntBg = new Graphics();
-    ntBg.roundRect(spotX - ntW / 2, spotY + 2, ntW, 9, 2).fill({ color: 0xffffff, alpha: 0.8 });
+    ntBg.roundRect(spotX - ntW / 2 + 1, spotY + 3, ntW, 13, 3).fill({ color: 0x000000, alpha: 0.08 });
+    ntBg.roundRect(spotX - ntW / 2, spotY + 2, ntW, 13, 3).fill({ color: 0xffffff, alpha: 0.92 });
+    ntBg.roundRect(spotX - ntW / 2, spotY + 2, ntW, 13, 3).stroke({ width: 0.5, color: breakTheme.accent, alpha: 0.3 });
     breakRoom.addChild(ntBg);
-    nameTag.position.set(spotX, spotY + 3);
+    nameTag.position.set(spotX, spotY + 4);
     breakRoom.addChild(nameTag);
   });
 

@@ -246,7 +246,7 @@ export function createTaskDelegationHandler(deps: TaskDelegationDeps) {
         const relatedLabel =
           mentionedDepts.length > 0
             ? mentionedDepts.map(getDeptName).join(", ")
-            : pickL(l(["없음"], ["None"], ["なし"], ["无"]), lang);
+            : pickL(l(["없음"], ["None"], ["なし"], ["无"], ["Нет"]), lang);
         appendTaskLog(taskId, "system", `Planning pre-check related departments: ${relatedLabel}`);
         notifyCeo(
           pickL(

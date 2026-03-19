@@ -74,8 +74,8 @@ export function createPlanningArchiveTools(deps: CreatePlanningArchiveToolsDeps)
       ),
       lang,
     );
-    const summaryTitle = pickL(l(["## 요약"], ["## Executive Summary"], ["## 要約"], ["## 执行摘要"]), lang);
-    const teamTitle = pickL(l(["## 팀별 취합"], ["## Team Consolidation"], ["## チーム別統合"], ["## 团队汇总"]), lang);
+    const summaryTitle = pickL(l(["## 요약"], ["## Executive Summary"], ["## 要約"], ["## 执行摘要"], ["## Сводка"]), lang);
+    const teamTitle = pickL(l(["## 팀별 취합"], ["## Team Consolidation"], ["## チーム別統合"], ["## 团队汇总"], ["## Сводка по командам"]), lang);
     const lines = [
       header,
       "",

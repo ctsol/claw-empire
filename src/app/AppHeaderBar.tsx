@@ -1,3 +1,4 @@
+import { ClipboardList, Compass, Activity, FileText, Megaphone, Building2, Video } from "lucide-react";
 import type { WorkflowPackKey } from "../types";
 import type { View } from "./types";
 
@@ -39,6 +40,8 @@ interface AppHeaderBarProps {
   onToggleTheme: () => void;
   onToggleMobileHeaderMenu: () => void;
   onCloseMobileHeaderMenu: () => void;
+  onOpenCeoMeeting?: () => void;
+  meetingLabel?: string;
 }
 
 export default function AppHeaderBar({
@@ -66,11 +69,12 @@ export default function AppHeaderBar({
   onToggleTheme,
   onToggleMobileHeaderMenu,
   onCloseMobileHeaderMenu,
+  onOpenCeoMeeting,
+  meetingLabel,
 }: AppHeaderBarProps) {
   return (
     <header
-      className="sticky top-0 z-30 flex items-center justify-between px-3 py-2 backdrop-blur-sm sm:px-4 sm:py-3 lg:px-6"
-      style={{ borderBottom: "1px solid var(--th-border)", background: "var(--th-bg-header)" }}
+      className="app-header-bar sticky top-0 z-30 flex items-center justify-between px-3 py-2 backdrop-blur-md sm:px-4 sm:py-2.5 lg:px-5"
     >
       <div className="flex min-w-0 items-center gap-2">
         <button
@@ -131,13 +135,23 @@ export default function AppHeaderBar({
         )}
       </div>
       <div className="flex items-center gap-2 sm:gap-3">
+        {meetingLabel && currentView === "office" && onOpenCeoMeeting && (
+          <button
+            onClick={onOpenCeoMeeting}
+            className="header-action-btn header-action-btn-secondary mobile-hidden"
+            aria-label={meetingLabel}
+          >
+            <Video size={14} />
+            <span className="hidden sm:inline ml-1">{meetingLabel}</span>
+          </button>
+        )}
         <button
           onClick={onOpenTasks}
           className="header-action-btn header-action-btn-primary"
           aria-label={tasksPrimaryLabel}
         >
-          <span className="sm:hidden">📋</span>
-          <span className="hidden sm:inline">📋 {tasksPrimaryLabel}</span>
+          <ClipboardList size={14} />
+          <span className="hidden sm:inline ml-1">{tasksPrimaryLabel}</span>
         </button>
         <button
           onClick={onOpenDecisionInbox}
@@ -147,24 +161,25 @@ export default function AppHeaderBar({
           }`}
           aria-label={decisionLabel}
         >
-          <span className="sm:hidden">{decisionInboxLoading ? "⏳" : "🧭"}</span>
-          <span className="hidden sm:inline">
-            {decisionInboxLoading ? "⏳" : "🧭"} {decisionLabel}
-          </span>
+          <Compass size={14} />
+          <span className="hidden sm:inline ml-1">{decisionLabel}</span>
           {decisionInboxCount > 0 && <span className="header-decision-badge">{decisionInboxCount}</span>}
         </button>
         <button onClick={onOpenAgentStatus} className="header-action-btn header-action-btn-secondary mobile-hidden">
-          &#x1F6E0; {agentStatusLabel}
+          <Activity size={14} />
+          <span className="ml-1">{agentStatusLabel}</span>
         </button>
         <button onClick={onOpenReportHistory} className="header-action-btn header-action-btn-secondary mobile-hidden">
-          {reportLabel}
+          <FileText size={14} />
+          <span className="ml-1">{reportLabel}</span>
         </button>
         <button onClick={onOpenAnnouncement} className="header-action-btn header-action-btn-secondary">
-          <span className="sm:hidden">📢</span>
-          <span className="hidden sm:inline">{announcementLabel}</span>
+          <Megaphone size={14} />
+          <span className="hidden sm:inline ml-1">{announcementLabel}</span>
         </button>
         <button onClick={onOpenRoomManager} className="header-action-btn header-action-btn-secondary mobile-hidden">
-          {roomManagerLabel}
+          <Building2 size={14} />
+          <span className="ml-1">{roomManagerLabel}</span>
         </button>
         <button
           onClick={onToggleTheme}
@@ -282,7 +297,7 @@ export default function AppHeaderBar({
                   className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition hover:opacity-80"
                   style={{ color: "var(--th-text-primary)" }}
                 >
-                  &#x1F6E0; {agentStatusLabel}
+                  <Activity size={14} /> {agentStatusLabel}
                 </button>
                 <button
                   onClick={() => {
@@ -292,7 +307,7 @@ export default function AppHeaderBar({
                   className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition hover:opacity-80"
                   style={{ color: "var(--th-text-primary)" }}
                 >
-                  {reportLabel}
+                  <FileText size={14} /> {reportLabel}
                 </button>
                 <button
                   onClick={() => {
@@ -302,7 +317,7 @@ export default function AppHeaderBar({
                   className="flex w-full items-center gap-2 px-3 py-2 text-left text-sm transition hover:opacity-80"
                   style={{ color: "var(--th-text-primary)" }}
                 >
-                  {roomManagerLabel}
+                  <Building2 size={14} /> {roomManagerLabel}
                 </button>
               </div>
             </>

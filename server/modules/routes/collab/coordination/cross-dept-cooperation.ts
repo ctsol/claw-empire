@@ -311,6 +311,7 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
             ],
             [`協業依頼進行中: ${crossDeptName} (${index + 1}/${deptIds.length}、残り${remaining}チーム)`],
             [`协作请求进行中：${crossDeptName}（${index + 1}/${deptIds.length}，队列剩余${remaining}个团队）`],
+            [`Запрос на совместную работу: ${crossDeptName} (${index + 1}/${deptIds.length}, осталось ${remaining} команд)`],
           ),
           lang,
         ),
@@ -330,6 +331,10 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
         ],
         [`${crossCoordinatorName}さん、CEO指示の"${taskTitle}"で${crossDeptName}の協力が必要です。お願いします！🤝`],
         [`${crossCoordinatorName}，CEO安排的"${taskTitle}"需要${crossDeptName}配合，麻烦协调一下！🤝`],
+        [
+          `${crossCoordinatorName}, нам нужна помощь отдела ${crossDeptName} по задаче "${taskTitle}". Сможете подключиться? 🤝`,
+          `${crossCoordinatorName}, по задаче "${taskTitle}" нужна поддержка от ${crossDeptName}. Давайте скоординируемся.`,
+        ],
       ),
       lang,
     );
@@ -383,6 +388,10 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
                 ],
                 [`了解しました、${leaderName}さん！${execName}を割り当てます 👍`],
                 [`好的，${leaderName}！安排${execName}支援 👍`],
+                [
+                  `Понял, ${leaderName}! Назначаю ${execName} прямо сейчас 👍`,
+                  `Принято! ${execName} займётся задачей от ${crossDeptName}. Буду держать в курсе.`,
+                ],
               ),
               lang,
             )
@@ -392,6 +401,7 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
                 [`Sure, ${leaderName}! I'll handle it personally 👍`],
                 [`了解しました！私が直接対応します 👍`],
                 [`好的！我亲自来处理 👍`],
+                [`Понял, ${leaderName}! Займусь лично 👍`],
               ),
               lang,
             );
@@ -401,7 +411,13 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
       const crossTaskId = randomUUID();
       const ct = nowMs();
       const crossTaskTitle = pickL(
-        l([`[협업] ${taskTitle}`], [`[Collaboration] ${taskTitle}`], [`[協業] ${taskTitle}`], [`[协作] ${taskTitle}`]),
+        l(
+          [`[협업] ${taskTitle}`],
+          [`[Collaboration] ${taskTitle}`],
+          [`[協業] ${taskTitle}`],
+          [`[协作] ${taskTitle}`],
+          [`[Совместная работа] ${taskTitle}`],
+        ),
         lang,
       );
       const parentTaskPath = db
@@ -538,8 +554,8 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
               crossTaskData.description ? `\n${crossTaskData.description}` : "",
               crossConversationCtx,
               `\n---`,
-              `Agent: ${execAgent.name} (${roleLabel}, ${crossDeptName})`,
-              execAgent.personality ? `Personality: ${execAgent.personality}` : "",
+              `Role: ${roleLabel} (${crossDeptName})`,
+              execAgent.personality ? `Work style: ${execAgent.personality}` : "",
               deptConstraint,
               deptPromptBlock,
               pickL(
@@ -548,6 +564,7 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
                   ["Please complete the task above thoroughly. Use the conversation context above if relevant."],
                   ["上記タスクを丁寧に完了してください。必要に応じて会話コンテキストを参照してください。"],
                   ["请完整地完成上述任务。可按需参考上方会话上下文。"],
+                  ["Выполните задачу выше тщательно. При необходимости используйте контекст беседы."],
                 ),
                 taskLang,
               ),
@@ -626,6 +643,7 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
                 [`${crossDeptName} ${execName} started collaboration work for '${taskTitle}'.`],
                 [`${crossDeptName}の${execName}が「${taskTitle}」の協業作業を開始しました。`],
                 [`${crossDeptName} 的 ${execName} 已开始「${taskTitle}」协作工作。`],
+                [`${crossDeptName}: ${execName} начал совместную работу над '${taskTitle}'.`],
               ),
               lang,
             ),
