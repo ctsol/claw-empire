@@ -1,0 +1,38 @@
+name: Locale Purity — Weekly Scan
+
+on:
+  schedule:
+    # Every Monday at 06:00 UTC
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      report_mode:
+        description: "Emit full violation report"
+        required: false
+        default: "false"
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  locale-purity-scan:
+    name: Locale purity scan (RU/EN only)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run locale purity gate
+        shell: bash
+        run: |
+          bash scripts/check-locale-purity.sh ${{ github.event.inputs.report_mode == 'true' && '--report' || '' }}
+
+      - name: Notify on violation
+        if: failure()
+        run: |
+          echo "::error::Locale purity gate FAILED. Non-RU/EN locale codes detected in src/ or server/."
+          echo "::error::Review the scan output above and open a clean-up PR."
+          echo "::error::Files to audit: src/i18n.ts, server/types/lang.ts, server/modules/workflow/core/, server/modules/bootstrap/schema/"
