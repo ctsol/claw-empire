@@ -170,52 +170,6 @@ export default function AgentFormModal({
                 </div>
               </div>
             </div>
-            {/* 로캘 기반 현지 이름 필드 */}
-            {locale.startsWith("ko") && (
-              <div>
-                <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                  {tr("한글 이름", "Korean Name")}
-                </label>
-                <input
-                  type="text"
-                  value={form.name_ko}
-                  onChange={(e) => setForm({ ...form, name_ko: e.target.value })}
-                  placeholder="도로롱"
-                  className={inputCls}
-                  style={inputStyle}
-                />
-              </div>
-            )}
-            {locale.startsWith("ja") && (
-              <div>
-                <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                  {t({ ko: "일본어 이름", en: "Japanese Name", ja: "日本語名", zh: "日语名" })}
-                </label>
-                <input
-                  type="text"
-                  value={form.name_ja}
-                  onChange={(e) => setForm({ ...form, name_ja: e.target.value })}
-                  placeholder="ドロロン"
-                  className={inputCls}
-                  style={inputStyle}
-                />
-              </div>
-            )}
-            {locale.startsWith("zh") && (
-              <div>
-                <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                  {t({ ko: "중국어 이름", en: "Chinese Name", ja: "中国語名", zh: "中文名" })}
-                </label>
-                <input
-                  type="text"
-                  value={form.name_zh}
-                  onChange={(e) => setForm({ ...form, name_zh: e.target.value })}
-                  placeholder="多罗隆"
-                  className={inputCls}
-                  style={inputStyle}
-                />
-              </div>
-            )}
             <div className="grid grid-cols-[72px_1fr] gap-2">
               <div>
                 <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
