@@ -1,5 +1,5 @@
 import type { MutableRefObject } from "react";
-import { Container, Graphics, Text, TextStyle, type Application, type Texture } from "pixi.js";
+import { Container, Graphics, Sprite, Text, TextStyle, type Application, type Texture } from "pixi.js";
 import type { Agent } from "../../types";
 import { localeName } from "../../i18n";
 import type { CallbackSnapshot, BreakAnimItem } from "./buildScene-types";
