@@ -25,20 +25,34 @@ export async function sendTelegramReportToChannel(
     const telegram = channels?.telegram as Record<string, unknown> | undefined;
     if (!telegram) return;
 
-    const reportChannel = telegram.reportChannel as
-      | { token?: string; targetId?: string; enabled?: boolean }
-      | undefined;
-    if (!reportChannel) return;
-    if (reportChannel.enabled === false) return;
-    const targetId = String(reportChannel.targetId ?? "").trim();
-    if (!targetId) return;
-
     const prefix = teamName ? `📊 [${teamName}]\n` : "";
     const message = `${prefix}${text}`;
 
-    await sendMessengerMessage({ channel: "telegram", targetId, text: message }).catch((err: unknown) => {
-      console.warn(`[telegram-report] failed to send to report channel ${targetId}: ${String(err)}`);
-    });
+    const reportChannel = telegram.reportChannel as
+      | { token?: string; targetId?: string; enabled?: boolean }
+      | undefined;
+    const rcTargetId = String(reportChannel?.targetId ?? "").trim();
+
+    // Use dedicated report channel if configured and not explicitly disabled
+    if (rcTargetId && reportChannel?.enabled !== false) {
+      await sendMessengerMessage({ channel: "telegram", targetId: rcTargetId, text: message }).catch((err: unknown) => {
+        console.warn(`[telegram-report] failed to send to report channel ${rcTargetId}: ${String(err)}`);
+      });
+      return;
+    }
+
+    // Fallback: send to all enabled Telegram sessions
+    const sessions = (telegram.sessions as Array<{ targetId?: string; enabled?: boolean }> | undefined) ?? [];
+    for (const session of sessions) {
+      if (session.enabled === false) continue;
+      const sessionTargetId = String(session.targetId ?? "").trim();
+      if (!sessionTargetId) continue;
+      await sendMessengerMessage({ channel: "telegram", targetId: sessionTargetId, text: message }).catch(
+        (err: unknown) => {
+          console.warn(`[telegram-report] failed to send to session ${sessionTargetId}: ${String(err)}`);
+        },
+      );
+    }
   } catch (err) {
     console.warn("[telegram-report] report channel send error:", err);
   }

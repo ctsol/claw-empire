@@ -602,6 +602,7 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
                 [`CEO, reporting completion for '${task.title}'.\n\n📋 Result:\n${reportBody}`],
                 [`CEO、'${task.title}' の完了をご報告します。\n\n📋 結果:\n${reportBody}`],
                 [`CEO，汇报 '${task.title}' 已完成。\n\n📋 结果:\n${reportBody}`],
+                [`Руководитель, отчёт о завершении задачи '${task.title}'.\n\n📋 Результат:\n${reportBody}`],
               ),
               reportLang,
             )
@@ -611,6 +612,7 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
                 [`CEO, reporting completion for '${task.title}'. The work has been finished successfully.`],
                 [`CEO、'${task.title}' の完了をご報告します。作業は正常に完了しました。`],
                 [`CEO，汇报 '${task.title}' 已完成。任务已成功结束。`],
+                [`Руководитель, задача '${task.title}' успешно завершена.`],
               ),
               reportLang,
             );
@@ -621,6 +623,7 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
             ["📌 Remediation/Collaboration Progress"],
             ["📌 補完/協業 進捗サマリー"],
             ["📌 整改/协作进度摘要"],
+            ["📌 Прогресс подзадач/сотрудничества"],
           ),
           reportLang,
         );
@@ -636,6 +639,7 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
               [`\n\n📝 Changes (branch: ${wtInfo?.branchName}):\n${diffSummary}`],
               [`\n\n📝 変更点 (branch: ${wtInfo?.branchName}):\n${diffSummary}`],
               [`\n\n📝 变更内容 (branch: ${wtInfo?.branchName}):\n${diffSummary}`],
+              [`\n\n📝 Изменения (ветка: ${wtInfo?.branchName}):\n${diffSummary}`],
             ),
             reportLang,
           );
@@ -711,6 +715,9 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
                     [
                       `CEO，'${task.title}' 执行时发生问题（退出码：${finalExitCode}）。\n\n❌ 错误内容:\n${errorBody}\n\n请重新分配代理或修改任务后重试。`,
                     ],
+                    [
+                      `Руководитель, задача '${task.title}' завершилась с ошибкой (код: ${finalExitCode}).\n\n❌ Ошибка:\n${errorBody}\n\nПереназначьте агента или измените задачу и повторите.`,
+                    ],
                   ),
                   failLang,
                 )
@@ -729,6 +736,9 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
                       `CEO，'${task.title}' 执行时发生问题（退出码：${finalExitCode}）。请重新分配代理或修改任务后重试。`,
                     ],
                   ),
+                    [
+                      `Руководитель, задача '${task.title}' завершилась с ошибкой (код: ${finalExitCode}). Переназначьте агента или измените задачу и повторите.`,
+                    ],
                   failLang,
                 );
 
@@ -743,6 +753,7 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
               [`Task '${task.title}' failed (exit code: ${finalExitCode}).`],
               [`'${task.title}' のタスクが失敗しました (exit code: ${finalExitCode})。`],
               [`任务 '${task.title}' 失败（exit code: ${finalExitCode}）。`],
+              [`Задача '${task.title}' завершилась с ошибкой (exit code: ${finalExitCode}).`],
             ),
             failLang,
           ),

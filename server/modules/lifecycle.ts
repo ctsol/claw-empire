@@ -346,7 +346,9 @@ export function startLifecycle(ctx: RuntimeContext): void {
             ? `[WATCHDOG] '${task.title}' は in_progress でしたが実行プロセスが存在しないため inbox に復旧しました。`
             : lang === "zh"
               ? `[WATCHDOG] '${task.title}' 处于 in_progress，但未发现执行进程，已恢复到 inbox。`
-              : `[WATCHDOG] '${task.title}' 작업이 in_progress 상태였지만 실행 프로세스가 없어 inbox로 복구했습니다.`;
+              : lang === "ru"
+                ? `[WATCHDOG] Задача '${task.title}' была in_progress, но активный процесс не обнаружен. Возвращено в inbox.`
+                : `[WATCHDOG] '${task.title}' was in progress but had no active process. Recovered to inbox.`;
       notifyCeo(watchdogMessage, task.id);
     }
   }
@@ -383,6 +385,90 @@ export function startLifecycle(ctx: RuntimeContext): void {
         finishReview(task.id, task.title);
       }, delay);
     });
+  }
+
+  // Auto-assign and promote inbox tasks to planned (so startPlannedTasks can pick them up)
+  function promoteInboxTasks(): void {
+    const autoAssignRow = db.prepare("SELECT value FROM settings WHERE key = 'autoAssign'").get() as
+      | { value: string }
+      | undefined;
+    if (autoAssignRow?.value === "false") return;
+
+    const now = nowMs();
+
+    // Step 1: Inbox tasks that already have an assigned idle agent — just promote to planned
+    const assignedRows = db
+      .prepare(
+        `
+        SELECT t.id, t.title, t.assigned_agent_id, t.department_id
+        FROM tasks t
+        JOIN agents a ON a.id = t.assigned_agent_id
+        WHERE t.status = 'inbox'
+          AND t.assigned_agent_id IS NOT NULL
+          AND a.status = 'idle'
+          AND t.source_task_id IS NULL
+        ORDER BY t.created_at ASC
+        LIMIT 5
+      `,
+      )
+      .all() as Array<{ id: string; title: string; assigned_agent_id: string; department_id: string | null }>;
+
+    for (const row of assignedRows) {
+      const changed = db
+        .prepare("UPDATE tasks SET status = 'planned', updated_at = ? WHERE id = ? AND status = 'inbox'")
+        .run(now, row.id) as { changes?: number };
+      if ((changed.changes ?? 0) > 0) {
+        appendTaskLog(row.id, "system", `Promoted inbox→planned (assigned agent was idle)`);
+        broadcast("task_update", db.prepare("SELECT * FROM tasks WHERE id = ?").get(row.id));
+        console.log(`[lifecycle] promoted inbox task to planned: ${row.title.slice(0, 50)}`);
+      }
+    }
+
+    // Step 2: Inbox tasks without an agent — auto-assign an idle agent from the same department
+    const unassigned = db
+      .prepare(
+        `
+        SELECT id, title, department_id
+        FROM tasks
+        WHERE status = 'inbox'
+          AND assigned_agent_id IS NULL
+          AND source_task_id IS NULL
+        ORDER BY created_at ASC
+        LIMIT 3
+      `,
+      )
+      .all() as Array<{ id: string; title: string; department_id: string | null }>;
+
+    for (const task of unassigned) {
+      const agent = db
+        .prepare(
+          `
+          SELECT a.id, a.name, a.department_id
+          FROM agents a
+          WHERE a.status = 'idle'
+            AND a.current_task_id IS NULL
+          ORDER BY
+            CASE WHEN a.department_id = ? THEN 0 ELSE 1 END,
+            CASE WHEN a.role = 'team_leader' THEN 1 ELSE 0 END,
+            a.stats_tasks_done ASC
+          LIMIT 1
+        `,
+        )
+        .get(task.department_id) as { id: string; name: string; department_id: string | null } | undefined;
+
+      if (!agent) continue;
+
+      const changed = db
+        .prepare(
+          "UPDATE tasks SET assigned_agent_id = ?, status = 'planned', updated_at = ? WHERE id = ? AND status = 'inbox'",
+        )
+        .run(agent.id, now, task.id) as { changes?: number };
+      if ((changed.changes ?? 0) > 0) {
+        appendTaskLog(task.id, "system", `Auto-assigned ${agent.name} and promoted inbox→planned`);
+        broadcast("task_update", db.prepare("SELECT * FROM tasks WHERE id = ?").get(task.id));
+        console.log(`[lifecycle] auto-assigned inbox task to ${agent.name}: ${task.title.slice(0, 50)}`);
+      }
+    }
   }
 
   // Auto-start planned tasks for idle agents (batch, max 3 at a time to avoid overload)
@@ -496,9 +582,9 @@ export function startLifecycle(ctx: RuntimeContext): void {
   setInterval(() => recoverOrphanWorkingAgents("interval"), IN_PROGRESS_ORPHAN_SWEEP_MS);
   setTimeout(sweepPendingSubtaskDelegations, 4_000);
   setInterval(sweepPendingSubtaskDelegations, SUBTASK_DELEGATION_SWEEP_MS);
-  // Auto-start planned tasks: check every 30s, initial check after 6s
-  setTimeout(startPlannedTasks, 6_000);
-  setInterval(startPlannedTasks, 30_000);
+  // Auto-promote inbox tasks to planned + auto-start planned tasks: check every 30s, initial check after 6s
+  setTimeout(() => { promoteInboxTasks(); startPlannedTasks(); }, 6_000);
+  setInterval(() => { promoteInboxTasks(); startPlannedTasks(); }, 30_000);
   setTimeout(autoAssignAgentProviders, 4_000);
   const telegramReceiver = startTelegramReceiver({ db });
   const discordReceiver = startDiscordReceiver({ db });
