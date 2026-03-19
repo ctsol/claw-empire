@@ -1,0 +1,50 @@
+name: Animation Performance Gate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  animation-fps-check:
+    name: Animation FPS Gate (≥30fps)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright browsers
+        run: pnpm exec playwright install chromium --with-deps
+
+      - name: Run animation FPS performance check
+        run: pnpm exec playwright test tests/perf/animation-fps.spec.ts --reporter=github
+        env:
+          CI: true
+          PW_ANIMATION_FPS_MIN: "30"
+
+      - name: Upload performance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: animation-perf-report
+          path: test-results/
+          retention-days: 7

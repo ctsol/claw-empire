@@ -15,6 +15,7 @@ import { registerSkillRoutes } from "./ops/skills/routes.ts";
 import { registerApiDocsRoutes } from "./ops/api-docs.ts";
 import { registerCeoMeetingRoutes } from "./ops/ceo-meeting-routes.ts";
 import { registerWorkflowPackRoutes } from "./ops/workflow-packs.ts";
+import { registerRoomSettingsRoutes } from "./ops/room-settings.ts";
 
 export function registerRoutesPartC(ctx: RuntimeContext): RouteOpsExports {
   const __ctx: RuntimeContext = ctx;
@@ -235,6 +236,11 @@ export function registerRoutesPartC(ctx: RuntimeContext): RouteOpsExports {
 
   registerTaskReportRoutes(__ctx);
   registerCeoMeetingRoutes(__ctx);
+
+  // ---------------------------------------------------------------------------
+  // Room Settings (admin RBAC + audit log)
+  // ---------------------------------------------------------------------------
+  registerRoomSettingsRoutes({ app, db, nowMs });
 
   return {
     prettyStreamJson,
