@@ -106,11 +106,11 @@ const LOCALE_TEXT = {
     ru: "Нет назначенных",
   },
   breakRoom: {
-    ko: "☕ 휴게실",
-    en: "☕ Break Room",
-    ja: "☕ 休憩室",
-    zh: "☕ 休息室",
-    ru: "☕ Комната отдыха",
+    ko: "🚬 흡연실",
+    en: "🚬 Smoking Area",
+    ja: "🚬 喫煙室",
+    zh: "🚬 吸烟区",
+    ru: "🚬 Курилка",
   },
   role: {
     team_leader: { ko: "팀장", en: "Lead", ja: "リーダー", zh: "组长", ru: "Лид" },

@@ -136,7 +136,7 @@ export function buildBreakRoom({
   breakRoom.addChild(brSignBg);
   // Icon
   const brSignIcon = new Text({
-    text: "🛋️",
+    text: "🚬",
     style: new TextStyle({ fontSize: 11, fontFamily: "system-ui, sans-serif" }),
   });
   brSignIcon.anchor.set(0, 0.5);
