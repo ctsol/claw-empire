@@ -109,10 +109,23 @@ export function buildBreakRoom({
   wallClocksRef.current.push(drawWallClock(breakRoom, brx + brw / 2 + 30, bry + 18));
   drawTrashCan(breakRoom, furnitureBaseX + 24, bry + brh - 14);
 
-  const brSignW = 102;
   const brSignH = 26;
-  const brSignX = brx + brw / 2 - brSignW / 2;
   const brSignY = bry - 8;
+  // Name text — create first to measure width
+  const brSignTxt = new Text({
+    text: pickLocale(activeLocale, LOCALE_TEXT.breakRoom),
+    style: new TextStyle({
+      fontSize: 10,
+      fill: 0xffffff,
+      fontWeight: "700",
+      fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
+      dropShadow: { alpha: 0.45, blur: 1.5, distance: 1, color: 0x000000 },
+      letterSpacing: 0.3,
+    }),
+  });
+  // Dynamic badge width: icon (16) + gap (7) + text width + right padding (10)
+  const brSignW = Math.max(90, Math.ceil(brSignTxt.width) + 16 + 7 + 10);
+  const brSignX = brx + brw / 2 - brSignW / 2;
   const brSignBg = new Graphics();
   // Drop shadow
   brSignBg.roundRect(brSignX + 1.5, brSignY + 2, brSignW, brSignH, 5).fill({ color: 0x000000, alpha: 0.18 });
@@ -129,18 +142,6 @@ export function buildBreakRoom({
   brSignIcon.anchor.set(0, 0.5);
   brSignIcon.position.set(brSignX + 7, brSignY + brSignH / 2);
   breakRoom.addChild(brSignIcon);
-  // Name text
-  const brSignTxt = new Text({
-    text: pickLocale(activeLocale, LOCALE_TEXT.breakRoom),
-    style: new TextStyle({
-      fontSize: 10,
-      fill: 0xffffff,
-      fontWeight: "700",
-      fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
-      dropShadow: { alpha: 0.45, blur: 1.5, distance: 1, color: 0x000000 },
-      letterSpacing: 0.3,
-    }),
-  });
   brSignTxt.anchor.set(0, 0.5);
   brSignTxt.position.set(brSignX + 23, brSignY + brSignH / 2);
   breakRoom.addChild(brSignTxt);

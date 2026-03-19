@@ -305,10 +305,12 @@ function renderAgentHeader(
   room.addChild(nameText);
 
   if (unread?.has(agent.id)) {
-    const bangBg = new Graphics();
     const bangX = ax + nameTagW / 2 + 2;
+    const bangBg = new Graphics();
     bangBg.circle(bangX, nameY + 6, 6).fill(0xff3333);
     bangBg.circle(bangX, nameY + 6, 6).stroke({ width: 1, color: 0xff0000, alpha: 0.6 });
+    bangBg.eventMode = "static";
+    bangBg.cursor = "pointer";
     room.addChild(bangBg);
     const bangTxt = new Text({
       text: "!",
@@ -317,6 +319,35 @@ function renderAgentHeader(
     bangTxt.anchor.set(0.5, 0.5);
     bangTxt.position.set(bangX, nameY + 6);
     room.addChild(bangTxt);
+
+    // Tooltip
+    const tipLabel = pickLocale(activeLocale, {
+      ko: "읽지 않은 메시지",
+      en: "Unread messages",
+      ja: "未読メッセージ",
+      zh: "未读消息",
+      ru: "Непрочитанные сообщения",
+    });
+    const tipTxt = new Text({
+      text: tipLabel,
+      style: new TextStyle({ fontSize: 9, fill: 0xffffff, fontFamily: "'Inter', system-ui, sans-serif" }),
+    });
+    const tipBg = new Graphics();
+    const tipW = tipTxt.width + 10;
+    const tipH = 16;
+    const tipX = bangX - tipW / 2;
+    const tipY = nameY - 20;
+    tipBg.roundRect(tipX, tipY, tipW, tipH, 4).fill({ color: 0x1a1a2e, alpha: 0.92 });
+    tipBg.roundRect(tipX, tipY, tipW, tipH, 4).stroke({ width: 0.5, color: 0xff3333, alpha: 0.6 });
+    tipTxt.anchor.set(0.5, 0.5);
+    tipTxt.position.set(bangX, tipY + tipH / 2);
+    const tipContainer = new Container();
+    tipContainer.addChild(tipBg);
+    tipContainer.addChild(tipTxt);
+    tipContainer.visible = false;
+    room.addChild(tipContainer);
+    bangBg.on("pointerenter", () => { tipContainer.visible = true; });
+    bangBg.on("pointerleave", () => { tipContainer.visible = false; });
   }
 
   const roleText = new Text({
