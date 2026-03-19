@@ -276,53 +276,6 @@ export default function DepartmentFormModal({
             </div>
           </div>
 
-          {/* 로캘 이름 */}
-          {locale.startsWith("ko") && (
-            <div>
-              <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                {tr("한글 이름", "Korean Name")}
-              </label>
-              <input
-                type="text"
-                value={form.name_ko}
-                onChange={(e) => setForm({ ...form, name_ko: e.target.value })}
-                placeholder="개발팀"
-                className={inputCls}
-                style={inputStyle}
-              />
-            </div>
-          )}
-          {locale.startsWith("ja") && (
-            <div>
-              <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                {t({ ko: "일본어 이름", en: "Japanese Name", ja: "日本語名", zh: "日语名" })}
-              </label>
-              <input
-                type="text"
-                value={form.name_ja}
-                onChange={(e) => setForm({ ...form, name_ja: e.target.value })}
-                placeholder="開発チーム"
-                className={inputCls}
-                style={inputStyle}
-              />
-            </div>
-          )}
-          {locale.startsWith("zh") && (
-            <div>
-              <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                {t({ ko: "중국어 이름", en: "Chinese Name", ja: "中国語名", zh: "中文名" })}
-              </label>
-              <input
-                type="text"
-                value={form.name_zh}
-                onChange={(e) => setForm({ ...form, name_zh: e.target.value })}
-                placeholder="开发部"
-                className={inputCls}
-                style={inputStyle}
-              />
-            </div>
-          )}
-
           {/* 설명 */}
           <div>
             <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
