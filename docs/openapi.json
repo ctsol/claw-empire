@@ -40,6 +40,9 @@
     },
     {
       "name": "docs"
+    },
+    {
+      "name": "room-design"
     }
   ],
   "components": {
@@ -17824,6 +17827,211 @@
                   "error": "internal_error",
                   "message": "Unexpected server error."
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/room-design/tokens": {
+      "get": {
+        "tags": ["room-design"],
+        "summary": "Get room design tokens",
+        "description": "Returns current design tokens for the requested scope. Public endpoint — no authentication required.",
+        "operationId": "getRoomDesignTokens",
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["global", "office", "break_room", "meeting_room", "ceo_zone", "hallway"],
+              "default": "global"
+            },
+            "description": "Token scope (room identifier or 'global')."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Design tokens for the requested scope.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok", "scope", "tokens"],
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "scope": { "type": "string" },
+                    "tokens": { "type": "object", "additionalProperties": true },
+                    "updated_by": { "type": "string", "nullable": true },
+                    "updated_at": { "type": "integer", "nullable": true }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["room-design"],
+        "summary": "Update room design tokens",
+        "description": "Admin-only. Updates design tokens for a scope and writes an audit log entry.",
+        "operationId": "putRoomDesignTokens",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["tokens"],
+                "properties": {
+                  "scope": {
+                    "type": "string",
+                    "enum": ["global", "office", "break_room", "meeting_room", "ceo_zone", "hallway"],
+                    "default": "global"
+                  },
+                  "tokens": {
+                    "type": "object",
+                    "additionalProperties": true,
+                    "description": "Design token key-value pairs (CSS variables, animation params, etc.)"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Tokens saved successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok", "scope", "updated_at"],
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "scope": { "type": "string" },
+                    "updated_at": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid scope or tokens payload.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/room-design/tokens/all": {
+      "get": {
+        "tags": ["room-design"],
+        "summary": "Get all room design token scopes",
+        "description": "Returns tokens for all scopes in one response. Public endpoint.",
+        "operationId": "getAllRoomDesignTokens",
+        "responses": {
+          "200": {
+            "description": "All design token scopes.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok", "scopes"],
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "scopes": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "type": "object",
+                        "properties": {
+                          "tokens": { "type": "object", "additionalProperties": true },
+                          "updated_by": { "type": "string" },
+                          "updated_at": { "type": "integer" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/room-design/audit": {
+      "get": {
+        "tags": ["room-design"],
+        "summary": "Get room design token audit log",
+        "description": "Admin-only. Returns audit log entries for design token changes.",
+        "operationId": "getRoomDesignAudit",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "scope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["global", "office", "break_room", "meeting_room", "ceo_zone", "hallway"]
+            },
+            "description": "Filter by scope. Omit to get all scopes."
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "minimum": 1, "maximum": 200, "default": 50 },
+            "description": "Maximum number of entries to return."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Audit log entries.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": ["ok", "entries"],
+                  "properties": {
+                    "ok": { "type": "boolean" },
+                    "entries": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": { "type": "integer" },
+                          "scope": { "type": "string" },
+                          "changed_by": { "type": "string" },
+                          "actor_role": { "type": "string" },
+                          "created_at": { "type": "integer" }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Authentication required.",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
               }
             }
           }

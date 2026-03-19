@@ -139,6 +139,39 @@ export function applyTaskSchemaMigrations(db: DbLike): void {
   repairLegacyTaskForeignKeys(db);
   ensureMessagesIdempotencySchema(db);
   migrateAgentPersonalityToRussian(db);
+  ensureRoomDesignTokensSchema(db);
+}
+
+function ensureRoomDesignTokensSchema(db: DbLike): void {
+  try {
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS room_design_tokens (
+        scope TEXT PRIMARY KEY,
+        tokens_json TEXT NOT NULL DEFAULT '{}',
+        updated_by TEXT NOT NULL DEFAULT 'admin',
+        updated_at INTEGER DEFAULT (unixepoch()*1000)
+      )
+    `);
+  } catch {
+    /* already exists */
+  }
+  try {
+    db.exec(`
+      CREATE TABLE IF NOT EXISTS room_design_tokens_audit (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        scope TEXT NOT NULL,
+        tokens_json TEXT NOT NULL,
+        changed_by TEXT NOT NULL DEFAULT 'admin',
+        actor_role TEXT NOT NULL DEFAULT 'admin',
+        created_at INTEGER DEFAULT (unixepoch()*1000)
+      )
+    `);
+    db.exec(
+      "CREATE INDEX IF NOT EXISTS idx_room_design_tokens_audit_scope ON room_design_tokens_audit(scope, created_at DESC)",
+    );
+  } catch {
+    /* already exists */
+  }
 }
 
 // Migrate Korean/English agent personalities to Russian for existing installations.
