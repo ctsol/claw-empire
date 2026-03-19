@@ -24,6 +24,7 @@ interface OfficeViewProps {
   onCeoOfficeCallProcessed?: (id: string) => void;
   onOpenActiveMeetingMinutes?: (taskId: string) => void;
   customDeptThemes?: Record<string, { floor1: number; floor2: number; wall: number; accent: number }>;
+  animMode?: AnimMode;
   themeHighlightTargetId?: string | null;
   onSelectAgent: (agent: Agent) => void;
   onSelectDepartment: (dept: Department) => void;
@@ -155,6 +156,46 @@ const MOBILE_MOVE_CODES = {
 type MobileMoveDirection = keyof typeof MOBILE_MOVE_CODES;
 type RoomTheme = { floor1: number; floor2: number; wall: number; accent: number };
 
+/* ================================================================== */
+/*  Animation Mode                                                      */
+/* ================================================================== */
+
+type AnimMode = "game" | "corporate";
+
+interface AnimProfile {
+  subCloneWaveSpeed: number;
+  subCloneMoveYAmp: number;
+  subCloneFireworkInterval: number;
+  deliverySpeed: number;
+  burstPuffCountSpawn: number;
+  burstPuffCountDespawn: number;
+  fireworkSparkCount: number;
+  burstTextEnabled: boolean;
+}
+
+const ANIM_PROFILES: Record<AnimMode, AnimProfile> = {
+  game: {
+    subCloneWaveSpeed: 0.04,
+    subCloneMoveYAmp: 0.34,
+    subCloneFireworkInterval: 210,
+    deliverySpeed: 0.014,
+    burstPuffCountSpawn: 9,
+    burstPuffCountDespawn: 7,
+    fireworkSparkCount: 10,
+    burstTextEnabled: true,
+  },
+  corporate: {
+    subCloneWaveSpeed: 0.025,
+    subCloneMoveYAmp: 0.20,
+    subCloneFireworkInterval: 420,
+    deliverySpeed: 0.010,
+    burstPuffCountSpawn: 5,
+    burstPuffCountDespawn: 4,
+    fireworkSparkCount: 6,
+    burstTextEnabled: false,
+  },
+};
+
 type SubCloneBurstParticle = {
   node: Container;
   vx: number;
@@ -171,10 +212,12 @@ function emitSubCloneSmokeBurst(
   x: number,
   y: number,
   mode: "spawn" | "despawn",
+  animMode: AnimMode = "game",
 ): void {
-  const baseColor = mode === "spawn" ? 0xc7d4ec : 0xb7bfd1;
+  const profile = ANIM_PROFILES[animMode];
+  const baseColor = mode === "spawn" ? (animMode === "corporate" ? 0xd8e0f0 : 0xc7d4ec) : 0xb7bfd1;
   const strokeColor = mode === "spawn" ? 0xe6edff : 0xd4dae8;
-  const puffCount = mode === "spawn" ? 9 : 7;
+  const puffCount = mode === "spawn" ? profile.burstPuffCountSpawn : profile.burstPuffCountDespawn;
   for (let i = 0; i < puffCount; i++) {
     const puff = new Graphics();
     const radius = 1.8 + Math.random() * 2.8;
@@ -194,7 +237,8 @@ function emitSubCloneSmokeBurst(
   }
 
   const flash = new Graphics();
-  flash.circle(0, 0, mode === "spawn" ? 5.4 : 4.2).fill({ color: 0xf8fbff, alpha: mode === "spawn" ? 0.52 : 0.42 });
+  const flashAlphaSpawn = animMode === "corporate" ? 0.30 : 0.52;
+  flash.circle(0, 0, mode === "spawn" ? 5.4 : 4.2).fill({ color: 0xf8fbff, alpha: mode === "spawn" ? flashAlphaSpawn : 0.42 });
   flash.position.set(x, y - 14);
   target.addChild(flash);
   particles.push({
@@ -207,49 +251,66 @@ function emitSubCloneSmokeBurst(
     growth: 0.022,
   });
 
-  const burstTxt = new Text({
-    text: "펑",
-    style: new TextStyle({
-      fontSize: 7,
-      fill: mode === "spawn" ? 0xeff4ff : 0xdde4f5,
-      fontWeight: "bold",
-      fontFamily: "system-ui, sans-serif",
-      stroke: { color: 0x1f2838, width: 2 },
-    }),
-  });
-  burstTxt.anchor.set(0.5, 0.5);
-  burstTxt.position.set(x, y - 24);
-  target.addChild(burstTxt);
-  particles.push({
-    node: burstTxt,
-    vx: (Math.random() - 0.5) * 0.35,
-    vy: -0.3,
-    life: 0,
-    maxLife: mode === "spawn" ? 18 : 16,
-    spin: (Math.random() - 0.5) * 0.04,
-    growth: 0.004,
-  });
+  if (profile.burstTextEnabled) {
+    const burstTxt = new Text({
+      text: "✦",
+      style: new TextStyle({
+        fontSize: 7,
+        fill: mode === "spawn" ? 0xeff4ff : 0xdde4f5,
+        fontWeight: "bold",
+        fontFamily: "system-ui, sans-serif",
+        stroke: { color: 0x1f2838, width: 2 },
+      }),
+    });
+    burstTxt.anchor.set(0.5, 0.5);
+    burstTxt.position.set(x, y - 24);
+    target.addChild(burstTxt);
+    particles.push({
+      node: burstTxt,
+      vx: (Math.random() - 0.5) * 0.35,
+      vy: -0.3,
+      life: 0,
+      maxLife: mode === "spawn" ? 18 : 16,
+      spin: (Math.random() - 0.5) * 0.04,
+      growth: 0.004,
+    });
+  }
 }
 
-function emitSubCloneFireworkBurst(target: Container, particles: SubCloneBurstParticle[], x: number, y: number): void {
-  const colors = [0xff6b6b, 0xffc75f, 0x7ce7ff, 0x8cff9f, 0xd7a6ff];
-  const sparkCount = 10;
+function emitSubCloneFireworkBurst(
+  target: Container,
+  particles: SubCloneBurstParticle[],
+  x: number,
+  y: number,
+  animMode: AnimMode = "game",
+): void {
+  const profile = ANIM_PROFILES[animMode];
+  const gameColors = [0xff6b6b, 0xffc75f, 0x7ce7ff, 0x8cff9f, 0xd7a6ff];
+  const corporateColors = [0x60a5fa, 0x34d399, 0xa78bfa];
+  const colors = animMode === "corporate" ? corporateColors : gameColors;
+  const sparkCount = profile.fireworkSparkCount;
+  const speedMin = animMode === "corporate" ? 0.5 : 0.9;
+  const speedRange = animMode === "corporate" ? 0.5 : 0.85;
+  const radiusMin = animMode === "corporate" ? 0.7 : 0.85;
+  const radiusRange = animMode === "corporate" ? 0.4 : 0.6;
+  const maxLifeMin = animMode === "corporate" ? 12 : 16;
+  const maxLifeRange = animMode === "corporate" ? 6 : 8;
   for (let i = 0; i < sparkCount; i++) {
     const spark = new Graphics();
     const color = colors[Math.floor(Math.random() * colors.length)];
-    const radius = 0.85 + Math.random() * 0.6;
+    const radius = radiusMin + Math.random() * radiusRange;
     spark.circle(0, 0, radius).fill({ color, alpha: 0.96 });
     spark.circle(0, 0, radius).stroke({ width: 0.45, color: 0xffffff, alpha: 0.5 });
     spark.position.set(x + (Math.random() - 0.5) * 5, y + (Math.random() - 0.5) * 3);
     target.addChild(spark);
     const angle = (Math.PI * 2 * i) / sparkCount + (Math.random() - 0.5) * 0.45;
-    const speed = 0.9 + Math.random() * 0.85;
+    const speed = speedMin + Math.random() * speedRange;
     particles.push({
       node: spark,
       vx: Math.cos(angle) * speed,
       vy: Math.sin(angle) * speed - 0.45,
       life: 0,
-      maxLife: 16 + Math.floor(Math.random() * 8),
+      maxLife: maxLifeMin + Math.floor(Math.random() * maxLifeRange),
       spin: (Math.random() - 0.5) * 0.08,
       growth: 0.006 + Math.random() * 0.006,
     });
@@ -294,6 +355,9 @@ export {
   type MobileMoveDirection,
   type RoomTheme,
   type SubCloneBurstParticle,
+  type AnimMode,
+  type AnimProfile,
+  ANIM_PROFILES,
   emitSubCloneSmokeBurst,
   emitSubCloneFireworkBurst,
 };
