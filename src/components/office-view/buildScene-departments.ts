@@ -1,6 +1,5 @@
 import type { MutableRefObject } from "react";
-import { Container, Graphics, Sprite, Text, TextStyle, type Application, type Texture } from "pixi.js";
-import { getDeptSignTexture } from "./dept-sign-icons";
+import { Container, Graphics, Text, TextStyle, type Application, type Texture } from "pixi.js";
 import type { Agent, Department, SubAgent, Task } from "../../types";
 import { localeName } from "../../i18n";
 import type { CallbackSnapshot, AnimItem, SubCloneAnimItem } from "./buildScene-types";
@@ -133,23 +132,15 @@ export function buildDepartmentRooms({
     signBg.cursor = "pointer";
     signBg.on("pointerdown", () => cbRef.current.onSelectDepartment(dept));
     room.addChild(signBg);
-    // Icon — SVG texture sprite (Lucide-based), fallback to emoji Text
-    const iconTex = getDeptSignTexture(dept.id, textures);
-    if (iconTex) {
-      const iconSprite = new Sprite(iconTex);
-      iconSprite.anchor.set(0, 0.5);
-      iconSprite.width = 14;
-      iconSprite.height = 14;
-      iconSprite.position.set(signX + 6, signY + signH / 2);
-      room.addChild(iconSprite);
-    } else {
-      const fallbackIcon = new Text({
+    // Emoji icon
+    {
+      const iconText = new Text({
         text: dept.icon || "🏢",
-        style: new TextStyle({ fontSize: 11, fontFamily: "system-ui, sans-serif" }),
+        style: new TextStyle({ fontSize: 12, fontFamily: "system-ui, sans-serif" }),
       });
-      fallbackIcon.anchor.set(0, 0.5);
-      fallbackIcon.position.set(signX + 7, signY + signH / 2);
-      room.addChild(fallbackIcon);
+      iconText.anchor.set(0, 0.5);
+      iconText.position.set(signX + 6, signY + signH / 2);
+      room.addChild(iconText);
     }
     // Department name
     const signTxt = new Text({

@@ -1,6 +1,5 @@
 import type { MutableRefObject } from "react";
-import { Container, Graphics, Sprite, Text, TextStyle, type Application, type Texture } from "pixi.js";
-import { getBreakRoomTexture } from "./dept-sign-icons";
+import { Container, Graphics, Text, TextStyle, type Application, type Texture } from "pixi.js";
 import type { Agent } from "../../types";
 import { localeName } from "../../i18n";
 import type { CallbackSnapshot, BreakAnimItem } from "./buildScene-types";
@@ -136,23 +135,13 @@ export function buildBreakRoom({
   brSignBg.roundRect(brSignX + 1, brSignY + 1, brSignW - 2, brSignH - 2, 4).stroke({ width: 1, color: 0xffffff, alpha: 0.18 });
   breakRoom.addChild(brSignBg);
   // Icon — SVG texture sprite, fallback to emoji
-  const brIconTex = getBreakRoomTexture(textures);
-  if (brIconTex) {
-    const brIconSprite = new Sprite(brIconTex);
-    brIconSprite.anchor.set(0, 0.5);
-    brIconSprite.width = 14;
-    brIconSprite.height = 14;
-    brIconSprite.position.set(brSignX + 6, brSignY + brSignH / 2);
-    breakRoom.addChild(brIconSprite);
-  } else {
-    const brSignIcon = new Text({
-      text: "🚬",
-      style: new TextStyle({ fontSize: 11, fontFamily: "system-ui, sans-serif" }),
-    });
-    brSignIcon.anchor.set(0, 0.5);
-    brSignIcon.position.set(brSignX + 7, brSignY + brSignH / 2);
-    breakRoom.addChild(brSignIcon);
-  }
+  const brSignIcon = new Text({
+    text: "🚬",
+    style: new TextStyle({ fontSize: 12, fontFamily: "system-ui, sans-serif" }),
+  });
+  brSignIcon.anchor.set(0, 0.5);
+  brSignIcon.position.set(brSignX + 6, brSignY + brSignH / 2);
+  breakRoom.addChild(brSignIcon);
   brSignTxt.anchor.set(0, 0.5);
   brSignTxt.position.set(brSignX + 23, brSignY + brSignH / 2);
   breakRoom.addChild(brSignTxt);

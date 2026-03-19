@@ -4,7 +4,6 @@ import type { Agent, Department, SubAgent, Task } from "../../types";
 import { buildSpriteMap } from "../AgentAvatar";
 import { type Delivery, MIN_OFFICE_W, findScrollContainer } from "./model";
 import { runOfficeTickerStep, type OfficeTickerContext } from "./officeTicker";
-import { loadDeptSignIconTextures } from "./dept-sign-icons";
 
 interface UseOfficePixiRuntimeParams {
   containerRef: MutableRefObject<HTMLDivElement | null>;
@@ -139,14 +138,6 @@ export function useOfficePixiRuntime({
           .catch(() => {}),
       );
 
-      // Load department sign icons (Lucide SVG → Pixi textures)
-      loads.push(
-        loadDeptSignIconTextures().then((iconTextures) => {
-          for (const [key, tex] of Object.entries(iconTextures)) {
-            textures[`dept_icon:${key}`] = tex;
-          }
-        }),
-      );
 
       await Promise.all(loads);
 
