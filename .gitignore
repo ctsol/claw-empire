@@ -9,6 +9,7 @@ custom-skills/
 /tasks/
 *.log
 *.pid
+*.db
 *.sqlite
 *.sqlite-shm
 *.sqlite-wal
