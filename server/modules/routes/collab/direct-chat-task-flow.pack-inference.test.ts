@@ -69,11 +69,12 @@ describe("direct-chat task flow pack inference", () => {
         }),
         buildRoundGoal: () => "round",
         getDeptName: () => "기획팀",
-        l: (ko: string[], en: string[], ja?: string[], zh?: string[]) => ({
+        l: (ko: string[], en: string[], ja?: string[], zh?: string[], ru?: string[]) => ({
           ko,
           en,
           ja: ja ?? en,
           zh: zh ?? en,
+          ru: ru ?? en,
         }),
         pickL: (pool: any) => pool.ko[0],
         registerTaskMessengerRoute: () => {},

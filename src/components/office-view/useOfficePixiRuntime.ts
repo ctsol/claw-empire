@@ -78,7 +78,7 @@ export function useOfficePixiRuntime({
       const app = new Application();
       await app.init({
         width: officeWRef.current,
-        height: 600,
+        height: Math.max(360, Math.min(520, window.innerHeight - 300)),
         backgroundAlpha: 0,
         antialias: false,
         resolution: Math.min(window.devicePixelRatio || 1, 2),

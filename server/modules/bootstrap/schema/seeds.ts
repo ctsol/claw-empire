@@ -13,22 +13,12 @@ export function applyDefaultSeeds(db: DbLike): void {
     const insertDept = db.prepare(
       "INSERT INTO departments (id, name, name_ko, name_ja, name_zh, icon, color, sort_order) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
     );
-    // Workflow order: 기획 → 개발 → 디자인 → QA → 인프라보안 → 운영
-    insertDept.run("planning", "Planning", "기획팀", "企画チーム", "企划组", "📊", "#f59e0b", 1);
-    insertDept.run("dev", "Development", "개발팀", "開発チーム", "开发组", "💻", "#3b82f6", 2);
-    insertDept.run("design", "Design", "디자인팀", "デザインチーム", "设计组", "🎨", "#8b5cf6", 3);
-    insertDept.run("qa", "QA/QC", "품질관리팀", "品質管理チーム", "质量管理组", "🔍", "#ef4444", 4);
-    insertDept.run(
-      "devsecops",
-      "DevSecOps",
-      "인프라보안팀",
-      "インフラセキュリティチーム",
-      "基础安全组",
-      "🛡️",
-      "#f97316",
-      5,
-    );
-    insertDept.run("operations", "Operations", "운영팀", "運営チーム", "运营组", "⚙️", "#10b981", 6);
+    insertDept.run("planning", "Planning", "Planning", "Planning", "Planning", "📊", "#f59e0b", 1);
+    insertDept.run("dev", "Development", "Development", "Development", "Development", "💻", "#3b82f6", 2);
+    insertDept.run("design", "Design", "Design", "Design", "Design", "🎨", "#8b5cf6", 3);
+    insertDept.run("qa", "QA/QC", "QA/QC", "QA/QC", "QA/QC", "🔍", "#ef4444", 4);
+    insertDept.run("devsecops", "DevSecOps", "DevSecOps", "DevSecOps", "DevSecOps", "🛡️", "#f97316", 5);
+    insertDept.run("operations", "Operations", "Operations", "Operations", "Operations", "⚙️", "#10b981", 6);
     console.log("[Claw-Empire] Seeded default departments");
   }
 
@@ -40,26 +30,26 @@ export function applyDefaultSeeds(db: DbLike): void {
      VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     );
     // Development (3)
-    insertAgent.run(randomUUID(), "Aria", "아리아", "dev", "team_leader", "claude", "👩‍💻", "Дотошный старший разработчик");
-    insertAgent.run(randomUUID(), "Bolt", "볼트", "dev", "senior", "codex", "⚡", "Эксперт быстрого кодинга");
-    insertAgent.run(randomUUID(), "Nova", "노바", "dev", "junior", "copilot", "🌟", "Креативный джуниор");
+    insertAgent.run(randomUUID(), "Aria", "Aria", "dev", "team_leader", "claude", "👩‍💻", "Дотошный старший разработчик");
+    insertAgent.run(randomUUID(), "Bolt", "Bolt", "dev", "senior", "codex", "⚡", "Эксперт быстрого кодинга");
+    insertAgent.run(randomUUID(), "Nova", "Nova", "dev", "junior", "copilot", "🌟", "Креативный джуниор");
     // Design (2)
-    insertAgent.run(randomUUID(), "Pixel", "픽셀", "design", "team_leader", "claude", "🎨", "Лидер дизайна");
-    insertAgent.run(randomUUID(), "Luna", "루나", "design", "junior", "gemini", "🌙", "Чуткий UI-дизайнер");
+    insertAgent.run(randomUUID(), "Pixel", "Pixel", "design", "team_leader", "claude", "🎨", "Лидер дизайна");
+    insertAgent.run(randomUUID(), "Luna", "Luna", "design", "junior", "gemini", "🌙", "Чуткий UI-дизайнер");
     // Planning (2)
-    insertAgent.run(randomUUID(), "Sage", "세이지", "planning", "team_leader", "codex", "🧠", "Стратегический аналитик");
-    insertAgent.run(randomUUID(), "Clio", "클리오", "planning", "senior", "claude", "📝", "Планировщик, опирающийся на данные");
+    insertAgent.run(randomUUID(), "Sage", "Sage", "planning", "team_leader", "codex", "🧠", "Стратегический аналитик");
+    insertAgent.run(randomUUID(), "Clio", "Clio", "planning", "senior", "claude", "📝", "Планировщик, опирающийся на данные");
     // Operations (2)
-    insertAgent.run(randomUUID(), "Atlas", "아틀라스", "operations", "team_leader", "claude", "🗺️", "Мастер эксплуатации");
-    insertAgent.run(randomUUID(), "Turbo", "터보", "operations", "senior", "codex", "🚀", "Эксперт автоматизации");
+    insertAgent.run(randomUUID(), "Atlas", "Atlas", "operations", "team_leader", "claude", "🗺️", "Мастер эксплуатации");
+    insertAgent.run(randomUUID(), "Turbo", "Turbo", "operations", "senior", "codex", "🚀", "Эксперт автоматизации");
     // QA/QC (2)
-    insertAgent.run(randomUUID(), "Hawk", "호크", "qa", "team_leader", "claude", "🦅", "Острый контролёр качества");
-    insertAgent.run(randomUUID(), "Lint", "린트", "qa", "senior", "codex", "🔬", "Дотошный тест-инженер");
+    insertAgent.run(randomUUID(), "Hawk", "Hawk", "qa", "team_leader", "claude", "🦅", "Острый контролёр качества");
+    insertAgent.run(randomUUID(), "Lint", "Lint", "qa", "senior", "codex", "🔬", "Дотошный тест-инженер");
     // DevSecOps (2)
-    insertAgent.run(randomUUID(), "Vault", "볼트S", "devsecops", "team_leader", "claude", "🛡️", "Архитектор безопасности");
-    insertAgent.run(randomUUID(), "Pipe", "파이프", "devsecops", "senior", "codex", "🔧", "Эксперт CI/CD-пайплайнов");
+    insertAgent.run(randomUUID(), "Vault", "Vault", "devsecops", "team_leader", "claude", "🛡️", "Архитектор безопасности");
+    insertAgent.run(randomUUID(), "Pipe", "Pipe", "devsecops", "senior", "codex", "🔧", "Эксперт CI/CD-пайплайнов");
     // QA Junior (1)
-    insertAgent.run(randomUUID(), "DORO", "도로롱", "qa", "junior", "gemini", "🩷", "Дотошный джуниор по качеству");
+    insertAgent.run(randomUUID(), "DORO", "DORO", "qa", "junior", "gemini", "🩷", "Дотошный джуниор по качеству");
     console.log("[Claw-Empire] Seeded default agents");
   }
 
@@ -194,8 +184,8 @@ export function applyDefaultSeeds(db: DbLike): void {
     const insertDeptIfMissing = db.prepare(
       "INSERT OR IGNORE INTO departments (id, name, name_ko, icon, color, sort_order) VALUES (?, ?, ?, ?, ?, ?)",
     );
-    insertDeptIfMissing.run("qa", "QA/QC", "품질관리팀", "🔍", "#ef4444", 4);
-    insertDeptIfMissing.run("devsecops", "DevSecOps", "인프라보안팀", "🛡️", "#f97316", 5);
+    insertDeptIfMissing.run("qa", "QA/QC", "QA/QC", "🔍", "#ef4444", 4);
+    insertDeptIfMissing.run("devsecops", "DevSecOps", "DevSecOps", "🛡️", "#f97316", 5);
 
     const updateOrder = db.prepare("UPDATE departments SET sort_order = ? WHERE id = ?");
     for (const [id, order] of Object.entries(DEPT_ORDER)) {
@@ -245,13 +235,13 @@ export function applyDefaultSeeds(db: DbLike): void {
 
       const newAgents: [string, string, string, string, string, string, string][] = [
         // [name, name_ko, dept, role, provider, emoji, personality]
-        ["Luna", "루나", "design", "junior", "gemini", "🌙", "감성적인 UI 디자이너"],
-        ["Clio", "클리오", "planning", "senior", "claude", "📝", "데이터 기반 기획자"],
-        ["Turbo", "터보", "operations", "senior", "codex", "🚀", "자동화 전문가"],
-        ["Hawk", "호크", "qa", "team_leader", "claude", "🦅", "날카로운 품질 감시자"],
-        ["Lint", "린트", "qa", "senior", "codex", "🔬", "꼼꼼한 테스트 전문가"],
-        ["Vault", "볼트S", "devsecops", "team_leader", "claude", "🛡️", "보안 아키텍트"],
-        ["Pipe", "파이프", "devsecops", "senior", "codex", "🔧", "CI/CD 파이프라인 전문가"],
+        ["Luna", "Luna", "design", "junior", "gemini", "🌙", "Чуткий UI-дизайнер"],
+        ["Clio", "Clio", "planning", "senior", "claude", "📝", "Планировщик, опирающийся на данные"],
+        ["Turbo", "Turbo", "operations", "senior", "codex", "🚀", "Эксперт автоматизации"],
+        ["Hawk", "Hawk", "qa", "team_leader", "claude", "🦅", "Острый контролёр качества"],
+        ["Lint", "Lint", "qa", "senior", "codex", "🔬", "Дотошный тест-инженер"],
+        ["Vault", "Vault", "devsecops", "team_leader", "claude", "🛡️", "Архитектор безопасности"],
+        ["Pipe", "Pipe", "devsecops", "senior", "codex", "🔧", "Эксперт CI/CD-пайплайнов"],
       ];
 
       let added = 0;

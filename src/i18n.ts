@@ -6,7 +6,7 @@ export const LANGUAGE_STORAGE_KEY = "climpire.language";
 export const LANGUAGE_USER_SET_STORAGE_KEY = "climpire.language.user_set";
 
 export type LangText = {
-  ko: string;
+  ko?: string;
   en: string;
   ja?: string;
   zh?: string;
@@ -116,7 +116,7 @@ const I18nContext = createContext<I18nContextValue>({
 
 interface I18nProviderProps {
   language?: string | null;
-  children: ReactNode;
+  children?: ReactNode;
 }
 
 export function I18nProvider({ language, children }: I18nProviderProps) {

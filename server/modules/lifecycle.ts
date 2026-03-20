@@ -363,6 +363,7 @@ export function startLifecycle(ctx: RuntimeContext): void {
 
     recoverOrphanInProgressTasks("startup");
     recoverOrphanWorkingAgents("startup");
+    recoverOrphanCollaboratingTasks("startup");
 
     const reviewTasks = db
       .prepare(
@@ -533,6 +534,59 @@ export function startLifecycle(ctx: RuntimeContext): void {
     });
   }
 
+  // Recover collaborating tasks that have been stuck (no subtask activity) for too long
+  function recoverOrphanCollaboratingTasks(reason: InProgressRecoveryReason): void {
+    const COLLAB_GRACE_MS = 30 * 60 * 1000; // 30 minutes
+    const now = nowMs();
+
+    const collaboratingTasks = db
+      .prepare(
+        `SELECT id, title, assigned_agent_id, updated_at
+         FROM tasks
+         WHERE status = 'collaborating'
+         ORDER BY updated_at ASC`,
+      )
+      .all() as Array<{ id: string; title: string; assigned_agent_id: string | null; updated_at: number | null }>;
+
+    for (const task of collaboratingTasks) {
+      const lastTouched = task.updated_at ?? 0;
+      const ageMs = lastTouched > 0 ? Math.max(0, now - lastTouched) : COLLAB_GRACE_MS + 1;
+      if (ageMs < COLLAB_GRACE_MS) continue;
+
+      // Check for recent subtask log activity
+      const recentSubActivity = db
+        .prepare(
+          `SELECT tl.created_at FROM task_logs tl
+           JOIN subtasks s ON s.delegated_task_id = tl.task_id
+           WHERE s.task_id = ? AND tl.created_at > ?
+           LIMIT 1`,
+        )
+        .get(task.id, now - COLLAB_GRACE_MS) as { created_at: number } | undefined;
+      if (recentSubActivity) continue;
+
+      const t = nowMs();
+      const moved = db
+        .prepare("UPDATE tasks SET status = 'inbox', updated_at = ? WHERE id = ? AND status = 'collaborating'")
+        .run(t, task.id) as { changes?: number };
+      if ((moved.changes ?? 0) === 0) continue;
+
+      clearTaskWorkflowState(task.id);
+      if (task.assigned_agent_id) {
+        db.prepare("UPDATE agents SET status = 'idle', current_task_id = NULL WHERE id = ?").run(task.assigned_agent_id);
+        broadcast("agent_status", db.prepare("SELECT * FROM agents WHERE id = ?").get(task.assigned_agent_id));
+      }
+      broadcast("task_update", db.prepare("SELECT * FROM tasks WHERE id = ?").get(task.id));
+      const lang = resolveLang(task.title);
+      const msg =
+        lang === "ru"
+          ? `[WATCHDOG] Задача '${task.title}' зависла в режиме collaborating (${Math.round(ageMs / 60000)} мин). Возвращено в inbox.`
+          : `[WATCHDOG] '${task.title}' was stuck in collaborating (${Math.round(ageMs / 60000)}min). Recovered to inbox.`;
+      notifyCeo(msg, task.id);
+      appendTaskLog(task.id, "system", `Recovery (${reason}): collaborating for ${Math.round(ageMs / 60000)}min without activity → inbox`);
+      console.warn(`[lifecycle] recovered collaborating task: ${task.title.slice(0, 50)}`);
+    }
+  }
+
   function sweepPendingSubtaskDelegations(): void {
     const parents = db
       .prepare(
@@ -607,6 +661,7 @@ export function startLifecycle(ctx: RuntimeContext): void {
   setTimeout(recoverInterruptedWorkflowOnStartup, 3_000);
   setInterval(() => recoverOrphanInProgressTasks("interval"), IN_PROGRESS_ORPHAN_SWEEP_MS);
   setInterval(() => recoverOrphanWorkingAgents("interval"), IN_PROGRESS_ORPHAN_SWEEP_MS);
+  setInterval(() => recoverOrphanCollaboratingTasks("interval"), 5 * 60 * 1000);
   setTimeout(sweepPendingSubtaskDelegations, 4_000);
   setInterval(sweepPendingSubtaskDelegations, SUBTASK_DELEGATION_SWEEP_MS);
   // Auto-start inbox + planned tasks: check every 30s, initial check after 6s
