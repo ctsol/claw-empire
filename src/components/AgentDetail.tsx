@@ -32,6 +32,15 @@ interface AgentDetailProps {
   onAgentUpdated?: () => void;
 }
 
+function fileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 const CLI_MODEL_OVERRIDE_PROVIDERS: Agent["cli_provider"][] = ["claude", "codex", "gemini", "opencode", "kimi"];
 const CODEX_REASONING_FALLBACK_OPTIONS: ReasoningLevelOption[] = [
   { effort: "low", description: "Faster, lower depth" },
@@ -72,6 +81,12 @@ export default function AgentDetail({
   const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
   const [savingPlanningLead, setSavingPlanningLead] = useState(false);
   const [actsAsPlanningLead, setActsAsPlanningLead] = useState(Number(agent.acts_as_planning_leader ?? 0) === 1);
+  const [showAvatarEditor, setShowAvatarEditor] = useState(false);
+  const [spriteProcessing, setSpriteProcessing] = useState(false);
+  const [spritePreviews, setSpritePreviews] = useState<Record<string, string> | null>(null);
+  const [spriteNum, setSpriteNum] = useState(agent.sprite_number ?? 0);
+  const [spriteRegistering, setSpriteRegistering] = useState(false);
+  const [spriteRegistered, setSpriteRegistered] = useState(false);
 
   const agentTasks = tasks.filter((task) => task.assigned_agent_id === agent.id);
   const subtasksByTask = useMemo(() => {
@@ -372,7 +387,7 @@ export default function AgentDetail({
           </button>
 
           <div className="flex items-center gap-4">
-            <div className="relative">
+            <div className="relative group">
               <AgentAvatar
                 agent={agent}
                 agents={agents}
@@ -380,6 +395,14 @@ export default function AgentDetail({
                 rounded="2xl"
                 className={agent.status === "working" ? "animate-agent-work" : ""}
               />
+              <button
+                onClick={() => { setShowAvatarEditor((v) => !v); setSpritePreviews(null); setSpriteRegistered(false); }}
+                className="absolute inset-0 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ background: "rgba(0,0,0,0.55)" }}
+                title={t({ ko: "아바타 편집", en: "Edit avatar", ja: "アバター編集", zh: "编辑头像", ru: "Редактировать аватар" })}
+              >
+                <span className="text-lg">✏️</span>
+              </button>
               <div
                 className={`absolute -bottom-1 -right-1 w-4 h-4 rounded-full border-2 border-slate-800 ${
                   agent.status === "working"
@@ -730,6 +753,100 @@ export default function AgentDetail({
             <span className="text-[10px] text-slate-500">{agent.stats_xp} XP</span>
           </div>
         </div>
+
+        {showAvatarEditor && (
+          <div className="px-4 pb-3 border-b border-slate-700 space-y-2">
+            <div className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 pt-2">
+              {t({ ko: "스프라이트 편집", en: "Edit Sprite", ja: "スプライト編集", zh: "编辑精灵", ru: "Редактор спрайта" })}
+            </div>
+            {!spritePreviews && !spriteProcessing && (
+              <label className="flex items-center gap-2 py-3 rounded-lg border border-dashed border-slate-600 cursor-pointer hover:border-blue-500/50 transition-colors justify-center text-slate-400 text-xs">
+                <span>🖼️</span>
+                <span>{t({ ko: "스프라이트 시트 업로드 (2×2)", en: "Upload sprite sheet (2×2)", ja: "スプライトシートをアップロード (2×2)", zh: "上传精灵表 (2×2)", ru: "Загрузить sprite sheet (2×2)" })}</span>
+                <input
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={async (e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    setSpriteProcessing(true);
+                    setSpritePreviews(null);
+                    setSpriteRegistered(false);
+                    try {
+                      const base64 = await fileToBase64(file);
+                      const result = await api.processSprite(base64);
+                      setSpritePreviews(result.previews);
+                      setSpriteNum(result.suggestedNumber);
+                    } catch (err) {
+                      console.error("Sprite processing failed:", err);
+                    } finally {
+                      setSpriteProcessing(false);
+                    }
+                  }}
+                />
+              </label>
+            )}
+            {spriteProcessing && (
+              <div className="flex items-center justify-center gap-2 py-3 text-slate-400 text-xs">
+                <span className="animate-spin">⏳</span>
+                <span>{t({ ko: "처리 중...", en: "Processing...", ja: "処理中...", zh: "处理中...", ru: "Обработка..." })}</span>
+              </div>
+            )}
+            {spritePreviews && !spriteProcessing && (
+              <div className="space-y-2">
+                <div className="flex gap-2">
+                  {(["D", "L", "R"] as const).map((dir) => (
+                    <div key={dir} className="flex-1 text-center">
+                      <div className="text-[10px] text-slate-500 mb-1">
+                        {dir === "D" ? t({ ko: "정면", en: "Front", ja: "正面", zh: "正面", ru: "Перед" }) : dir === "L" ? t({ ko: "좌측", en: "Left", ja: "左", zh: "左", ru: "Лево" }) : t({ ko: "우측", en: "Right", ja: "右", zh: "右", ru: "Право" })}
+                      </div>
+                      <div className="rounded bg-slate-700 p-1 h-16 flex items-center justify-center">
+                        {spritePreviews[dir] && <img src={spritePreviews[dir]} alt={dir} className="max-h-14 object-contain" style={{ imageRendering: "pixelated" }} />}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-slate-400">{t({ ko: "번호", en: "Sprite #", ja: "番号", zh: "编号", ru: "№" })}</span>
+                  <input
+                    type="number"
+                    value={spriteNum}
+                    onChange={(e) => setSpriteNum(Number(e.target.value))}
+                    min={1}
+                    className="w-14 px-2 py-1 bg-slate-700 border border-slate-600 rounded text-xs text-slate-200 text-center focus:outline-none focus:border-blue-500"
+                  />
+                  <button
+                    onClick={async () => {
+                      if (!spritePreviews) return;
+                      setSpriteRegistering(true);
+                      try {
+                        await api.registerSprite(spritePreviews, spriteNum);
+                        await api.updateAgent(agent.id, { sprite_number: spriteNum });
+                        setSpriteRegistered(true);
+                        onAgentUpdated?.();
+                      } catch (err) {
+                        console.error("Sprite register failed:", err);
+                      } finally {
+                        setSpriteRegistering(false);
+                      }
+                    }}
+                    disabled={spriteRegistering || spriteRegistered}
+                    className={`px-3 py-1 rounded text-xs font-medium transition-all ${spriteRegistered ? "bg-emerald-600/20 text-emerald-400 border border-emerald-500/30" : "bg-blue-600 hover:bg-blue-500 text-white"} disabled:opacity-50`}
+                  >
+                    {spriteRegistering ? t({ ko: "등록 중...", en: "Saving...", ja: "保存中...", zh: "保存中...", ru: "Сохранение..." }) : spriteRegistered ? "✓" : t({ ko: "저장", en: "Save", ja: "保存", zh: "保存", ru: "Сохранить" })}
+                  </button>
+                  <button
+                    onClick={() => { setSpritePreviews(null); setSpriteRegistered(false); }}
+                    className="text-xs px-2 py-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-700 transition-colors"
+                  >
+                    {t({ ko: "다시", en: "Redo", ja: "やり直し", zh: "重新", ru: "Заново" })}
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="flex border-b border-slate-700">
           {[
