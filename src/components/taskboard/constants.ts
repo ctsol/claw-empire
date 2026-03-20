@@ -233,10 +233,10 @@ export function getTaskTypeBadge(type: TaskType, t: TFunction) {
   return { ...option, label: taskTypeLabel(option.value, t) };
 }
 
-export function priorityIcon(priority: number) {
-  if (priority >= 4) return "🔴";
-  if (priority >= 2) return "🟡";
-  return "🟢";
+export function priorityBadgeClass(priority: number): string {
+  if (priority >= 4) return "bg-red-600/20 text-red-400 border border-red-600/40";
+  if (priority >= 2) return "bg-amber-600/20 text-amber-400 border border-amber-600/40";
+  return "bg-green-600/20 text-green-400 border border-green-600/40";
 }
 
 export function priorityLabel(priority: number, t: TFunction) {

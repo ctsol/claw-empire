@@ -67,6 +67,8 @@ export function TaskBoard({
   const [search, setSearch] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
   const [showAllTasks, setShowAllTasks] = useState(false);
+  const [dragTaskId, setDragTaskId] = useState<string | null>(null);
+  const [dragOverColumn, setDragOverColumn] = useState<string | null>(null);
 
   const hiddenTaskIds = useMemo(
     () => new Set(tasks.filter((task) => task.hidden === 1).map((task) => task.id)),
@@ -127,6 +129,37 @@ export function TaskBoard({
     }
     return grouped;
   }, [subtasks]);
+
+  const handleDragStart = useCallback((e: React.DragEvent, taskId: string) => {
+    setDragTaskId(taskId);
+    e.dataTransfer.effectAllowed = "move";
+  }, []);
+
+  const handleDragOver = useCallback((e: React.DragEvent, status: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    setDragOverColumn(status);
+  }, []);
+
+  const handleDrop = useCallback(
+    (e: React.DragEvent, status: string) => {
+      e.preventDefault();
+      if (dragTaskId) {
+        const task = tasks.find((t) => t.id === dragTaskId);
+        if (task && task.status !== status) {
+          onUpdateTask(dragTaskId, { status: status as Task["status"] });
+        }
+      }
+      setDragTaskId(null);
+      setDragOverColumn(null);
+    },
+    [dragTaskId, tasks, onUpdateTask],
+  );
+
+  const handleDragEnd = useCallback(() => {
+    setDragTaskId(null);
+    setDragOverColumn(null);
+  }, []);
 
   const activeFilterCount = [filterDept, filterAgent, filterType, filterProject, search].filter(Boolean).length;
   const hiddenTaskCount = useMemo(() => {
@@ -250,13 +283,20 @@ export function TaskBoard({
         onSearch={setSearch}
       />
 
-      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pb-2 sm:flex-row sm:overflow-x-auto sm:overflow-y-hidden">
+      <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto pb-2 sm:flex-row sm:overflow-x-auto sm:overflow-y-hidden" onDragEnd={handleDragEnd}>
         {COLUMNS.map((column) => {
           const columnTasks = tasksByStatus[column.status] ?? [];
           return (
             <div
               key={column.status}
-              className={`taskboard-column flex w-full flex-col rounded-xl border sm:w-72 sm:flex-shrink-0 ${column.borderColor} bg-slate-900`}
+              onDragOver={(e) => handleDragOver(e, column.status)}
+              onDrop={(e) => handleDrop(e, column.status)}
+              onDragLeave={() => setDragOverColumn(null)}
+              className={`taskboard-column flex w-full flex-col rounded-xl border sm:w-72 sm:flex-shrink-0 transition-colors ${
+                dragOverColumn === column.status && dragTaskId
+                  ? "border-blue-500 bg-blue-950/40"
+                  : `${column.borderColor} bg-slate-900`
+              }`}
             >
               <div className={`flex items-center justify-between rounded-t-xl ${column.headerBg} px-3.5 py-2.5`}>
                 <div className="flex items-center gap-2">
@@ -285,6 +325,7 @@ export function TaskBoard({
                       projects={projects}
                       taskSubtasks={subtasksByTask[task.id] ?? []}
                       isHiddenTask={hiddenTaskIds.has(task.id)}
+                      isDragging={dragTaskId === task.id}
                       onUpdateTask={onUpdateTask}
                       onDeleteTask={onDeleteTask}
                       onAssignTask={onAssignTask}
@@ -298,6 +339,7 @@ export function TaskBoard({
                       onDiscardTask={onDiscardTask}
                       onHideTask={hideTask}
                       onUnhideTask={unhideTask}
+                      onDragStart={handleDragStart}
                     />
                   ))
                 )}

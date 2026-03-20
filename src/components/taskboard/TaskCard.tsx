@@ -7,7 +7,7 @@ import DiffModal from "./DiffModal";
 import {
   getTaskTypeBadge,
   isHideableStatus,
-  priorityIcon,
+  priorityBadgeClass,
   priorityLabel,
   STATUS_OPTIONS,
   taskStatusLabel,
@@ -21,6 +21,7 @@ interface TaskCardProps {
   projects?: Project[];
   taskSubtasks: SubTask[];
   isHiddenTask?: boolean;
+  isDragging?: boolean;
   onUpdateTask: (id: string, data: Partial<Task>) => void;
   onDeleteTask: (id: string) => void;
   onAssignTask: (taskId: string, agentId: string) => void;
@@ -34,6 +35,7 @@ interface TaskCardProps {
   onDiscardTask?: (id: string) => void;
   onHideTask?: (id: string) => void;
   onUnhideTask?: (id: string) => void;
+  onDragStart?: (e: React.DragEvent, taskId: string) => void;
 }
 
 const SUBTASK_STATUS_ICON: Record<string, string> = {
@@ -50,6 +52,7 @@ export default function TaskCard({
   projects,
   taskSubtasks,
   isHiddenTask,
+  isDragging,
   onUpdateTask,
   onDeleteTask,
   onAssignTask,
@@ -63,6 +66,7 @@ export default function TaskCard({
   onDiscardTask,
   onHideTask,
   onUnhideTask,
+  onDragStart,
 }: TaskCardProps) {
   void onMergeTask;
   void onDiscardTask;
@@ -91,10 +95,14 @@ export default function TaskCard({
 
   return (
     <div
-      className={`group rounded-xl border p-3.5 shadow-sm transition hover:shadow-md ${
-        isHiddenTask
-          ? "border-cyan-700/80 bg-slate-800/80 hover:border-cyan-600"
-          : "border-slate-700 bg-slate-800 hover:border-slate-600"
+      draggable
+      onDragStart={(e) => onDragStart?.(e, task.id)}
+      className={`group rounded-xl border p-3.5 shadow-sm transition hover:shadow-md cursor-grab active:cursor-grabbing ${
+        isDragging
+          ? "opacity-40 scale-95"
+          : isHiddenTask
+            ? "border-cyan-700/80 bg-slate-800/80 hover:border-cyan-600"
+            : "border-slate-700 bg-slate-800 hover:border-slate-600"
       }`}
     >
       <div className="mb-2 flex items-start justify-between gap-2">
@@ -105,10 +113,10 @@ export default function TaskCard({
           {task.title}
         </button>
         <span
-          className="flex-shrink-0 text-base"
+          className={`flex-shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${priorityBadgeClass(task.priority)}`}
           title={`${t({ ko: "우선순위", en: "Priority", ja: "優先度", zh: "优先级", ru: "Приоритет" })}: ${priorityLabel(task.priority, t)}`}
         >
-          {priorityIcon(task.priority)}
+          {priorityLabel(task.priority, t)}
         </span>
       </div>
 
