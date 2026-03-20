@@ -423,7 +423,7 @@ export default function OfficeView({
   });
 
   return (
-    <div className="w-full overflow-auto" style={{ minHeight: "100%" }}>
+    <div className="w-full">
       <div className="relative mx-auto w-full">
         <div
           ref={containerRef}
