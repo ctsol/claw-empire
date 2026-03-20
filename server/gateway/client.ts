@@ -996,3 +996,33 @@ export async function gatewayHttpInvoke(_req: {
 }): Promise<any> {
   throw new Error("openclaw gateway integration has been removed; use direct messenger transports");
 }
+
+/**
+ * Sends a text message to all enabled sessions of the given channel.
+ * Used by telegram-report-sender to send team reports.
+ * Uses properly decrypted tokens from loadMessengerConfig().
+ */
+export async function sendByChannelForReport(channel: MessengerChannel, text: string): Promise<void> {
+  const config = loadMessengerConfig();
+  const channelConfig = config[channel];
+  if (!channelConfig) return;
+
+  const channelToken = channelConfig.token;
+  const errors: string[] = [];
+
+  for (const session of channelConfig.sessions) {
+    if (!session.enabled) continue;
+    const token = normalizeText(session.token) || channelToken;
+    if (!token && channel !== "imessage") continue;
+    try {
+      await sendByChannel(channel, token, session.targetId, text);
+    } catch (err) {
+      errors.push(`${session.targetId}: ${String(err)}`);
+      console.warn(`[telegram-report] failed to send to ${channel} session ${session.targetId}: ${String(err)}`);
+    }
+  }
+
+  if (errors.length > 0 && channelConfig.sessions.filter((s) => s.enabled).length > 0) {
+    console.warn(`[telegram-report] ${errors.length} session(s) failed: ${errors.join(" | ")}`);
+  }
+}

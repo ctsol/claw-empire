@@ -376,7 +376,7 @@ export default function AppMainLayout({
           />
         </div>
 
-        <main className="flex-1 overflow-y-auto overflow-x-hidden min-w-0">
+        <main className={`flex-1 overflow-x-hidden min-w-0 ${view === "office" ? "overflow-hidden flex flex-col" : "overflow-y-auto"}`}>
           <AppHeaderBar
             currentView={view}
             connected={connected}
@@ -483,7 +483,7 @@ export default function AppMainLayout({
             </div>
           )}
 
-          <div className="p-3 sm:p-4 lg:p-6">
+          <div className={view === "office" ? "flex-1 overflow-hidden p-3 sm:p-4 lg:p-6" : "p-3 sm:p-4 lg:p-6"}>
             {view === "office" && (
               <OfficeView
                 departments={officePresentation.departments}
