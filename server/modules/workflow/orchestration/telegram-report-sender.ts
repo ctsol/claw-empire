@@ -12,12 +12,18 @@ export async function sendTelegramReportToChannel(
   teamName: string,
   text: string,
 ): Promise<void> {
+  console.log(`[telegram-report] sendTelegramReportToChannel called, teamName="${teamName}", textLen=${text?.length ?? 0}`);
   try {
     const prefix = teamName ? `📊 [${teamName}]\n` : "";
     const message = `${prefix}${text}`.trim();
-    if (!message) return;
+    if (!message) {
+      console.warn("[telegram-report] message is empty, skipping");
+      return;
+    }
 
+    console.log(`[telegram-report] calling sendByChannelForReport, messageLen=${message.length}`);
     await sendByChannelForReport("telegram", message);
+    console.log("[telegram-report] sendByChannelForReport completed");
   } catch (err) {
     console.warn("[telegram-report] report channel send error:", err);
   }

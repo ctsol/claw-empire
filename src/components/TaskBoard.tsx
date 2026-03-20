@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { bulkHideTasks, getProjects } from "../api";
 import { useI18n } from "../i18n";
 import type { Agent, Department, Project, SubTask, Task, WorkflowPackKey } from "../types";
@@ -67,6 +67,7 @@ export function TaskBoard({
   const [search, setSearch] = useState("");
   const [projects, setProjects] = useState<Project[]>([]);
   const [showAllTasks, setShowAllTasks] = useState(false);
+  const dragTaskIdRef = useRef<string | null>(null);
   const [dragTaskId, setDragTaskId] = useState<string | null>(null);
   const [dragOverColumn, setDragOverColumn] = useState<string | null>(null);
 
@@ -131,8 +132,10 @@ export function TaskBoard({
   }, [subtasks]);
 
   const handleDragStart = useCallback((e: React.DragEvent, taskId: string) => {
+    dragTaskIdRef.current = taskId;
     setDragTaskId(taskId);
     e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", taskId);
   }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent, status: string) => {
@@ -144,19 +147,22 @@ export function TaskBoard({
   const handleDrop = useCallback(
     (e: React.DragEvent, status: string) => {
       e.preventDefault();
-      if (dragTaskId) {
-        const task = tasks.find((t) => t.id === dragTaskId);
+      const taskId = dragTaskIdRef.current || e.dataTransfer.getData("text/plain");
+      if (taskId) {
+        const task = tasks.find((t) => t.id === taskId);
         if (task && task.status !== status) {
-          onUpdateTask(dragTaskId, { status: status as Task["status"] });
+          onUpdateTask(taskId, { status: status as Task["status"] });
         }
       }
+      dragTaskIdRef.current = null;
       setDragTaskId(null);
       setDragOverColumn(null);
     },
-    [dragTaskId, tasks, onUpdateTask],
+    [tasks, onUpdateTask],
   );
 
   const handleDragEnd = useCallback(() => {
+    dragTaskIdRef.current = null;
     setDragTaskId(null);
     setDragOverColumn(null);
   }, []);
@@ -291,7 +297,12 @@ export function TaskBoard({
               key={column.status}
               onDragOver={(e) => handleDragOver(e, column.status)}
               onDrop={(e) => handleDrop(e, column.status)}
-              onDragLeave={() => setDragOverColumn(null)}
+              onDragLeave={(e) => {
+                // Only clear if leaving the column entirely (not entering a child)
+                if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+                  setDragOverColumn(null);
+                }
+              }}
               className={`taskboard-column flex w-full flex-col rounded-xl border sm:w-72 sm:flex-shrink-0 transition-colors ${
                 dragOverColumn === column.status && dragTaskId
                   ? "border-blue-500 bg-blue-950/40"
@@ -311,6 +322,11 @@ export function TaskBoard({
               </div>
 
               <div className="flex flex-col gap-2.5 p-2.5 sm:flex-1 sm:overflow-y-auto">
+                {dragOverColumn === column.status && dragTaskId && (
+                  <div className="rounded-xl border-2 border-dashed border-blue-500/60 bg-blue-500/10 h-12 flex items-center justify-center text-xs text-blue-400 animate-pulse">
+                    {t({ ko: "여기에 놓기", en: "Drop here", ja: "ここにドロップ", zh: "放置到此处", ru: "Опустить сюда" })}
+                  </div>
+                )}
                 {columnTasks.length === 0 ? (
                   <div className="flex min-h-24 items-center justify-center py-8 text-xs text-slate-600 sm:flex-1">
                     {t({ ko: "업무 없음", en: "No tasks", ja: "タスクなし", zh: "暂无任务", ru: "Нет задач" })}

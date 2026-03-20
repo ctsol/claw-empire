@@ -1005,24 +1005,38 @@ export async function gatewayHttpInvoke(_req: {
 export async function sendByChannelForReport(channel: MessengerChannel, text: string): Promise<void> {
   const config = loadMessengerConfig();
   const channelConfig = config[channel];
-  if (!channelConfig) return;
+  if (!channelConfig) {
+    console.warn(`[telegram-report] sendByChannelForReport: no config for channel "${channel}"`);
+    return;
+  }
 
   const channelToken = channelConfig.token;
+  const enabledSessions = channelConfig.sessions.filter((s) => s.enabled);
+  console.log(`[telegram-report] channel="${channel}" sessions=${channelConfig.sessions.length} enabled=${enabledSessions.length} channelTokenPresent=${!!channelToken}`);
+
   const errors: string[] = [];
+  let sent = 0;
 
   for (const session of channelConfig.sessions) {
     if (!session.enabled) continue;
     const token = normalizeText(session.token) || channelToken;
-    if (!token && channel !== "imessage") continue;
+    console.log(`[telegram-report] session "${session.id}" targetId="${session.targetId}" tokenPresent=${!!token} agentId="${session.agentId ?? "none"}"`);
+    if (!token && channel !== "imessage") {
+      console.warn(`[telegram-report] session "${session.id}" skipped: no token`);
+      continue;
+    }
     try {
       await sendByChannel(channel, token, session.targetId, text);
+      sent++;
+      console.log(`[telegram-report] ✓ sent to ${channel}:${session.targetId}`);
     } catch (err) {
       errors.push(`${session.targetId}: ${String(err)}`);
-      console.warn(`[telegram-report] failed to send to ${channel} session ${session.targetId}: ${String(err)}`);
+      console.warn(`[telegram-report] ✗ failed to send to ${channel} session ${session.targetId}: ${String(err)}`);
     }
   }
 
-  if (errors.length > 0 && channelConfig.sessions.filter((s) => s.enabled).length > 0) {
+  console.log(`[telegram-report] done: sent=${sent} errors=${errors.length}`);
+  if (errors.length > 0 && enabledSessions.length > 0) {
     console.warn(`[telegram-report] ${errors.length} session(s) failed: ${errors.join(" | ")}`);
   }
 }
