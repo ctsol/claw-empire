@@ -2,17 +2,16 @@ import type { MutableRefObject } from "react";
 import { Graphics, Text, TextStyle, type AnimatedSprite, type Container, type Sprite } from "pixi.js";
 import type { MeetingPresence } from "../../types";
 import {
+  type AnimMode,
   type Delivery,
   type RoomRect,
   type SubCloneBurstParticle,
   type WallClockVisual,
+  ANIM_PROFILES,
   CEO_SIZE,
   CEO_SPEED,
-  SUB_CLONE_FIREWORK_INTERVAL,
   SUB_CLONE_FLOAT_DRIFT,
   SUB_CLONE_MOVE_X_AMPLITUDE,
-  SUB_CLONE_MOVE_Y_AMPLITUDE,
-  SUB_CLONE_WAVE_SPEED,
   TARGET_CHAR_H,
   destroyNode,
   emitSubCloneFireworkBurst,
@@ -82,6 +81,7 @@ export interface OfficeTickerContext {
   officeWRef: MutableRefObject<number>;
   totalHRef: MutableRefObject<number>;
   dataRef: MutableRefObject<OfficeTickerData>;
+  animModeRef: MutableRefObject<AnimMode>;
   followCeoInView: () => void;
 }
 
@@ -387,13 +387,14 @@ export function runOfficeTickerStep(ctx: OfficeTickerContext): void {
     }
   }
 
+  const animProfile = ANIM_PROFILES[ctx.animModeRef.current];
   for (const clone of ctx.subCloneAnimItemsRef.current) {
-    const wave = tick * SUB_CLONE_WAVE_SPEED + clone.phase;
+    const wave = tick * animProfile.subCloneWaveSpeed + clone.phase;
     const driftX =
       Math.sin(wave * 0.7) * SUB_CLONE_MOVE_X_AMPLITUDE +
       Math.cos(wave * 0.38 + clone.phase * 0.6) * SUB_CLONE_FLOAT_DRIFT;
     const driftY =
-      Math.sin(wave * 0.95) * SUB_CLONE_MOVE_Y_AMPLITUDE +
+      Math.sin(wave * 0.95) * animProfile.subCloneMoveYAmp +
       Math.cos(wave * 0.52 + clone.phase) * (SUB_CLONE_FLOAT_DRIFT * 0.65);
     clone.container.position.x = clone.baseX + driftX;
     clone.container.position.y = clone.baseY + driftY;
@@ -409,7 +410,7 @@ export function runOfficeTickerStep(ctx: OfficeTickerContext): void {
       clone.animated.gotoAndStop(frame);
     }
 
-    if ((tick + clone.fireworkOffset) % SUB_CLONE_FIREWORK_INTERVAL === 0) {
+    if ((tick + clone.fireworkOffset) % animProfile.subCloneFireworkInterval === 0) {
       const room = clone.container.parent as Container | null;
       if (room) {
         emitSubCloneFireworkBurst(
@@ -417,6 +418,7 @@ export function runOfficeTickerStep(ctx: OfficeTickerContext): void {
           ctx.subCloneBurstParticlesRef.current,
           clone.container.position.x,
           clone.container.position.y - 24,
+          ctx.animModeRef.current,
         );
       }
     }

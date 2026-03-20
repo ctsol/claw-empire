@@ -10,6 +10,7 @@ import {
   SLOT_H,
   SLOT_W,
   TARGET_CHAR_H,
+  type AnimMode,
   type RoomRect,
   type SubCloneBurstParticle,
   type WallClockVisual,
@@ -62,6 +63,7 @@ interface BuildDepartmentRoomsParams {
   removedSubBurstsByParent: Map<string, Array<{ x: number; y: number }>>;
   addedWorkingSubIds: Set<string>;
   nextSubSnapshot: Map<string, { parentAgentId: string; x: number; y: number }>;
+  animMode?: AnimMode;
 }
 
 export function buildDepartmentRooms({
@@ -92,6 +94,7 @@ export function buildDepartmentRooms({
   removedSubBurstsByParent,
   addedWorkingSubIds,
   nextSubSnapshot,
+  animMode = "game",
 }: BuildDepartmentRoomsParams): void {
   departments.forEach((dept, deptIdx) => {
     const col = deptIdx % gridCols;
@@ -202,7 +205,7 @@ export function buildDepartmentRooms({
       const removedBursts = removedSubBurstsByParent.get(agent.id);
       if (removedBursts && removedBursts.length > 0) {
         for (const burst of removedBursts) {
-          emitSubCloneSmokeBurst(room, subCloneBurstParticlesRef.current, burst.x, burst.y, "despawn");
+          emitSubCloneSmokeBurst(room, subCloneBurstParticlesRef.current, burst.x, burst.y, "despawn", animMode);
         }
         removedSubBurstsByParent.delete(agent.id);
       }
@@ -229,6 +232,7 @@ export function buildDepartmentRooms({
           addedWorkingSubIds,
           nextSubSnapshot,
           themeAccent: theme.accent,
+          animMode,
         });
       }
     });

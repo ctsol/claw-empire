@@ -14,6 +14,7 @@ import CliUsagePanel from "./office-view/CliUsagePanel";
 import RecentTasksPanel, { type RecentTasksPanelHandle } from "./office-view/RecentTasksPanel";
 import VirtualPadOverlay from "./office-view/VirtualPadOverlay";
 import {
+  type AnimMode,
   type OfficeViewProps,
   type Delivery,
   type RoomRect,
@@ -49,6 +50,7 @@ export default function OfficeView({
   onCeoOfficeCallProcessed,
   onOpenActiveMeetingMinutes,
   customDeptThemes,
+  animMode: animModeProp,
   themeHighlightTargetId,
   onSelectAgent,
   onSelectDepartment,
@@ -57,6 +59,14 @@ export default function OfficeView({
   const { theme: currentTheme } = useTheme();
   const themeRef = useRef<ThemeMode>(currentTheme);
   themeRef.current = currentTheme;
+
+  // Determine effective animation mode: respect prefers-reduced-motion by downgrading to corporate
+  const prefersReducedMotion =
+    typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const effectiveAnimMode: AnimMode = prefersReducedMotion ? "corporate" : (animModeProp ?? "game");
+  const animModeRef = useRef<AnimMode>(effectiveAnimMode);
+  animModeRef.current = effectiveAnimMode;
+
   const containerRef = useRef<HTMLDivElement>(null);
   const appRef = useRef<Application | null>(null);
   const texturesRef = useRef<Record<string, Texture>>({});
@@ -321,6 +331,7 @@ export default function OfficeView({
       breakBubblesRef,
       wallClocksRef,
       wallClockSecondRef,
+      animModeRef,
       setSceneRevision,
     });
   }, []);
@@ -352,6 +363,7 @@ export default function OfficeView({
       officeWRef,
       totalHRef,
       dataRef,
+      animModeRef,
       followCeoInView,
     }),
     [followCeoInView, cliUsageRef],
