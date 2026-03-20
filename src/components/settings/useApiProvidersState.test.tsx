@@ -115,9 +115,9 @@ describe("useApiProvidersState model assignment", () => {
     ]);
     apiMocks.getDepartments.mockImplementation(async (options?: { workflowPackKey?: string }) => {
       if (options?.workflowPackKey === "video_preprod") {
-        return [{ id: "planning", name: "Storyboard", name_ko: "스토리보드", workflow_pack_key: "video_preprod" }];
+        return [{ id: "planning", name: "Storyboard", name_ko: "", workflow_pack_key: "video_preprod" }];
       }
-      return [{ id: "planning", name: "Planning", name_ko: "기획", workflow_pack_key: "development" }];
+      return [{ id: "planning", name: "Planning", name_ko: "", workflow_pack_key: "development" }];
     });
 
     const { result } = renderHook(() =>
@@ -145,8 +145,8 @@ describe("useApiProvidersState model assignment", () => {
       { id: "agent-legacy" },
     ]);
     expect(result.current.apiAssignDepts).toEqual([
-      { id: "planning", name: "Planning", name_ko: "기획", workflow_pack_key: "development" },
-      { id: "planning", name: "Storyboard", name_ko: "스토리보드", workflow_pack_key: "video_preprod" },
+      { id: "planning", name: "Planning", name_ko: "", workflow_pack_key: "development" },
+      { id: "planning", name: "Storyboard", name_ko: "", workflow_pack_key: "video_preprod" },
     ]);
   });
 });

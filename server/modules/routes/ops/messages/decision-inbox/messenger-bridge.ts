@@ -313,7 +313,7 @@ export function createDecisionInboxMessengerBridge(deps: DecisionBridgeDeps) {
     if (status >= 400) {
       const reason = normalizeTextField(payload.error) || `status_${status}`;
       return pickDecisionL10n(
-        `⚠️ 의사결정 회신 처리 실패 (${reason})`,
+        ``,
         `⚠️ Decision reply failed (${reason})`,
         `⚠️ 意思決定返信に失敗しました (${reason})`,
         `⚠️ 决策回复失败（${reason}）`,
@@ -325,7 +325,7 @@ export function createDecisionInboxMessengerBridge(deps: DecisionBridgeDeps) {
       const blockedLabel = String(firstBlocked?.title ?? "").trim() || "task";
       const reasonLabel = String(firstBlocked?.reason ?? "").trim() || "review_gate_hold";
       return pickDecisionL10n(
-        `⚠️ 팀장 회의 시작이 보류되었습니다. (${blockedLabel}, ${reasonLabel})`,
+        ``,
         `⚠️ Team-lead meeting start is on hold. (${blockedLabel}, ${reasonLabel})`,
         `⚠️ チームリーダー会議の開始は保留です。(${blockedLabel}, ${reasonLabel})`,
         `⚠️ 组长评审会议暂缓启动。(${blockedLabel}, ${reasonLabel})`,
@@ -336,14 +336,14 @@ export function createDecisionInboxMessengerBridge(deps: DecisionBridgeDeps) {
     const resolved = payload.resolved === true;
     if (resolved) {
       return pickDecisionL10n(
-        `✅ 의사결정 반영 완료: ${optionLabel}`,
+        ``,
         `✅ Decision applied: ${optionLabel}`,
         `✅ 意思決定を反映しました: ${optionLabel}`,
         `✅ 已应用决策：${optionLabel}`,
       );
     }
     return pickDecisionL10n(
-      `☑️ 의사결정 기록 완료: ${optionLabel}`,
+      ``,
       `☑️ Decision recorded: ${optionLabel}`,
       `☑️ 意思決定を記録しました: ${optionLabel}`,
       `☑️ 已记录决策：${optionLabel}`,
@@ -430,7 +430,7 @@ export function createDecisionInboxMessengerBridge(deps: DecisionBridgeDeps) {
     if (!pendingDecision) {
       if (!hasExplicitMarker) return { handled: false, status: 200, payload: {} };
       const noDecisionMsg = pickDecisionL10n(
-        "⚠️ 이 채널에는 대기 중인 의사결정 요청이 없습니다.",
+        "⚠️       .",
         "⚠️ There is no pending decision request on this channel.",
         "⚠️ このチャンネルには保留中の意思決定リクエストがありません。",
         "⚠️ 此频道没有待处理的决策请求。",
@@ -451,7 +451,7 @@ export function createDecisionInboxMessengerBridge(deps: DecisionBridgeDeps) {
     if (!selectedOptionNumber) {
       const optionsHint = pendingDecision.options.map((option) => option.number).join(", ");
       const retryMsg = pickDecisionL10n(
-        `⚠️ 선택 번호가 필요합니다. 가능한 번호: ${optionsHint}`,
+        ``,
         `⚠️ Option number required. Available options: ${optionsHint}`,
         `⚠️ 選択番号が必要です。選べる番号: ${optionsHint}`,
         `⚠️ 需要选项编号。可用编号：${optionsHint}`,

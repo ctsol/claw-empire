@@ -24,8 +24,8 @@ function seedCollaborationFixture(db: DatabaseSync, provider: ProviderCase["prov
   db.exec(`
     INSERT INTO departments (id, name, name_ko, icon, color, sort_order)
     VALUES
-      ('planning', 'Planning', '기획', 'P', '#111827', 1),
-      ('dev', 'Development', '개발', 'D', '#1d4ed8', 2);
+      ('planning', 'Planning', '', 'P', '#111827', 1),
+      ('dev', 'Development', '', 'D', '#1d4ed8', 2);
 
     INSERT INTO projects (id, name, project_path, core_goal, default_pack_key, created_at, updated_at)
     VALUES ('project-1', 'Demo', '/workspace/demo', 'Ship it', 'development', 1, 1);
@@ -34,9 +34,9 @@ function seedCollaborationFixture(db: DatabaseSync, provider: ProviderCase["prov
       id, name, name_ko, department_id, workflow_pack_key, role, cli_provider,
       oauth_account_id, api_provider_id, api_model, avatar_emoji, status, created_at
     ) VALUES
-      ('planning-leader', 'Planner', '기획팀장', 'planning', 'development', 'team_leader', 'claude', NULL, NULL, NULL, ':P', 'idle', 1),
-      ('dev-leader', 'Dev Lead', '개발팀장', 'dev', 'development', 'team_leader', 'claude', NULL, NULL, NULL, ':D', 'idle', 1),
-      ('dev-worker', 'Dev Worker', '개발담당', 'dev', 'development', 'senior', '${provider}', 'oauth-1', 'api-provider-1', 'model-1', ':W', 'idle', 1);
+      ('planning-leader', 'Planner', '', 'planning', 'development', 'team_leader', 'claude', NULL, NULL, NULL, ':P', 'idle', 1),
+      ('dev-leader', 'Dev Lead', '', 'dev', 'development', 'team_leader', 'claude', NULL, NULL, NULL, ':D', 'idle', 1),
+      ('dev-worker', 'Dev Worker', '', 'dev', 'development', 'senior', '${provider}', 'oauth-1', 'api-provider-1', 'model-1', ':W', 'idle', 1);
 
     INSERT INTO tasks (
       id, title, description, department_id, assigned_agent_id, project_id,

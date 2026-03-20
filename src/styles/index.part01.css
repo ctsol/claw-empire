@@ -37,9 +37,9 @@
   --th-text-heading: #f0f6fc;
   --th-scrollbar-thumb: #21262d;
   --th-scrollbar-thumb-hover: #30363d;
-  --th-card-bg: rgba(13, 17, 23, 0.7);
-  --th-card-border: rgba(48, 54, 61, 0.5);
-  --th-card-bg-hover: rgba(22, 27, 34, 0.85);
+  --th-card-bg: rgba(30, 36, 44, 0.82);
+  --th-card-border: rgba(58, 66, 76, 0.6);
+  --th-card-bg-hover: rgba(38, 44, 54, 0.92);
   --th-panel-bg: rgba(13, 17, 23, 0.72);
   --th-panel-border: rgba(48, 54, 61, 0.5);
   --th-label-color: #6e7681;

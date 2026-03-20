@@ -33,13 +33,13 @@ const DEFAULT_THEMES: Record<string, DeptTheme> = {
 const DEFAULT_TONE = 50;
 
 const labels = {
-  title: { ko: "사무실 관리", en: "Office Manager", ja: "オフィス管理", zh: "办公室管理", ru: "Управление офисом" },
-  accent: { ko: "메인 색상", en: "Main Color", ja: "メインカラー", zh: "主色调", ru: "Основной цвет" },
-  tone: { ko: "톤 (밝기)", en: "Tone (Brightness)", ja: "トーン（明るさ）", zh: "色调（亮度）", ru: "Тон (яркость)" },
-  reset: { ko: "초기화", en: "Reset", ja: "リセット", zh: "重置", ru: "Сброс" },
-  resetAll: { ko: "전체 초기화", en: "Reset All", ja: "全てリセット", zh: "全部重置", ru: "Сбросить всё" },
-  close: { ko: "닫기", en: "Close", ja: "閉じる", zh: "关闭", ru: "Закрыть" },
-  presets: { ko: "프리셋", en: "Presets", ja: "プリセット", zh: "预设", ru: "Пресеты" },
+  title: { ko: "", en: "Office Manager", ja: "オフィス管理", zh: "办公室管理", ru: "Управление офисом" },
+  accent: { ko: "", en: "Main Color", ja: "メインカラー", zh: "主色调", ru: "Основной цвет" },
+  tone: { ko: "()", en: "Tone (Brightness)", ja: "トーン（明るさ）", zh: "色调（亮度）", ru: "Тон (яркость)" },
+  reset: { ko: "", en: "Reset", ja: "リセット", zh: "重置", ru: "Сброс" },
+  resetAll: { ko: "", en: "Reset All", ja: "全てリセット", zh: "全部重置", ru: "Сбросить всё" },
+  close: { ko: "", en: "Close", ja: "閉じる", zh: "关闭", ru: "Закрыть" },
+  presets: { ko: "", en: "Presets", ja: "プリセット", zh: "预设", ru: "Пресеты" },
 };
 
 /* ================================================================== */

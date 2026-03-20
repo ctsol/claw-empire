@@ -17,7 +17,7 @@ export interface DecisionInboxItem {
   projectName?: string | null;
 }
 
-const DECISION_REPLY_RE = /\[의사결정\s*회신\]|\[Decision Reply\]|\[意思決定返信\]|\[决策回复\]/i;
+const DECISION_REPLY_RE = /\[의사결정\s*회신\]|\[Decision Reply\]|\[意思決定返信\]|\[决策回复\]|\[ответ\s*на\s*решение\]/i;
 
 export function isDecisionReplyContent(content: string): boolean {
   return DECISION_REPLY_RE.test(content);

@@ -40,7 +40,7 @@ export function createReviewRoundPlanningHelpers(deps: ReviewRoundPlanningDeps):
         ? lines.join("\n")
         : pickL(
             l(
-              ["- 취합할 라운드 의견이 없습니다."],
+              ["-    ."],
               ["- No round opinions to consolidate."],
               ["- 集約対象のラウンド意見がありません。"],
               ["- 暂无可汇总的轮次意见。"],
@@ -50,7 +50,7 @@ export function createReviewRoundPlanningHelpers(deps: ReviewRoundPlanningDeps):
     return pickL(
       l(
         [
-          `라운드 ${reviewRound} 의견을 기획팀장이 우선 취합했습니다.\n작업: '${taskTitle}'\n${projectName ? `프로젝트: '${projectName}'\n` : ""}아래 번호 중 우선순위가 높은 보완 항목을 먼저 선택하고, 필요 시 추가 의견을 함께 넣어 보완 라운드를 여세요.\n\n검토 선택지:\n${optionBlock}`,
+          ``,
         ],
         [
           `Planning lead pre-consolidated round ${reviewRound} opinions.\nTask: '${taskTitle}'\n${projectName ? `Project: '${projectName}'\n` : ""}Pick the highest-priority remediation options first, and add an extra note only when needed.\n\nCandidate options:\n${optionBlock}`,
@@ -110,7 +110,7 @@ export function createReviewRoundPlanningHelpers(deps: ReviewRoundPlanningDeps):
             input.optionNotes.length > 0
               ? input.optionNotes.map((note, idx) => `${idx + 1}) ${clip(note, 320)}`).join("\n")
               : pickL(
-                  l(["- 라운드 의견 없음"], ["- No round opinions"], ["- ラウンド意見なし"], ["- 无轮次意见"], ["- Нет комментариев к раунду"]),
+                  l(["-"], ["- No round opinions"], ["- ラウンド意見なし"], ["- 无轮次意见"], ["- Нет комментариев к раунду"]),
                   input.lang,
                 );
           const prompt = [
@@ -157,8 +157,7 @@ export function createReviewRoundPlanningHelpers(deps: ReviewRoundPlanningDeps):
               updated_at = ?
           WHERE meeting_id = ?
             AND snapshot_hash = ?
-            AND status = 'collecting'
-        `,
+            AND status = 'collecting'`,
           )
           .run(
             plannerSummary,
@@ -176,7 +175,7 @@ export function createReviewRoundPlanningHelpers(deps: ReviewRoundPlanningDeps):
             event_type: "planning_summary",
             summary: pickL(
               l(
-                [`라운드 ${input.reviewRound} 기획팀장 취합\n${plannerSummary}`],
+                [` ${input.reviewRound}  \n${plannerSummary}`],
                 [`Round ${input.reviewRound} planning consolidation\n${plannerSummary}`],
                 [`ラウンド${input.reviewRound} 企画リード集約\n${plannerSummary}`],
                 [`第 ${input.reviewRound} 轮规划负责人汇总\n${plannerSummary}`],
@@ -190,7 +189,7 @@ export function createReviewRoundPlanningHelpers(deps: ReviewRoundPlanningDeps):
       } catch {
         const failMsg = pickL(
           l(
-            ["리뷰 라운드 기획팀장 취합이 일시 지연되었습니다. 자동 재시도 중입니다."],
+            [".   ."],
             ["Review-round planning consolidation is temporarily delayed. Auto retry in progress."],
             ["レビューラウンド企画リード集約が一時遅延しました。自動再試行中です。"],
             ["评审轮次规划汇总暂时延迟，正在自动重试。"],
@@ -201,7 +200,7 @@ export function createReviewRoundPlanningHelpers(deps: ReviewRoundPlanningDeps):
         db.prepare(
           `
           UPDATE review_round_decision_states
-          SET status = 'failed',
+          SET status ='failed',
               planner_summary = ?,
               updated_at = ?
           WHERE meeting_id = ?

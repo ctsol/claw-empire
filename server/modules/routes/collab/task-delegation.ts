@@ -246,12 +246,12 @@ export function createTaskDelegationHandler(deps: TaskDelegationDeps) {
         const relatedLabel =
           mentionedDepts.length > 0
             ? mentionedDepts.map(getDeptName).join(", ")
-            : pickL(l(["없음"], ["None"], ["なし"], ["无"], ["Нет"]), lang);
+            : pickL(l([""], ["None"], ["なし"], ["无"], ["Нет"]), lang);
         appendTaskLog(taskId, "system", `Planning pre-check related departments: ${relatedLabel}`);
         notifyCeo(
           pickL(
             l(
-              [`[기획팀] '${taskTitle}' 유관부서 사전 파악 완료: ${relatedLabel}`],
+              [`[Planning] Related departments identified for '${taskTitle}': ${relatedLabel}`],
               [`[Planning] Related departments identified for '${taskTitle}': ${relatedLabel}`],
               [`[企画] '${taskTitle}' の関連部門の事前把握が完了: ${relatedLabel}`],
               [`[企划] 已完成'${taskTitle}'相关部门预识别：${relatedLabel}`],
@@ -274,7 +274,7 @@ export function createTaskDelegationHandler(deps: TaskDelegationDeps) {
           notifyCeo(
             pickL(
               l(
-                [`[CEO OFFICE] 기획팀 선행 협업을 서브태스크 통합 디스패처로 실행합니다: ${crossDeptNames}`],
+                [`[CEO OFFICE] Running planning pre-collaboration via unified subtask dispatcher: ${crossDeptNames}`],
                 [`[CEO OFFICE] Running planning pre-collaboration via unified subtask dispatcher: ${crossDeptNames}`],
                 [`[CEO OFFICE] 企画先行協業を統合サブタスクディスパッチャで実行します: ${crossDeptNames}`],
                 [`[CEO OFFICE] 企划前置协作改为统一 SubTask 调度执行：${crossDeptNames}`],
@@ -296,7 +296,7 @@ export function createTaskDelegationHandler(deps: TaskDelegationDeps) {
         notifyCeo(
           pickL(
             l(
-              [`[CEO OFFICE] 기획팀 선행 협업 처리 시작: ${crossDeptNames}`],
+              [`[CEO OFFICE] Planning pre-collaboration started with: ${crossDeptNames}`],
               [`[CEO OFFICE] Planning pre-collaboration started with: ${crossDeptNames}`],
               [`[CEO OFFICE] 企画チームの先行協業を開始: ${crossDeptNames}`],
               [`[CEO OFFICE] 企划团队前置协作已启动：${crossDeptNames}`],
@@ -329,7 +329,7 @@ export function createTaskDelegationHandler(deps: TaskDelegationDeps) {
             notifyCeo(
               pickL(
                 l(
-                  ["[CEO OFFICE] 유관부서 선행 처리 완료. 이제 내부 업무 하달을 시작합니다."],
+                  ["[CEO OFFICE] Related-department pre-processing complete. Starting internal delegation now."],
                   ["[CEO OFFICE] Related-department pre-processing complete. Starting internal delegation now."],
                   ["[CEO OFFICE] 関連部門の先行処理が完了。これより内部委任を開始します。"],
                   ["[CEO OFFICE] 相关部门前置处理完成，现开始内部下达。"],

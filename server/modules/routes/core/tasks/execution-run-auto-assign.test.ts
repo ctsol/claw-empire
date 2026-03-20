@@ -93,7 +93,7 @@ function insertAgent(
 }
 
 describe("selectAutoAssignableAgentForTask", () => {
-  it("오피스팩별 우선 부서가 다르게 적용된다", () => {
+  it("", () => {
     const db = setupDb();
     try {
       insertAgent(db, { id: "agent-plan", name: "Planner", department_id: "planning", created_at: 1 });
@@ -124,7 +124,7 @@ describe("selectAutoAssignableAgentForTask", () => {
     }
   });
 
-  it("팩 우선 부서 순서로 자동 배정 대상을 고른다", () => {
+  it("", () => {
     const db = setupDb();
     try {
       insertAgent(db, { id: "agent-dev", name: "Dev", department_id: "dev", created_at: 1 });
@@ -143,7 +143,7 @@ describe("selectAutoAssignableAgentForTask", () => {
     }
   });
 
-  it("프로젝트 manual 모드에서는 지정 인원 범위로만 자동 배정한다", () => {
+  it("manual", () => {
     const db = setupDb();
     try {
       insertAgent(db, { id: "agent-plan", name: "Planner", department_id: "planning", created_at: 1 });
@@ -163,7 +163,7 @@ describe("selectAutoAssignableAgentForTask", () => {
     }
   });
 
-  it("선호 부서가 비어있으면 전체 idle/break 인원으로 폴백한다", () => {
+  it("idle/break", () => {
     const db = setupDb();
     try {
       insertAgent(db, {
@@ -194,7 +194,7 @@ describe("selectAutoAssignableAgentForTask", () => {
     }
   });
 
-  it("워크팩 프로필 에이전트가 있으면 런타임 후보를 해당 프로필로 제한한다", () => {
+  it("", () => {
     const db = setupDb();
     try {
       insertAgent(db, { id: "novel-pack-agent", name: "Novel Pack Agent", department_id: "design", created_at: 0 });
@@ -208,7 +208,7 @@ describe("selectAutoAssignableAgentForTask", () => {
               {
                 id: "design",
                 name: "Design",
-                name_ko: "디자인팀",
+                name_ko: "",
                 name_ja: "デザインチーム",
                 name_zh: "设计组",
                 icon: "🎨",
@@ -221,7 +221,7 @@ describe("selectAutoAssignableAgentForTask", () => {
               {
                 id: "novel-pack-agent",
                 name: "Novel Pack Agent",
-                name_ko: "소설팩 에이전트",
+                name_ko: "",
                 name_ja: "小説パックエージェント",
                 name_zh: "小说包代理",
                 department_id: "design",
@@ -253,7 +253,7 @@ describe("selectAutoAssignableAgentForTask", () => {
     }
   });
 
-  it("없는 프로필 에이전트는 전역 agents 테이블에 자동 생성하지 않는다", () => {
+  it("agents", () => {
     const db = setupDb();
     try {
       insertAgent(db, { id: "agent-global-design", name: "Global Designer", department_id: "design", created_at: 1 });
@@ -267,7 +267,7 @@ describe("selectAutoAssignableAgentForTask", () => {
               {
                 id: "missing-pack-agent",
                 name: "Missing Pack Agent",
-                name_ko: "미싱 팩 에이전트",
+                name_ko: "",
                 name_ja: "未登録パックエージェント",
                 name_zh: "缺失包代理",
                 department_id: "design",
@@ -302,7 +302,7 @@ describe("selectAutoAssignableAgentForTask", () => {
     }
   });
 
-  it("manual 프로젝트면 워크팩 프로필과 manual 범위를 교집합으로 제한한다", () => {
+  it("manual    manual", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO settings (key, value) VALUES (?, ?)").run(
@@ -340,7 +340,7 @@ describe("selectAutoAssignableAgentForTask", () => {
     }
   });
 
-  it("copilot 계정이 없으면 OAuth 없는 provider를 건너뛰고 다른 후보를 선택한다", () => {
+  it("copilot   OAuth  provider", () => {
     const db = setupDb();
     try {
       insertAgent(db, {
@@ -370,7 +370,7 @@ describe("selectAutoAssignableAgentForTask", () => {
     }
   });
 
-  it("copilot 활성 계정이 있으면 copilot 후보를 정상 선택한다", () => {
+  it("copilot    copilot", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO oauth_accounts (id, provider, status) VALUES (?, ?, ?)").run(

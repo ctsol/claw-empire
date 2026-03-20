@@ -43,6 +43,7 @@ export interface Agent {
   cli_reasoning_level?: string | null;
   avatar_emoji: string;
   sprite_number?: number | null;
+  avatar_seed?: string | null;
   personality: string | null;
   status: AgentStatus;
   current_task_id: string | null;
@@ -313,9 +314,9 @@ export type CliModelsResponse = Record<string, CliModelInfo[]>;
 // Settings
 export interface ProviderModelConfig {
   model: string;
-  subModel?: string; // 서브 에이전트(알바생) 모델 (claude, codex만 해당)
+  subModel?: string; // sub-agent model (claude, codex only)
   reasoningLevel?: string; // Codex: "low"|"medium"|"high"|"xhigh"
-  subModelReasoningLevel?: string; // 알바생 추론 레벨 (codex만 해당)
+  subModelReasoningLevel?: string; // sub-agent reasoning level (codex only)
 }
 
 export interface RoomTheme {

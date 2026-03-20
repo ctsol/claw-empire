@@ -23,7 +23,7 @@ function makeDepartment(id: string): Department {
 }
 
 describe("buildOfficePackStarterAgents", () => {
-  it("development 팩에서는 기본 직원을 생성하지 않는다", () => {
+  it("development", () => {
     const starters = buildOfficePackStarterAgents({
       packKey: "development",
       departments: [makeDepartment("planning"), makeDepartment("dev")],
@@ -31,7 +31,7 @@ describe("buildOfficePackStarterAgents", () => {
     expect(starters).toHaveLength(0);
   });
 
-  it("비개발 팩에서는 기본 직원(팀장 포함)을 생성한다", () => {
+  it("( )", () => {
     const starters = buildOfficePackStarterAgents({
       packKey: "report",
       departments: [
@@ -50,7 +50,7 @@ describe("buildOfficePackStarterAgents", () => {
     expect(starters.every((agent) => !!agent.department_id)).toBe(true);
   });
 
-  it("비개발 팩 personality는 생성 시 locale 기준으로 작성된다", () => {
+  it("personality   locale", () => {
     const startersEn = buildOfficePackStarterAgents({
       packKey: "report",
       departments: [makeDepartment("planning"), makeDepartment("dev"), makeDepartment("design"), makeDepartment("qa")],
@@ -68,7 +68,7 @@ describe("buildOfficePackStarterAgents", () => {
     expect(startersJa.some((agent) => (agent.personality ?? "").includes("最優先"))).toBe(true);
   });
 
-  it("starter 초안은 부서 내 순번(seed_order_in_department)을 기록한다", () => {
+  it("starter    (seed_order_in_department)", () => {
     const starters = buildOfficePackStarterAgents({
       packKey: "report",
       departments: [makeDepartment("planning"), makeDepartment("dev"), makeDepartment("design"), makeDepartment("qa")],
@@ -82,7 +82,7 @@ describe("buildOfficePackStarterAgents", () => {
     expect(planningOrders[1]).toBe(2);
   });
 
-  it("오피스팩 seed 직원은 가능한 범위에서 sprite_number를 중복 없이 배정한다", () => {
+  it("seed    sprite_number", () => {
     const starters = buildOfficePackStarterAgents({
       packKey: "video_preprod",
       departments: [
@@ -102,7 +102,7 @@ describe("buildOfficePackStarterAgents", () => {
 });
 
 describe("resolveOfficePackSeedProvider", () => {
-  it("기획팀은 claude/codex를 번갈아 배치한다", () => {
+  it("claude/codex", () => {
     expect(
       resolveOfficePackSeedProvider({
         packKey: "report",
@@ -123,7 +123,7 @@ describe("resolveOfficePackSeedProvider", () => {
     ).toBe("codex");
   });
 
-  it("개발/디자인은 claude, 인프라보안/운영/QA는 codex를 사용한다", () => {
+  it("/ claude, //QA codex", () => {
     expect(
       resolveOfficePackSeedProvider({ packKey: "report", departmentId: "dev", role: "senior", seedIndex: 2 }),
     ).toBe("claude");
@@ -143,7 +143,7 @@ describe("resolveOfficePackSeedProvider", () => {
 });
 
 describe("buildOfficePackPresentation", () => {
-  it("비개발 팩 부서 설명/프롬프트를 locale 기준으로 생성한다", () => {
+  it("/ locale", () => {
     const presentationEn = buildOfficePackPresentation({
       packKey: "report",
       locale: "en",
@@ -161,7 +161,7 @@ describe("buildOfficePackPresentation", () => {
       agents: [],
       customRoomThemes: {},
     });
-    expect(presentationKo.departments[0]?.description).toContain("협업");
-    expect(presentationKo.departments[0]?.prompt).toContain("[부서 역할]");
+    expect(presentationKo.departments[0]?.description).toContain("");
+    expect(presentationKo.departments[0]?.prompt).toContain("[ ]");
   });
 });

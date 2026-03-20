@@ -128,7 +128,7 @@ async function waitForTaskAssignment(
 test.describe("CI manual assignment coverage", () => {
   test.setTimeout(150_000);
 
-  test("신규 부서/팀원 추가 + 수동 배정(선택 팀원/팀장 fallback) 실행 검증", async ({ request }) => {
+  test("/  +  ( / fallback)", async ({ request }) => {
     const seed = `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`;
     const deptId = `ci_dept_${seed}`;
     const cleanup = {

@@ -21,7 +21,7 @@ describe("createWsHub", () => {
     vi.restoreAllMocks();
   });
 
-  it("일반 이벤트는 즉시 broadcast한다", () => {
+  it("broadcast", () => {
     const hub = createWsHub(() => 1000);
     const wsOpen: MockWs = {
       readyState: WebSocket.OPEN,
@@ -47,7 +47,7 @@ describe("createWsHub", () => {
     });
   });
 
-  it("cli_output은 첫 이벤트 즉시 전송 후 batch window에서 flush한다", async () => {
+  it("cli_output      batch window flush", async () => {
     const hub = createWsHub(() => 2000);
     const wsOpen: MockWs = {
       readyState: WebSocket.OPEN,
@@ -69,7 +69,7 @@ describe("createWsHub", () => {
     expect(payloads).toEqual([{ seq: 1 }, { seq: 2 }, { seq: 3 }]);
   });
 
-  it("batch queue cap(60)을 넘으면 가장 오래된 항목부터 버린다", async () => {
+  it("batch queue cap(60)", async () => {
     const hub = createWsHub(() => 3000);
     const wsOpen: MockWs = {
       readyState: WebSocket.OPEN,

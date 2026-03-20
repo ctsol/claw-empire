@@ -253,7 +253,7 @@ export function registerTaskExecutionControlRoutes(deps: TaskExecutionControlRou
         try {
           pendingCallback();
         } catch {
-          // 콜백 실패 시에도 큐 정리는 계속
+          // Continue queue cleanup even if callback fails
         }
       }
       crossDeptNextCallbacks.delete(id);
@@ -325,7 +325,7 @@ export function registerTaskExecutionControlRoutes(deps: TaskExecutionControlRou
           pickL(
             l(
               [
-                `'${task.title}' 작업이 보류 상태로 전환되었습니다. 세션은 유지되며 재개 시 이어서 진행됩니다.${rolledBack ? " 코드 변경분은 git rollback 처리되었습니다." : ""}`,
+                `'${task.title}' was moved to pending. The session is preserved and will continue on resume.${rolledBack ? " Code changes were rolled back via git." : ""}`,
               ],
               [
                 `'${task.title}' was moved to pending. The session is preserved and will continue on resume.${rolledBack ? " Code changes were rolled back via git." : ""}`,
@@ -346,7 +346,7 @@ export function registerTaskExecutionControlRoutes(deps: TaskExecutionControlRou
           pickL(
             l(
               [
-                `'${task.title}' 작업이 취소되었습니다.${rolledBack ? " 코드 변경분은 git rollback 처리되었습니다." : ""}`,
+                `'${task.title}' was cancelled.${rolledBack ? " Code changes were rolled back via git." : ""}`,
               ],
               [`'${task.title}' was cancelled.${rolledBack ? " Code changes were rolled back via git." : ""}`],
               [
@@ -419,7 +419,7 @@ export function registerTaskExecutionControlRoutes(deps: TaskExecutionControlRou
         pickL(
           l(
             [
-              `'${task.title}' 작업이 보류 상태로 전환되었습니다. 인터럽트(SIGINT)로 브레이크를 걸었고 세션은 유지됩니다.${rolledBack ? " 코드 변경분은 git rollback 처리되었습니다." : ""}`,
+              `'${task.title}' was moved to pending. A graceful interrupt (SIGINT) was sent and the session is preserved.${rolledBack ? " Code changes were rolled back via git." : ""}`,
             ],
             [
               `'${task.title}' was moved to pending. A graceful interrupt (SIGINT) was sent and the session is preserved.${rolledBack ? " Code changes were rolled back via git." : ""}`,
@@ -440,7 +440,7 @@ export function registerTaskExecutionControlRoutes(deps: TaskExecutionControlRou
         pickL(
           l(
             [
-              `'${task.title}' 작업이 취소되었습니다.${rolledBack ? " 코드 변경분은 git rollback 처리되었습니다." : ""}`,
+              `'${task.title}' was cancelled.${rolledBack ? " Code changes were rolled back via git." : ""}`,
             ],
             [`'${task.title}' was cancelled.${rolledBack ? " Code changes were rolled back via git." : ""}`],
             [
@@ -534,7 +534,9 @@ export function registerTaskExecutionControlRoutes(deps: TaskExecutionControlRou
       notifyCeo(
         pickL(
           l(
-            [`'${task.title}' 작업이 복구되었습니다. (${targetStatus}) 기존 세션을 유지한 채 자동 재개를 시작합니다.`],
+            [
+              `'${task.title}' was resumed. (${targetStatus}) Auto-resume is starting with the existing session preserved.`,
+            ],
             [
               `'${task.title}' was resumed. (${targetStatus}) Auto-resume is starting with the existing session preserved.`,
             ],
@@ -549,7 +551,7 @@ export function registerTaskExecutionControlRoutes(deps: TaskExecutionControlRou
       notifyCeo(
         pickL(
           l(
-            [`'${task.title}' 작업이 복구되었습니다. (${targetStatus})`],
+            [`'${task.title}' was resumed. (${targetStatus})`],
             [`'${task.title}' was resumed. (${targetStatus})`],
             [`'${task.title}' が復旧されました。(${targetStatus})`],
             [`'${task.title}' 已恢复。(${targetStatus})`],

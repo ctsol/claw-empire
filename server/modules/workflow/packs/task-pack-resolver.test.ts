@@ -22,7 +22,7 @@ function setupDb(): DatabaseSync {
 }
 
 describe("task-pack-resolver", () => {
-  it("explicit pack key가 있으면 최우선으로 사용한다", () => {
+  it("explicit pack key", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO projects (id, default_pack_key) VALUES (?, ?)").run("project-1", "novel");
@@ -39,7 +39,7 @@ describe("task-pack-resolver", () => {
     }
   });
 
-  it("source task pack -> project default 순으로 폴백한다", () => {
+  it("source task pack -> project default", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO projects (id, default_pack_key) VALUES (?, ?)").run("project-1", "novel");
@@ -63,7 +63,7 @@ describe("task-pack-resolver", () => {
     }
   });
 
-  it("유효한 값이 없으면 fallback/default를 사용한다", () => {
+  it("fallback/default", () => {
     const db = setupDb();
     try {
       const withFallback = resolveWorkflowPackKeyForTask({
@@ -82,7 +82,7 @@ describe("task-pack-resolver", () => {
     }
   });
 
-  it("project/task 단건 조회 헬퍼가 유효한 pack만 반환한다", () => {
+  it("project/task     pack", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO projects (id, default_pack_key) VALUES (?, ?)").run("project-1", "roleplay");

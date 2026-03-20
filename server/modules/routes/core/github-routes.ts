@@ -84,7 +84,7 @@ export function registerGitHubRoutes(deps: GitHubRouteDeps): void {
               );
             }
           } catch {
-            // private repo 접근 체크 실패는 무시하고 기존 결과 유지
+            // ignore private repo access check failure and keep existing result
           }
         }
       } catch (probeErr) {

@@ -20,7 +20,7 @@ const unlearnSkillMock = vi.mocked(unlearnSkill);
 const TEST_AGENT: Agent = {
   id: "a1",
   name: "Atlas",
-  name_ko: "아틀라스",
+  name_ko: "",
   department_id: "dep-1",
   role: "team_leader",
   cli_provider: "claude",

@@ -19,10 +19,10 @@ export default function SkillsMemorySection({
     <div className="rounded-xl border border-slate-700/60 bg-slate-900/50 p-3">
       <div className="mb-2 flex items-center justify-between">
         <div className="text-sm font-semibold text-slate-100">
-          {t({ ko: "학습 메모리", en: "Learning Memory", ja: "学習メモリ", zh: "学习记忆", ru: "Память обучения" })}
+          {t({ ko: "", en: "Learning Memory", ja: "学習メモリ", zh: "学习记忆", ru: "Память обучения" })}
         </div>
         <div className="text-[11px] text-slate-500">
-          {t({ ko: "CLI별 스킬 이력", en: "Per-CLI skill history", ja: "CLI別スキル履歴", zh: "按 CLI 的技能记录", ru: "История навыков по CLI" })}
+          {t({ ko: "CLI", en: "Per-CLI skill history", ja: "CLI別スキル履歴", zh: "按 CLI 的技能记录", ru: "История навыков по CLI" })}
         </div>
       </div>
       <SkillHistoryPanel

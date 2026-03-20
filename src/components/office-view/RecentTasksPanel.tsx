@@ -28,12 +28,12 @@ const STATUS_COLORS: Record<string, string> = {
 
 function statusLabel(status: string, t: TFunction): string {
   const labels: Record<string, LangText> = {
-    inbox: { ko: "접수", en: "Inbox", ja: "受信", zh: "收件", ru: "Входящие" },
-    planned: { ko: "계획", en: "Planned", ja: "計画", zh: "计划", ru: "Планируется" },
-    in_progress: { ko: "진행", en: "In Progress", ja: "進行中", zh: "进行中", ru: "В работе" },
-    review: { ko: "검토", en: "Review", ja: "レビュー", zh: "评审", ru: "Проверка" },
-    done: { ko: "완료", en: "Done", ja: "完了", zh: "完成", ru: "Готово" },
-    cancelled: { ko: "취소", en: "Cancelled", ja: "取消", zh: "取消", ru: "Отменено" },
+    inbox: { ko: "", en: "Inbox", ja: "受信", zh: "收件", ru: "Входящие" },
+    planned: { ko: "", en: "Planned", ja: "計画", zh: "计划", ru: "Планируется" },
+    in_progress: { ko: "", en: "In Progress", ja: "進行中", zh: "进行中", ru: "В работе" },
+    review: { ko: "", en: "Review", ja: "レビュー", zh: "评审", ru: "Проверка" },
+    done: { ko: "", en: "Done", ja: "完了", zh: "完成", ru: "Готово" },
+    cancelled: { ko: "", en: "Cancelled", ja: "取消", zh: "取消", ru: "Отменено" },
   };
   return labels[status] ? t(labels[status]) : status;
 }
@@ -69,7 +69,7 @@ const RecentTasksPanel = forwardRef<RecentTasksPanelHandle, RecentTasksPanelProp
             </svg>
           </span>
           <h3 className="text-sm font-semibold text-slate-200">
-            {t({ ko: "최근 작업", en: "Recent Tasks", ja: "最近のタスク", zh: "最近任务", ru: "Последние задачи" })}
+            {t({ ko: "", en: "Recent Tasks", ja: "最近のタスク", zh: "最近任务", ru: "Последние задачи" })}
           </h3>
           <span className="ml-auto rounded-full bg-slate-800 px-2 py-0.5 text-[10px] text-slate-400">
             {recent.length}

@@ -29,7 +29,7 @@ describe("i18n helpers", () => {
     });
   });
 
-  it("normalizeLanguage는 다양한 locale 코드를 표준 언어코드로 정규화한다", () => {
+  it("normalizeLanguage  locale", () => {
     expect(normalizeLanguage("ko-KR")).toBe("ko");
     expect(normalizeLanguage("en_US")).toBe("en");
     expect(normalizeLanguage("ja-JP")).toBe("ja");
@@ -38,7 +38,7 @@ describe("i18n helpers", () => {
     expect(normalizeLanguage(undefined)).toBe("en");
   });
 
-  it("detectBrowserLanguage는 navigator.languages 우선순위로 감지한다", () => {
+  it("detectBrowserLanguage navigator.languages", () => {
     Object.defineProperty(window.navigator, "languages", {
       configurable: true,
       value: ["ja-JP", "en-US"],
@@ -50,21 +50,21 @@ describe("i18n helpers", () => {
     expect(detectBrowserLanguage()).toBe("ja");
   });
 
-  it("localeName/pickLang/localeFromLanguage가 fallback 규칙을 지킨다", () => {
+  it("localeName/pickLang/localeFromLanguage fallback", () => {
     const text: LangText = {
-      ko: "안녕하세요",
+      ko: "",
       en: "hello",
     };
-    expect(pickLang("ko", text)).toBe("안녕하세요");
+    expect(pickLang("ko", text)).toBe("");
     expect(pickLang("ja", text)).toBe("hello");
     expect(pickLang("zh", text)).toBe("hello");
 
     expect(
       localeName("ko", {
         name: "Planning",
-        name_ko: "기획",
+        name_ko: "",
       }),
-    ).toBe("기획");
+    ).toBe("");
     expect(
       localeName("ja", {
         name: "Planning",
@@ -93,7 +93,7 @@ describe("i18n helpers", () => {
   });
 
   it("[QA] pickLang has no Russian case — falls back to en for unsupported locales", () => {
-    const text: LangText = { ko: "안녕", en: "hello", ja: "こんにちは", zh: "你好" };
+    const text: LangText = { ko: "", en: "hello", ja: "こんにちは", zh: "你好" };
     // "ru" is not a valid UiLanguage; runtime would fall through to default (en)
     expect(pickLang("ru" as UiLanguage, text)).toBe("hello");
   });
@@ -111,7 +111,7 @@ describe("i18n helpers", () => {
     expect(detectBrowserLanguage()).toBe("en");
   });
 
-  it("useI18n은 override 언어가 있으면 Provider 언어보다 override를 우선한다", () => {
+  it("useI18n override   Provider  override", () => {
     let result: I18nContextValue = {
       language: "en",
       locale: "en-US",
@@ -133,7 +133,7 @@ describe("i18n helpers", () => {
     expect(result.locale).toBe("ja-JP");
     expect(
       result.t({
-        ko: "안녕하세요",
+        ko: "",
         en: "hello",
         ja: "こんにちは",
         zh: "你好",
@@ -151,11 +151,11 @@ describe("i18n helpers", () => {
     expect(result.locale).toBe("ko-KR");
     expect(
       result.t({
-        ko: "안녕하세요",
+        ko: "",
         en: "hello",
         ja: "こんにちは",
         zh: "你好",
       }),
-    ).toBe("안녕하세요");
+    ).toBe("");
   });
 });

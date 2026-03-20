@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo, useCallback } from "react";
+import { useState, useRef, useMemo, useCallback, useEffect } from "react";
 import type { DecisionInboxItem } from "./components/chat/decision-inbox";
 import { useWebSocket } from "./hooks/useWebSocket";
 import type {
@@ -57,7 +57,23 @@ export default function App() {
   const initialRoomThemes = useMemo(() => readStoredRoomThemes(), []);
   const hasLocalRoomThemesRef = useRef<boolean>(initialRoomThemes.hasStored);
 
-  const [view, setView] = useState<View>("office");
+  const VALID_VIEWS: View[] = ["office", "agents", "dashboard", "tasks", "skills", "settings", "ceo-meeting"];
+  const [view, setViewRaw] = useState<View>(() => {
+    const hash = window.location.hash.replace("#", "") as View;
+    return VALID_VIEWS.includes(hash) ? hash : "office";
+  });
+  const setView = useCallback((v: View) => {
+    setViewRaw(v);
+    window.location.hash = v === "office" ? "" : v;
+  }, []);
+  useEffect(() => {
+    const onHash = () => {
+      const hash = window.location.hash.replace("#", "") as View;
+      setViewRaw(VALID_VIEWS.includes(hash) ? hash : "office");
+    };
+    window.addEventListener("hashchange", onHash);
+    return () => window.removeEventListener("hashchange", onHash);
+  }, []);
   const [departments, setDepartments] = useState<Department[]>([]);
   const [agents, setAgents] = useState<Agent[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);

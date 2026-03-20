@@ -123,7 +123,7 @@ async function listSystemProcesses(): Promise<SystemProcessInfo[]> {
         const parsed = parseWindowsProcessJson(stdout);
         if (parsed.length) return parsed;
       } catch {
-        // 다음 후보 셸로 폴백
+        // fallback to next candidate shell
       }
     }
 
@@ -370,7 +370,7 @@ export function registerAgentProcessInspectorRoutes(ctx: RuntimeContext): void {
     try {
       killPidTree(pid);
     } catch {
-      // 종료 신호가 실패해도 후속 상태 정리는 진행
+      // proceed with subsequent state cleanup even if termination signal fails
     }
 
     if (trackedTaskId) {

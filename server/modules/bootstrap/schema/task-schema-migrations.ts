@@ -87,7 +87,7 @@ export function applyTaskSchemaMigrations(db: DbLike): void {
     /* already exists */
   }
 
-  // 프로젝트별 직원 직접선택 기능: assignment_mode + project_agents 테이블
+  // Per-project direct employee selection: assignment_mode + project_agents table
   try {
     db.exec("ALTER TABLE projects ADD COLUMN assignment_mode TEXT NOT NULL DEFAULT 'auto'");
   } catch {
@@ -177,26 +177,26 @@ function ensureRoomDesignTokensSchema(db: DbLike): void {
 // Migrate Korean/English agent personalities to Russian for existing installations.
 const AGENT_PERSONALITY_RU_MAP: Record<string, string> = {
   // Dev
-  "꼼꼼한 시니어 개발자": "Дотошный старший разработчик",
-  "빠른 코딩 전문가": "Эксперт быстрого кодинга",
-  "창의적인 주니어": "Креативный джуниор",
+  "Meticulous senior developer": "Дотошный старший разработчик",
+  "Fast coding expert": "Эксперт быстрого кодинга",
+  "Creative junior": "Креативный джуниор",
   // Design
-  "리드 디자이너": "Лидер дизайна",
-  "섬세한 UI 디자이너": "Чуткий UI-дизайнер",
+  "Design lead": "Лидер дизайна",
+  "Empathetic UI designer": "Чуткий UI-дизайнер",
   // Planning
-  "전략적 분석가": "Стратегический аналитик",
-  "데이터 기반 플래너": "Планировщик, опирающийся на данные",
+  "Strategic analyst": "Стратегический аналитик",
+  "Data-driven planner": "Планировщик, опирающийся на данные",
   // Operations
-  "운영 마스터": "Мастер эксплуатации",
-  "자동화 전문가": "Эксперт автоматизации",
+  "Operations master": "Мастер эксплуатации",
+  "Automation expert": "Эксперт автоматизации",
   // QA
-  "날카로운 품질 관리자": "Острый контролёр качества",
-  "꼼꼼한 테스트 엔지니어": "Дотошный тест-инженер",
+  "Sharp quality controller": "Острый контролёр качества",
+  "Meticulous test engineer": "Дотошный тест-инженер",
   // DevSecOps
-  "보안 아키텍트": "Архитектор безопасности",
-  "CI/CD 파이프라인 전문가": "Эксперт CI/CD-пайплайнов",
+  "Security architect": "Архитектор безопасности",
+  "CI/CD pipeline expert": "Эксперт CI/CD-пайплайнов",
   // QA Junior
-  "꼼꼼한 품질 주니어": "Дотошный джуниор по качеству",
+  "Meticulous junior QA": "Дотошный джуниор по качеству",
 };
 
 function migrateAgentPersonalityToRussian(db: DbLike): void {
@@ -761,4 +761,11 @@ function ensureMessagesIdempotencySchema(db: DbLike): void {
     ON messages(idempotency_key)
     WHERE idempotency_key IS NOT NULL
   `);
+
+  // Avatar seed for avataaars generation
+  try {
+    db.exec("ALTER TABLE agents ADD COLUMN avatar_seed TEXT");
+  } catch {
+    /* already exists */
+  }
 }

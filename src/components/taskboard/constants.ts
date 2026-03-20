@@ -191,19 +191,19 @@ export const TASK_TYPE_OPTIONS: { value: TaskType; color: string }[] = [
 export function taskStatusLabel(status: TaskStatus, t: TFunction) {
   switch (status) {
     case "inbox":
-      return t({ ko: "수신함", en: "Inbox", ja: "受信箱", zh: "收件箱", ru: "Входящие" });
+      return t({ ko: "", en: "Inbox", ja: "受信箱", zh: "收件箱", ru: "Входящие" });
     case "planned":
-      return t({ ko: "계획됨", en: "Planned", ja: "計画済み", zh: "已计划", ru: "Запланировано" });
+      return t({ ko: "", en: "Planned", ja: "計画済み", zh: "已计划", ru: "Запланировано" });
     case "in_progress":
-      return t({ ko: "진행 중", en: "In Progress", ja: "進行中", zh: "进行中", ru: "В процессе" });
+      return t({ ko: "", en: "In Progress", ja: "進行中", zh: "进行中", ru: "В процессе" });
     case "review":
-      return t({ ko: "검토", en: "Review", ja: "レビュー", zh: "审核", ru: "Проверка" });
+      return t({ ko: "", en: "Review", ja: "レビュー", zh: "审核", ru: "Проверка" });
     case "done":
-      return t({ ko: "완료", en: "Done", ja: "完了", zh: "完成", ru: "Готово" });
+      return t({ ko: "", en: "Done", ja: "完了", zh: "完成", ru: "Готово" });
     case "pending":
-      return t({ ko: "보류", en: "Pending", ja: "保留", zh: "待处理", ru: "Ожидание" });
+      return t({ ko: "", en: "Pending", ja: "保留", zh: "待处理", ru: "Ожидание" });
     case "cancelled":
-      return t({ ko: "취소", en: "Cancelled", ja: "キャンセル", zh: "已取消", ru: "Отменено" });
+      return t({ ko: "", en: "Cancelled", ja: "キャンセル", zh: "已取消", ru: "Отменено" });
     default:
       return status;
   }
@@ -212,17 +212,17 @@ export function taskStatusLabel(status: TaskStatus, t: TFunction) {
 export function taskTypeLabel(type: TaskType, t: TFunction) {
   switch (type) {
     case "general":
-      return t({ ko: "일반", en: "General", ja: "一般", zh: "通用", ru: "Общее" });
+      return t({ ko: "", en: "General", ja: "一般", zh: "通用", ru: "Общее" });
     case "development":
-      return t({ ko: "개발", en: "Development", ja: "開発", zh: "开发", ru: "Разработка" });
+      return t({ ko: "", en: "Development", ja: "開発", zh: "开发", ru: "Разработка" });
     case "design":
-      return t({ ko: "디자인", en: "Design", ja: "デザイン", zh: "设计", ru: "Дизайн" });
+      return t({ ko: "", en: "Design", ja: "デザイン", zh: "设计", ru: "Дизайн" });
     case "analysis":
-      return t({ ko: "분석", en: "Analysis", ja: "分析", zh: "分析", ru: "Анализ" });
+      return t({ ko: "", en: "Analysis", ja: "分析", zh: "分析", ru: "Анализ" });
     case "presentation":
-      return t({ ko: "발표", en: "Presentation", ja: "プレゼン", zh: "演示", ru: "Презентация" });
+      return t({ ko: "", en: "Presentation", ja: "プレゼン", zh: "演示", ru: "Презентация" });
     case "documentation":
-      return t({ ko: "문서화", en: "Documentation", ja: "文書化", zh: "文档", ru: "Документация" });
+      return t({ ko: "", en: "Documentation", ja: "文書化", zh: "文档", ru: "Документация" });
     default:
       return type;
   }
@@ -233,6 +233,12 @@ export function getTaskTypeBadge(type: TaskType, t: TFunction) {
   return { ...option, label: taskTypeLabel(option.value, t) };
 }
 
+export function priorityIcon(priority: number): string {
+  if (priority >= 4) return "🔴";
+  if (priority >= 2) return "🟡";
+  return "🟢";
+}
+
 export function priorityBadgeClass(priority: number): string {
   if (priority >= 4) return "bg-red-600/20 text-red-400 border border-red-600/40";
   if (priority >= 2) return "bg-amber-600/20 text-amber-400 border border-amber-600/40";
@@ -240,9 +246,9 @@ export function priorityBadgeClass(priority: number): string {
 }
 
 export function priorityLabel(priority: number, t: TFunction) {
-  if (priority >= 4) return t({ ko: "높음", en: "High", ja: "高", zh: "高", ru: "Высокий" });
-  if (priority >= 2) return t({ ko: "중간", en: "Medium", ja: "中", zh: "中", ru: "Средний" });
-  return t({ ko: "낮음", en: "Low", ja: "低", zh: "低", ru: "Низкий" });
+  if (priority >= 4) return t({ ko: "", en: "High", ja: "高", zh: "高", ru: "Высокий" });
+  if (priority >= 2) return t({ ko: "", en: "Medium", ja: "中", zh: "中", ru: "Средний" });
+  return t({ ko: "", en: "Low", ja: "低", zh: "低", ru: "Низкий" });
 }
 
 export function timeAgo(ts: number, localeTag: string): string {

@@ -19,17 +19,17 @@ function classifyReviewHoldReason(message: string): string {
 function buildVideoFinalRenderRequestDescription(taskTitle: string): string {
   return [
     "[VIDEO_FINAL_RENDER]",
-    `상위 업무: ${taskTitle}`,
-    "모든 문서/협업 산출물을 취합해 최종 소개 영상을 1회 렌더링하세요.",
-    "최종 렌더링 엔진은 반드시 Remotion만 사용하세요. Python(moviepy/Pillow) 기반 렌더링은 금지됩니다.",
-    "산출물 경로 규칙(project_department_final.mp4)을 지키고, 결과 파일 경로/용량 검증을 보고하세요.",
+    `Parent task: ${taskTitle}`,
+    "/      1 .",
+    "Remotion . Python(moviepy/Pillow)   .",
+    "(project_department_final.mp4) ,   /  .",
     "",
     "[QUALITY]",
-    "- 목표 길이 55~65초, 8~12 샷 이상 구성",
-    "- 시작 2~4초는 브랜드/마스코트 키비주얼 인트로",
-    "- 정적인 장면 3초 초과 금지, 샷별 모션(카메라/텍스트/레이아웃) 분리",
-    "- 자막/텍스트 safe area(좌우 8%, 상하 10%) 준수",
-    "- 결과 보고에 초 단위 씬 타임라인과 품질 체크리스트 포함",
+    "-   55~65, 8~12",
+    "-  2~4 /",
+    "-   3  ,  (//)",
+    "- / safe area( 8%,  10%)",
+    "-",
   ].join("\n");
 }
 
@@ -105,7 +105,7 @@ export function handleProjectReviewDecisionReply(input: ProjectReviewReplyInput)
       project_id: projectId,
       snapshot_hash: decisionSnapshotHash,
       event_type: "representative_pick",
-      summary: `대표 선택: ${targetTask.title}`,
+      summary: `CEO selected: ${targetTask.title}`,
       selected_options_json: JSON.stringify([
         {
           number: optionNumber,
@@ -138,7 +138,7 @@ export function handleProjectReviewDecisionReply(input: ProjectReviewReplyInput)
     }
     const lang = getPreferredLanguage();
     const followupTitlePrefix = pickL(
-      l(["[의사결정 추가요청]"], ["[Decision Follow-up]"], ["[意思決定追加要請]"], ["[决策追加请求]"], ["[Уточнение решения]"]),
+      l(["[ ]"], ["[Decision Follow-up]"], ["[意思決定追加要請]"], ["[决策追加请求]"], ["[Уточнение решения]"]),
       lang,
     );
     const targetTaskIdInput = normalizeTextField(req.body?.target_task_id);
@@ -208,7 +208,7 @@ export function handleProjectReviewDecisionReply(input: ProjectReviewReplyInput)
       project_id: projectId,
       snapshot_hash: decisionSnapshotHash,
       event_type: "followup_request",
-      summary: selectedOption.label || "추가요청 입력",
+      summary: selectedOption.label || "",
       selected_options_json: JSON.stringify([
         {
           number: optionNumber,
@@ -378,7 +378,7 @@ export function handleProjectReviewDecisionReply(input: ProjectReviewReplyInput)
 
         const subtaskId = randomUUID();
         const createdAt = nowMs();
-        const renderTitle = "[VIDEO_FINAL_RENDER] 최종 영상 렌더링";
+        const renderTitle = "[VIDEO_FINAL_RENDER]";
         const renderDescription = buildVideoFinalRenderRequestDescription(taskRow.title);
         db.prepare(
           `
@@ -392,7 +392,7 @@ export function handleProjectReviewDecisionReply(input: ProjectReviewReplyInput)
         processSubtaskDelegations?.(taskRow.id, { includeRender: true });
       }
 
-      const blockedSummary = `팀장 회의 시작 보류 (${blockedTasks.length}건): ${blockedTasks.map((task) => task.title).join(", ")}`;
+      const blockedSummary = `Team leader meeting start deferred (${blockedTasks.length} task(s)): ${blockedTasks.map((task) => task.title).join(", ")}`;
       recordProjectReviewDecisionEvent({
         project_id: projectId,
         snapshot_hash: decisionSnapshotHash,
@@ -424,7 +424,7 @@ export function handleProjectReviewDecisionReply(input: ProjectReviewReplyInput)
       project_id: projectId,
       snapshot_hash: decisionSnapshotHash,
       event_type: "start_review_meeting",
-      summary: selectedOption.label || "팀장 회의 진행",
+      summary: selectedOption.label || "",
       selected_options_json: JSON.stringify([
         {
           number: optionNumber,

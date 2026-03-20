@@ -1,4 +1,4 @@
-import { type Container, Graphics } from "pixi.js";
+import { Container, Graphics, Text, TextStyle } from "pixi.js";
 import { blendColor } from "./drawing-core";
 import { LOCALE_TEXT, OFFICE_PASTEL, pickLocale, type SupportedLocale } from "./themes-locale";
 
@@ -202,34 +202,165 @@ function formatReset(iso: string, locale: SupportedLocale): string {
   const h = Math.floor(diff / 3_600_000);
   const m = Math.floor((diff % 3_600_000) / 60_000);
   if (h > 0) {
-    if (locale === "ko") return `${h}시간 ${m}분`;
+    if (locale === "ko") return `${h}h ${m}m`;
     if (locale === "ja") return `${h}時間 ${m}分`;
     if (locale === "zh") return `${h}小时 ${m}分`;
     return `${h}h ${m}m`;
   }
-  if (locale === "ko") return `${m}분`;
+  if (locale === "ko") return `${m}m`;
   if (locale === "ja") return `${m}分`;
   if (locale === "zh") return `${m}分`;
   return `${m}m`;
 }
 
 function formatPeopleCount(count: number, locale: SupportedLocale): string {
-  if (locale === "ko") return `${count}명`;
+  if (locale === "ko") return `${count}`;
   if (locale === "ja") return `${count}人`;
   if (locale === "zh") return `${count}人`;
   return `${count}`;
 }
 
 function formatTaskCount(count: number, locale: SupportedLocale): string {
-  if (locale === "ko") return `${count}건`;
+  if (locale === "ko") return `${count}`;
   if (locale === "ja") return `${count}件`;
   if (locale === "zh") return `${count}项`;
   return `${count}`;
 }
 
+/**
+ * Enhanced trash can for department rooms showing completed (done) tasks.
+ * Renders a semi-transparent bin with crumpled paper pieces inside and a
+ * badge showing how many tasks are done.  On hover a tooltip reads
+ * "Done: X tasks" (localised).
+ */
+function drawDoneTrashCan(
+  parent: Container,
+  x: number,
+  y: number,
+  doneCount: number,
+  locale: SupportedLocale,
+): Container {
+  const wrap = new Container();
+  wrap.alpha = 0.65;
+
+  const g = new Graphics();
+
+  // Shadow
+  g.ellipse(x, y + 11, 7, 2.5).fill({ color: 0x000000, alpha: 0.1 });
+
+  // Can body (wider to hold paper)
+  g.roundRect(x - 6, y, 12, 12, 1.5).fill(0x6a6a7d);
+  g.roundRect(x - 6, y, 12, 12, 1.5).stroke({ width: 0.4, color: 0x55556a });
+
+  // Rim / lid lip
+  g.roundRect(x - 7, y - 1.5, 14, 2.5, 1).fill(0x808092);
+
+  // Inner dark area visible at top
+  g.rect(x - 5, y + 0.5, 10, 3).fill({ color: 0x2a2a38, alpha: 0.45 });
+
+  // Crumpled paper pieces (coloured by task status palette)
+  if (doneCount > 0) {
+    const paperColors = [0xe8e8e8, 0xd0e8d0, 0xd0d8f0, 0xf0e0c8, 0xe0d0e8];
+    const paperCount = Math.min(doneCount, 5);
+    for (let i = 0; i < paperCount; i++) {
+      const px = x - 3 + (i % 3) * 3 + (i % 2) * -0.5;
+      const py = y - 2.5 - i * 1.2;
+      const rot = ((i * 37 + 13) % 60) - 30;
+      const color = paperColors[i % paperColors.length];
+      // Each crumpled ball is a small rotated rounded rect
+      const pw = 3 + (i % 2);
+      const ph = 2.5 + ((i + 1) % 2);
+      g.roundRect(px - pw / 2, py - ph / 2, pw, ph, 0.8).fill(color);
+      // Crumple line
+      g.moveTo(px - pw / 2 + 0.5, py + (rot > 0 ? -0.5 : 0.5))
+        .lineTo(px + pw / 2 - 0.5, py + (rot > 0 ? 0.5 : -0.5))
+        .stroke({ width: 0.3, color: 0x999999, alpha: 0.35 });
+    }
+  }
+
+  wrap.addChild(g);
+
+  // Badge with count
+  if (doneCount > 0) {
+    const badgeX = x + 6;
+    const badgeY = y - 2;
+    const label = `${doneCount}`;
+    const badgeTxt = new Text({
+      text: label,
+      style: new TextStyle({
+        fontSize: 7,
+        fill: 0xffffff,
+        fontWeight: "bold",
+        fontFamily: "'Inter', system-ui, sans-serif",
+      }),
+    });
+    badgeTxt.anchor.set(0.5, 0.5);
+    const badgeW = Math.max(badgeTxt.width + 5, 10);
+    const badgeH = 9;
+    const badgeBg = new Graphics();
+    badgeBg
+      .roundRect(badgeX - badgeW / 2, badgeY - badgeH / 2, badgeW, badgeH, 4)
+      .fill({ color: 0x44aa66, alpha: 0.9 });
+    badgeBg
+      .roundRect(badgeX - badgeW / 2, badgeY - badgeH / 2, badgeW, badgeH, 4)
+      .stroke({ width: 0.4, color: 0x338855, alpha: 0.7 });
+    badgeTxt.position.set(badgeX, badgeY);
+    wrap.addChild(badgeBg);
+    wrap.addChild(badgeTxt);
+  }
+
+  // Hover tooltip
+  {
+    const tipLabel = pickLocale(locale, {
+      ko: "",
+      en: `Done: ${doneCount} tasks`,
+      ja: `完了: ${doneCount}件`,
+      zh: `已完成: ${doneCount}项`,
+      ru: `Готово: ${doneCount} задач`,
+    });
+    const tipTxt = new Text({
+      text: tipLabel,
+      style: new TextStyle({ fontSize: 9, fill: 0xffffff, fontFamily: "'Inter', system-ui, sans-serif" }),
+    });
+    const tipW = tipTxt.width + 10;
+    const tipH = 16;
+    const tipX = x - tipW / 2;
+    const tipY = y - 22;
+    const tipBg = new Graphics();
+    tipBg.roundRect(tipX, tipY, tipW, tipH, 4).fill({ color: 0x1a1a2e, alpha: 0.92 });
+    tipBg.roundRect(tipX, tipY, tipW, tipH, 4).stroke({ width: 0.5, color: 0x44aa66, alpha: 0.6 });
+    tipTxt.anchor.set(0.5, 0.5);
+    tipTxt.position.set(x, tipY + tipH / 2);
+    const tipContainer = new Container();
+    tipContainer.addChild(tipBg);
+    tipContainer.addChild(tipTxt);
+    tipContainer.visible = false;
+    wrap.addChild(tipContainer);
+
+    // Hit area for hover – slightly larger than the can
+    const hitArea = new Graphics();
+    hitArea.roundRect(x - 8, y - 6, 16, 20, 2).fill({ color: 0xffffff, alpha: 0.001 });
+    hitArea.eventMode = "static";
+    hitArea.cursor = "pointer";
+    hitArea.on("pointerenter", () => {
+      tipContainer.visible = true;
+      wrap.alpha = 0.9;
+    });
+    hitArea.on("pointerleave", () => {
+      tipContainer.visible = false;
+      wrap.alpha = 0.65;
+    });
+    wrap.addChild(hitArea);
+  }
+
+  parent.addChild(wrap);
+  return wrap;
+}
+
 export {
   drawBookshelf,
   drawCoffeeMachine,
+  drawDoneTrashCan,
   drawSofa,
   drawCoffeeTable,
   drawHighTable,

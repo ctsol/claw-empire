@@ -34,7 +34,7 @@ function createBaseProps(): ComponentProps<typeof AppHeaderBar> {
 }
 
 describe("AppHeaderBar mobile office pack selector", () => {
-  it("모바일 더보기 메뉴에서 오피스팩을 변경할 수 있다", async () => {
+  it("", async () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     const onCloseMobileHeaderMenu = vi.fn();
@@ -61,7 +61,7 @@ describe("AppHeaderBar mobile office pack selector", () => {
     expect(onCloseMobileHeaderMenu).toHaveBeenCalled();
   });
 
-  it("오피스팩 컨트롤이 없으면 모바일 메뉴에 셀렉터를 표시하지 않는다", () => {
+  it("", () => {
     const props = createBaseProps();
     render(<AppHeaderBar {...props} />);
 

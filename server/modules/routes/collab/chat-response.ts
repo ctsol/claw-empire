@@ -47,7 +47,7 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
     if (agent.status === "offline")
       return pickL(
         l(
-          [`[자동응답] ${nameTag}은(는) 현재 오프라인입니다. 복귀 후 확인하겠습니다.`],
+          [`[Auto-reply] ${name} is currently offline. I'll check when I'm back.`],
           [`[Auto-reply] ${name} is currently offline. I'll check when I'm back.`],
           [`[自動応答] ${name}は現在オフラインです。復帰後確認します。`],
           [`[自动回复] ${name}目前离线，回来后会确认。`],
@@ -60,9 +60,9 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
         return pickL(
           l(
             [
-              `앗, 대표님! 잠깐 커피 타러 갔었습니다. 바로 자리 복귀했습니다! ☕`,
-              `네! 휴식 중이었는데 돌아왔습니다. 무슨 일이신가요?`,
-              `여기 있습니다! 잠시 환기하고 왔어요. 말씀하세요~ 😊`,
+              `Oh! I just stepped out for coffee. I'm back now! ☕`,
+              `Yes! I was on a short break but I'm here. What do you need?`,
+              `I'm here! Just took a quick breather. What's up? 😊`,
             ],
             [
               `Oh! I just stepped out for coffee. I'm back now! ☕`,
@@ -78,8 +78,8 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
         return pickL(
           l(
             [
-              `안녕하세요, 대표님! 잠깐 쉬고 있었는데, 말씀하세요! ☕`,
-              `네~ 대표님! ${name}입니다. 잠시 브레이크 중이었어요. 무슨 일이세요?`,
+              `Hi! I was on a quick break. How can I help? ☕`,
+              `Hey! ${name} here. Was taking a breather. What's going on?`,
             ],
             [
               `Hi! I was on a quick break. How can I help? ☕`,
@@ -93,9 +93,9 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
       return pickL(
         l(
           [
-            `앗, 잠시 쉬고 있었습니다! 바로 확인하겠습니다 😅`,
-            `네, 대표님! 휴식 끝내고 바로 보겠습니다!`,
-            `복귀했습니다! 말씀하신 건 바로 처리할게요 ☕`,
+            `Oh, I was taking a break! Let me check right away 😅`,
+            `Got it! Break's over, I'll look into it now!`,
+            `I'm back! I'll handle that right away ☕`,
           ],
           [
             `Oh, I was taking a break! Let me check right away 😅`,
@@ -110,7 +110,7 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
     }
 
     if (agent.status === "working") {
-      const taskKo = taskTitle ? ` "${taskTitle}" 작업` : " 할당된 업무";
+      const taskKo = taskTitle ? ` "${taskTitle}" ` : "";
       const taskEn = taskTitle ? ` "${taskTitle}"` : " my current task";
       const taskJa = taskTitle ? ` "${taskTitle}"` : " 現在のタスク";
       const taskZh = taskTitle ? ` "${taskTitle}"` : " 当前任务";
@@ -119,9 +119,9 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
         return pickL(
           l(
             [
-              `네! 자리에 있습니다. 지금${taskKo} 진행 중이에요. 말씀하세요!`,
-              `여기 있습니다, 대표님! ${flair()} 열심히 하고 있어요 💻`,
-              `네~ 자리에서${taskKo} 처리 중입니다. 무슨 일이세요?`,
+              `Yes! I'm here. Currently working on${taskEn}. What do you need?`,
+              `I'm at my desk! ${flair()} and making good progress 💻`,
+              `Right here! Working on${taskEn}. What's up?`,
             ],
             [
               `Yes! I'm here. Currently working on${taskEn}. What do you need?`,
@@ -136,10 +136,7 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
       if (intent.greeting)
         return pickL(
           l(
-            [
-              `안녕하세요, 대표님! ${nameTag}입니다. ${flair()} 작업 중이에요 😊`,
-              `네, 대표님! 지금${taskKo}에 집중 중인데, 말씀하세요!`,
-            ],
+            [`Hi! ${nameTag} here. Currently ${flair()} 😊`, `Hello! I'm focused on${taskEn} right now, but go ahead!`],
             [`Hi! ${nameTag} here. Currently ${flair()} 😊`, `Hello! I'm focused on${taskEn} right now, but go ahead!`],
             [`こんにちは！${name}です。${flair()}作業中です 😊`],
             [`你好！${name}在这。正在${flair()} 😊`],
@@ -150,9 +147,9 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
         return pickL(
           l(
             [
-              `지금${taskKo} 진행 중입니다! ${flair()} 순조롭게 되고 있어요 📊`,
-              `${flair()}${taskKo} 처리하고 있습니다. 70% 정도 진행됐어요!`,
-              `현재${taskKo}에 몰두 중입니다. 곧 완료될 것 같아요! 💪`,
+              `Working on${taskEn} right now! ${flair()} — going smoothly 📊`,
+              `I'm ${flair()} on${taskEn}. About 70% done!`,
+              `Deep into${taskEn} at the moment. Should be done soon! 💪`,
             ],
             [
               `Working on${taskEn} right now! ${flair()} — going smoothly 📊`,
@@ -171,8 +168,8 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
         return pickL(
           l(
             [
-              `${taskKo} 순조롭게 진행되고 있습니다. ${flair()} 마무리 단계에요! 📊`,
-              `현재${taskKo} 진행률 약 70%입니다. 예정대로 완료 가능할 것 같습니다!`,
+              `${taskEn} is progressing well. ${flair()} — wrapping up! 📊`,
+              `About 70% done on${taskEn}. On track for completion!`,
             ],
             [
               `${taskEn} is progressing well. ${flair()} — wrapping up! 📊`,
@@ -186,10 +183,7 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
       if (intent.complaint)
         return pickL(
           l(
-            [
-              `죄송합니다, 대표님. 최대한 속도 내서 처리하겠습니다! 🏃‍♂️`,
-              `빠르게 진행하고 있습니다! 조금만 더 시간 주시면 곧 마무리됩니다.`,
-            ],
+            [`Sorry about that! I'll pick up the pace 🏃‍♂️`, `Working as fast as I can! Just need a bit more time.`],
             [`Sorry about that! I'll pick up the pace 🏃‍♂️`, `Working as fast as I can! Just need a bit more time.`],
             [`申し訳ありません！最速で対応します 🏃‍♂️`],
             [`抱歉！我会加快速度 🏃‍♂️`],
@@ -200,8 +194,8 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
         return pickL(
           l(
             [
-              `지금 작업 중이라 바로는 어렵지만, 완료 후 바로 착수하겠습니다! 📝`,
-              `현 작업 마무리되면 바로 가능합니다! 메모해두겠습니다.`,
+              `I'm tied up right now, but I'll jump on it as soon as I finish! 📝`,
+              `Can do! Let me wrap up my current task first.`,
             ],
             [
               `I'm tied up right now, but I'll jump on it as soon as I finish! 📝`,
@@ -214,10 +208,7 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
         );
       return pickL(
         l(
-          [
-            `네, 확인했습니다! 현재 작업 마무리 후 확인하겠습니다 📝`,
-            `알겠습니다, 대표님. ${flair()} 일단 메모해두겠습니다!`,
-          ],
+          [`Got it! I'll check after finishing my current task 📝`, `Noted! I'll get to it once I'm done here.`],
           [`Got it! I'll check after finishing my current task 📝`, `Noted! I'll get to it once I'm done here.`],
           [`了解しました！現在の作業完了後に確認します 📝`],
           [`收到！完成当前工作后确认 📝`],
@@ -230,10 +221,10 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
       return pickL(
         l(
           [
-            `네! 자리에 있습니다, 대표님. ${nameTag}입니다. 말씀하세요! 😊`,
-            `여기 있어요! 대기 중이었습니다. 무슨 일이세요?`,
-            `네~ 자리에 있습니다! 업무 지시 기다리고 있었어요.`,
-            `항상 대기 중입니다, 대표님! ${name} 여기 있어요 ✋`,
+            `Yes, I'm here! ${nameTag}. What do you need? 😊`,
+            `Right here! I was on standby. What's up?`,
+            `I'm at my desk! Ready for anything.`,
+            `Always ready! ${name} is here ✋`,
           ],
           [
             `Yes, I'm here! ${nameTag}. What do you need? 😊`,
@@ -254,10 +245,10 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
       return pickL(
         l(
           [
-            `안녕하세요, 대표님! ${nameTag}입니다. 오늘도 좋은 하루 보내고 계신가요? 😊`,
-            `안녕하세요! ${nameTag}입니다. 필요하신 게 있으시면 편하게 말씀하세요!`,
-            `네, 대표님! ${name}입니다. 오늘도 파이팅이요! 🔥`,
-            `반갑습니다, 대표님! ${dept} ${name}, 준비 완료입니다!`,
+            `Hello! ${nameTag} here. Having a good day? 😊`,
+            `Hi! ${nameTag}. Feel free to let me know if you need anything!`,
+            `Hey! ${name} here. Let's make today count! 🔥`,
+            `Good to see you! ${name} from ${dept}, ready to go!`,
           ],
           [
             `Hello! ${nameTag} here. Having a good day? 😊`,
@@ -278,9 +269,9 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
       return pickL(
         l(
           [
-            `지금은 대기 중이에요! ${flair()} 스킬업 하고 있었습니다 📚`,
-            `특별한 업무는 없어서 ${flair()} 개인 학습 중이었어요.`,
-            `한가한 상태입니다! 새로운 업무 주시면 바로 착수할 수 있어요 🙌`,
+            `I'm on standby! Was ${flair()} to sharpen my skills 📚`,
+            `Nothing assigned right now, so I was ${flair()}.`,
+            `I'm free! Give me something to do and I'll jump right in 🙌`,
           ],
           [
             `I'm on standby! Was ${flair()} to sharpen my skills 📚`,
@@ -296,9 +287,9 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
       return pickL(
         l(
           [
-            `감사합니다, 대표님! 더 열심히 하겠습니다! 💪`,
-            `대표님 칭찬에 힘이 불끈! 오늘도 최선을 다할게요 😊`,
-            `앗, 감사합니다~ 대표님이 알아주시니 더 보람차네요! ✨`,
+            `Thank you! I'll keep up the great work! 💪`,
+            `That means a lot! I'll do my best 😊`,
+            `Thanks! Really motivating to hear that ✨`,
           ],
           [
             `Thank you! I'll keep up the great work! 💪`,
@@ -313,7 +304,7 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
     if (intent.encourage)
       return pickL(
         l(
-          [`감사합니다! 대표님 응원 덕분에 힘이 납니다! 💪`, `네! 화이팅입니다! 기대에 꼭 부응할게요 🔥`],
+          [`Thanks! Your support means everything! 💪`, `You got it! I won't let you down 🔥`],
           [`Thanks! Your support means everything! 💪`, `You got it! I won't let you down 🔥`],
           [`ありがとうございます！頑張ります！💪`, `期待に応えます！🔥`],
           [`谢谢鼓励！一定不辜负期望！💪🔥`],
@@ -324,8 +315,8 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
       return pickL(
         l(
           [
-            `현재 대기 상태이고, 할당된 업무는 없습니다. 새 업무 주시면 바로 시작할 수 있어요! 📋`,
-            `대기 중이라 여유 있습니다. 업무 지시 기다리고 있어요!`,
+            ``,
+            ``,
           ],
           [
             `Currently on standby with no assigned tasks. Ready to start anything! 📋`,
@@ -340,9 +331,9 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
       return pickL(
         l(
           [
-            `ㅎㅎ 대표님 오늘 기분 좋으신가 봐요! 😄`,
-            `ㅋㅋ 대표님이랑 일하면 분위기가 좋아요~`,
-            `😂 잠깐 웃고 다시 집중! 업무 주시면 바로 달리겠습니다!`,
+            `     ! 😄`,
+            `    ~`,
+            `😂    !    !`,
           ],
           [
             `Haha, you're in a good mood today! 😄`,
@@ -357,7 +348,7 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
     if (intent.complaint)
       return pickL(
         l(
-          [`죄송합니다, 대표님! 더 빠르게 움직이겠습니다.`, `말씀 새겨듣겠습니다. 개선해서 보여드리겠습니다! 🙏`],
+          [``, ``],
           [`Sorry about that! I'll step it up.`, `I hear you. I'll improve and show results! 🙏`],
           [`申し訳ありません！もっと速く動きます。`, `改善してお見せします！🙏`],
           [`抱歉！会加快行动。`, `记住了，会改进的！🙏`],
@@ -368,9 +359,9 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
       return pickL(
         l(
           [
-            `제 의견으로는요... ${dept} 관점에서 한번 검토해보겠습니다! 🤔`,
-            `좋은 질문이시네요! 관련해서 정리해서 말씀드릴게요.`,
-            `${dept}에서 보기엔 긍정적으로 보입니다. 자세한 내용 분석 후 말씀드릴게요 📊`,
+            ``,
+            ``,
+            ``,
           ],
           [
             `From a ${dept} perspective, let me think about that... 🤔`,
@@ -386,9 +377,9 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
       return pickL(
         l(
           [
-            `물론이죠! 바로 시작할 수 있습니다. 상세 내용 말씀해주세요! 🚀`,
-            `가능합니다, 대표님! 지금 여유 있으니 바로 착수하겠습니다.`,
-            `네, 맡겨주세요! ${name}이(가) 책임지고 처리하겠습니다 💪`,
+            `!    .   ! 🚀`,
+            `, !     .`,
+            `, ! ${name}()   💪`,
           ],
           [
             `Absolutely! I can start right away. Just give me the details! 🚀`,
@@ -407,9 +398,9 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
       return pickL(
         l(
           [
-            `확인해보겠습니다! 잠시만요 🔍`,
-            `음, 좋은 질문이시네요. 찾아보고 말씀드리겠습니다!`,
-            `관련 내용 파악해서 빠르게 답변 드리겠습니다.`,
+            `!  🔍`,
+            `,  .  !`,
+            `     .`,
           ],
           [
             `Let me check on that! One moment 🔍`,
@@ -424,10 +415,10 @@ export function createChatReplyGenerator(deps: ChatResponseDeps): {
     return pickL(
       l(
         [
-          `네, 확인했습니다! 추가로 필요하신 게 있으면 말씀해주세요.`,
-          `네! ${name} 잘 들었습니다 😊 지시사항 있으시면 편하게 말씀하세요.`,
-          `알겠습니다, 대표님! 관련해서 진행할게요.`,
-          `확인했습니다! 바로 반영하겠습니다 📝`,
+          ``,
+          ``,
+          ``,
+          ``,
         ],
         [
           `Got it! Let me know if you need anything else.`,

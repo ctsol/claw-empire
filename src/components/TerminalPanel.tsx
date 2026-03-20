@@ -211,7 +211,7 @@ export default function TerminalPanel({
       await fetchTerminal();
       setInterventionMessage(
         tr(
-          "작업을 보류 상태로 전환했습니다. 프롬프트를 주입한 뒤 재개해 주세요.",
+          ".     .",
           "Task paused. Inject a prompt and resume.",
           "タスクを保留にしました。プロンプト注入後に再開してください。",
           "任务已暂停。请注入提示后恢复。",
@@ -222,7 +222,7 @@ export default function TerminalPanel({
         error instanceof Error
           ? error.message
           : tr(
-              "일시중지 요청에 실패했습니다.",
+              ".",
               "Pause request failed.",
               "一時停止リクエストに失敗しました。",
               "暂停请求失败。",
@@ -238,7 +238,7 @@ export default function TerminalPanel({
     if (!prompt) {
       setInterventionError(
         tr(
-          "주입할 프롬프트를 입력해 주세요.",
+          ".",
           "Please enter a prompt to inject.",
           "注入するプロンプトを入力してください。",
           "请输入要注入的提示。",
@@ -277,7 +277,7 @@ export default function TerminalPanel({
         if (!hasAssignedAgent) {
           throw new Error(
             tr(
-              "담당 에이전트가 배정되지 않아 난입 세션을 만들 수 없습니다. 먼저 에이전트를 배정해 주세요.",
+              ".    .",
               "Cannot create an interrupt session because no agent is assigned. Assign an agent first.",
               "担当エージェントが未割り当てのため、割り込みセッションを作成できません。先にエージェントを割り当ててください。",
               "由于未分配执行代理，无法创建中断会话。请先分配代理。",
@@ -286,7 +286,7 @@ export default function TerminalPanel({
         }
         throw new Error(
           tr(
-            "난입 세션 토큰이 아직 준비되지 않았습니다. 잠시 후 다시 시도해 주세요.",
+            ".     .",
             "Interrupt session token is not ready yet. Please retry shortly.",
             "割り込みセッショントークンはまだ準備できていません。しばらくしてから再試行してください。",
             "中断会话令牌尚未就绪，请稍后重试。",
@@ -304,7 +304,7 @@ export default function TerminalPanel({
       await fetchTerminal();
       setInterventionMessage(
         tr(
-          "난입 프롬프트를 주입하고 재개를 요청했습니다.",
+          ".",
           "Prompt injected and resume requested.",
           "プロンプトを注入し、再開をリクエストしました。",
           "已注入提示并请求恢复。",
@@ -315,7 +315,7 @@ export default function TerminalPanel({
         error instanceof Error
           ? error.message
           : tr(
-              "난입 실행에 실패했습니다.",
+              ".",
               "Interrupt inject failed.",
               "割り込み注入に失敗しました。",
               "中断注入失败。",
@@ -334,14 +334,14 @@ export default function TerminalPanel({
       await api.resumeTask(taskId);
       await fetchTerminal();
       setInterventionMessage(
-        tr("재개 요청을 전송했습니다.", "Resume requested.", "再開をリクエストしました。", "已请求恢复。"),
+        tr(".", "Resume requested.", "再開をリクエストしました。", "已请求恢复。"),
       );
     } catch (error) {
       setInterventionError(
         error instanceof Error
           ? error.message
           : tr(
-              "재개 요청에 실패했습니다.",
+              ".",
               "Resume request failed.",
               "再開リクエストに失敗しました。",
               "恢复请求失败。",
@@ -356,13 +356,13 @@ export default function TerminalPanel({
   const badgeLabel = t(badge.label);
   const meetingTypeLabel = (type: "planned" | "review") =>
     type === "planned"
-      ? tr("Planned 승인", "Planned Approval", "Planned 承認", "Planned 审批")
-      : tr("Review 승인", "Review Approval", "Review 承認", "Review 审批");
+      ? tr("Planned", "Planned Approval", "Planned 承認", "Planned 审批")
+      : tr("Review", "Review Approval", "Review 承認", "Review 审批");
   const meetingStatusLabel = (status: MeetingMinute["status"]) => {
-    if (status === "completed") return tr("완료", "Completed", "完了", "已完成");
-    if (status === "revision_requested") return tr("보완 요청", "Revision Requested", "修正要請", "要求修订");
-    if (status === "failed") return tr("실패", "Failed", "失敗", "失败");
-    return tr("진행중", "In Progress", "進行中", "进行中");
+    if (status === "completed") return tr("", "Completed", "完了", "已完成");
+    if (status === "revision_requested") return tr("", "Revision Requested", "修正要請", "要求修订");
+    if (status === "failed") return tr("", "Failed", "失敗", "失败");
+    return tr("", "In Progress", "進行中", "进行中");
   };
 
   const compactHintText = (value: string, max = 90) => {
@@ -381,7 +381,7 @@ export default function TerminalPanel({
     const summary = compactHintText(hint.summary, 100);
     if (hint.phase === "ok") {
       return tr(
-        `... ${hint.tool} 확인 완료: ${summary}`,
+        ``,
         `... ${hint.tool} checked: ${summary}`,
         `... ${hint.tool} 確認完了: ${summary}`,
         `... ${hint.tool} 已确认: ${summary}`,
@@ -389,14 +389,14 @@ export default function TerminalPanel({
     }
     if (hint.phase === "error") {
       return tr(
-        `... ${hint.tool} 재확인 중: ${summary}`,
+        ``,
         `... ${hint.tool} retry/check: ${summary}`,
         `... ${hint.tool} 再確認中: ${summary}`,
         `... ${hint.tool} 重试/检查: ${summary}`,
       );
     }
     return tr(
-      `... ${hint.tool} 진행 중: ${summary}`,
+      ``,
       `... ${hint.tool} in progress: ${summary}`,
       `... ${hint.tool} 実行中: ${summary}`,
       `... ${hint.tool} 进行中: ${summary}`,
@@ -449,7 +449,7 @@ export default function TerminalPanel({
                     : undefined
                 }
               >
-                {tr("터미널", "Terminal", "ターミナル", "终端")}
+                {tr("", "Terminal", "ターミナル", "终端")}
               </button>
               <button
                 onClick={() => setActiveTab("minutes")}
@@ -462,7 +462,7 @@ export default function TerminalPanel({
                     : undefined
                 }
               >
-                {tr("회의록", "Minutes", "会議録", "会议纪要")}
+                {tr("", "Minutes", "会議録", "会议纪要")}
               </button>
             </div>
           </div>
@@ -488,11 +488,11 @@ export default function TerminalPanel({
                     }
                   : undefined
               }
-              title={tr("난입 패널", "Interrupt panel", "割り込みパネル", "中断面板")}
+              title={tr("", "Interrupt panel", "割り込みパネル", "中断面板")}
             >
               {task?.status === "pending"
-                ? tr("주입", "Inject", "注入", "注入")
-                : tr("난입", "Interrupt", "割込", "中断")}
+                ? tr("", "Inject", "注入", "注入")
+                : tr("", "Interrupt", "割込", "中断")}
             </button>
           )}
           {/* Follow toggle */}
@@ -512,18 +512,18 @@ export default function TerminalPanel({
             }
             title={
               follow
-                ? tr("자동 스크롤 ON", "Auto-scroll ON", "自動スクロール ON", "自动滚动 ON")
-                : tr("자동 스크롤 OFF", "Auto-scroll OFF", "自動スクロール OFF", "自动滚动 OFF")
+                ? tr("ON", "Auto-scroll ON", "自動スクロール ON", "自动滚动 ON")
+                : tr("OFF", "Auto-scroll OFF", "自動スクロール OFF", "自动滚动 OFF")
             }
           >
-            {follow ? tr("따라가기", "FOLLOW", "追従中", "跟随中") : tr("일시정지", "PAUSED", "一時停止", "已暂停")}
+            {follow ? tr("", "FOLLOW", "追従中", "跟随中") : tr("", "PAUSED", "一時停止", "已暂停")}
           </button>
           {/* Scroll to bottom */}
           <button
             onClick={scrollToBottom}
             className="p-1.5 rounded transition"
             style={{ color: "var(--th-text-secondary)" }}
-            title={tr("맨 아래로", "Scroll to bottom", "一番下へ", "滚动到底部")}
+            title={tr("", "Scroll to bottom", "一番下へ", "滚动到底部")}
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M12 5v14M5 12l7 7 7-7" />
@@ -543,13 +543,13 @@ export default function TerminalPanel({
           <div className="text-[11px]" style={{ color: "var(--th-text-secondary)" }}>
             {task?.status === "in_progress"
               ? tr(
-                  "실행 중 작업을 보류하고, 새 프롬프트를 주입한 뒤 자동 재개합니다.",
+                  ",      .",
                   "Pause the running task, inject a new prompt, then auto-resume.",
                   "実行中タスクを保留にし、新しいプロンプトを注入して自動再開します。",
                   "将运行中的任务暂停，注入新提示后自动恢复。",
                 )
               : tr(
-                  "보류 상태에서 프롬프트를 주입하고 재개할 수 있습니다.",
+                  ".",
                   "Inject a prompt while pending and resume execution.",
                   "保留状態でプロンプトを注入し、再開できます。",
                   "可在暂停状态下注入提示并恢复执行。",
@@ -577,7 +577,7 @@ export default function TerminalPanel({
               color: "var(--th-text-primary)",
             }}
             placeholder={tr(
-              "예) 방금 방식 대신 테스트를 먼저 실행하고 실패 원인을 정리해.",
+              ")         .",
               "e.g. Run tests first, then summarize failures before continuing.",
               "例) 先にテストを実行し、失敗原因を整理してから続行してください。",
               "例如：先执行测试，再整理失败原因后继续。",
@@ -585,7 +585,7 @@ export default function TerminalPanel({
           />
           <div className="flex items-center justify-between text-[10px]" style={{ color: "var(--th-text-muted)" }}>
             <span>{`${interventionPrompt.length} / ${INTERVENTION_PROMPT_MAX_LENGTH}`}</span>
-            <span>{tr("Ctrl+Enter로 실행", "Ctrl+Enter to run", "Ctrl+Enterで実行", "Ctrl+Enter 执行")}</span>
+            <span>{tr("Ctrl+Enter", "Ctrl+Enter to run", "Ctrl+Enterで実行", "Ctrl+Enter 执行")}</span>
           </div>
           {interventionError && <div className="text-[11px] text-rose-300 break-words">{interventionError}</div>}
           {interventionMessage && <div className="text-[11px] text-emerald-300 break-words">{interventionMessage}</div>}
@@ -598,8 +598,8 @@ export default function TerminalPanel({
                 style={{ borderColor: "var(--th-border)", color: "var(--th-text-secondary)" }}
               >
                 {interventionBusy
-                  ? tr("처리 중...", "Processing...", "処理中...", "处理中...")
-                  : tr("일시중지", "Pause", "一時停止", "暂停")}
+                  ? tr("...", "Processing...", "処理中...", "处理中...")
+                  : tr("", "Pause", "一時停止", "暂停")}
               </button>
             )}
             <button
@@ -614,8 +614,8 @@ export default function TerminalPanel({
               }}
             >
               {interventionBusy
-                ? tr("실행 중...", "Running...", "実行中...", "执行中...")
-                : tr("난입 실행", "Inject + Resume", "割込実行", "中断注入")}
+                ? tr("...", "Running...", "実行中...", "执行中...")
+                : tr("", "Inject + Resume", "割込実行", "中断注入")}
             </button>
             {canInjectPrompt && (
               <button
@@ -624,7 +624,7 @@ export default function TerminalPanel({
                 className="rounded-md px-2.5 py-1.5 text-[11px] border transition disabled:opacity-50"
                 style={{ borderColor: "var(--th-border)", color: "var(--th-text-secondary)" }}
               >
-                {tr("재개만", "Resume only", "再開のみ", "仅恢复")}
+                {tr("", "Resume only", "再開のみ", "仅恢复")}
               </button>
             )}
           </div>
@@ -632,13 +632,13 @@ export default function TerminalPanel({
             <div className="text-[10px] text-amber-300">
               {hasAssignedAgent
                 ? tr(
-                    "세션 토큰이 아직 준비되지 않았습니다. 잠시 후 다시 시도해 주세요.",
+                    ".     .",
                     "Session token is not ready yet. Please retry shortly.",
                     "セッショントークンがまだ準備されていません。しばらくしてから再試行してください。",
                     "会话令牌尚未就绪，请稍后重试。",
                   )
                 : tr(
-                    "담당 에이전트가 없어 세션 토큰을 만들 수 없습니다. 먼저 에이전트를 배정해 주세요.",
+                    ".    .",
                     "No assigned agent, so a session token cannot be created. Assign an agent first.",
                     "担当エージェントがいないためセッショントークンを作成できません。先にエージェントを割り当ててください。",
                     "未分配代理，无法创建会话令牌。请先分配代理。",
@@ -679,10 +679,10 @@ export default function TerminalPanel({
               <div className="text-sm">
                 {task?.status === "in_progress"
                   ? shouldShowProgressHints
-                    ? tr("도구 실행 중...", "Tools are running...", "ツール実行中...", "工具正在运行...")
-                    : tr("출력을 기다리는 중...", "Waiting for output...", "出力待機中...", "正在等待输出...")
+                    ? tr("...", "Tools are running...", "ツール実行中...", "工具正在运行...")
+                    : tr("...", "Waiting for output...", "出力待機中...", "正在等待输出...")
                   : tr(
-                      "아직 터미널 출력이 없습니다",
+                      "",
                       "No terminal output yet",
                       "まだターミナル出力がありません",
                       "暂无终端输出",
@@ -704,7 +704,7 @@ export default function TerminalPanel({
             <div className="flex h-full flex-col items-center justify-center" style={{ color: "var(--th-text-muted)" }}>
               <div className="text-3xl mb-3">📝</div>
               <div className="text-sm">
-                {tr("회의록이 아직 없습니다", "No meeting minutes yet", "会議録はまだありません", "暂无会议纪要")}
+                {tr("", "No meeting minutes yet", "会議録はまだありません", "暂无会议纪要")}
               </div>
             </div>
           ) : (
@@ -722,7 +722,7 @@ export default function TerminalPanel({
                     className="rounded px-2 py-0.5 text-[10px]"
                     style={{ background: "var(--th-bg-surface)", color: "var(--th-text-primary)" }}
                   >
-                    {tr("라운드", "Round", "ラウンド", "轮次")} {meeting.round}
+                    {tr("", "Round", "ラウンド", "轮次")} {meeting.round}
                   </span>
                   <span
                     className="rounded px-2 py-0.5 text-[10px]"
@@ -770,13 +770,13 @@ export default function TerminalPanel({
           <div className="text-[10px] italic" style={{ color: "var(--th-text-secondary)" }}>
             {activeToolHint
               ? tr(
-                  `도구 실행중.. ${activeToolHint.tool} 확인 중`,
+                  ``,
                   `Tool running.. checking ${activeToolHint.tool}`,
                   `ツール実行中.. ${activeToolHint.tool} を確認中`,
                   `工具运行中.. 正在检查 ${activeToolHint.tool}`,
                 )
               : tr(
-                  "도구 실행중.. 진행 상황 확인 중",
+                  "..",
                   "Tool running.. checking progress",
                   "ツール実行中.. 進捗確認中",
                   "工具运行中.. 正在检查进度",
@@ -785,7 +785,7 @@ export default function TerminalPanel({
           {progressHints.current_file && (
             <div className="mt-1 text-[10px] break-words" style={{ color: "var(--th-text-muted)" }}>
               {tr(
-                `파일: ${shortPath(progressHints.current_file)}`,
+                ``,
                 `file: ${shortPath(progressHints.current_file)}`,
                 `ファイル: ${shortPath(progressHints.current_file)}`,
                 `文件: ${shortPath(progressHints.current_file)}`,
@@ -818,7 +818,7 @@ export default function TerminalPanel({
         style={{ color: "var(--th-text-muted)" }}
       >
         <span>
-          {agent ? `${agentName}` : tr("담당 에이전트 없음", "No agent", "担当エージェントなし", "无负责人")}
+          {agent ? `${agentName}` : tr("", "No agent", "担当エージェントなし", "无负责人")}
           {agent?.cli_provider ? ` (${agent.cli_provider})` : ""}
         </span>
         <span>
@@ -826,12 +826,12 @@ export default function TerminalPanel({
             <span className="inline-flex items-center gap-1">
               <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
               {activeTab === "terminal"
-                ? tr("실시간", "Live", "ライブ", "实时")
-                : tr("회의록", "Minutes", "会議録", "会议纪要")}
+                ? tr("", "Live", "ライブ", "实时")
+                : tr("", "Minutes", "会議録", "会议纪要")}
             </span>
           )}
-          {task?.status === "review" && tr("검토 중", "Under review", "レビュー中", "审核中")}
-          {task?.status === "done" && tr("완료됨", "Completed", "完了", "已完成")}
+          {task?.status === "review" && tr("", "Under review", "レビュー中", "审核中")}
+          {task?.status === "done" && tr("", "Completed", "完了", "已完成")}
         </span>
       </div>
     </div>

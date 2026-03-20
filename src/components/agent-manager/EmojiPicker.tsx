@@ -1,20 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import { EMOJI_GROUPS } from "./constants";
+import { generateAvatar } from "../avatar-generator";
 
-export function StackedSpriteIcon({ sprites }: { sprites: [number, number] }) {
+export function StackedSpriteIcon({ agentIds }: { agentIds?: [string, string]; sprites?: [number, number] }) {
+  const id1 = agentIds?.[0] ?? "agent-1";
+  const id2 = agentIds?.[1] ?? "agent-2";
   return (
     <span className="relative inline-flex items-center" style={{ width: 22, height: 16 }}>
       <img
-        src={`/sprites/${sprites[0]}-D-1.png`}
+        src={generateAvatar(id1, 32)}
         alt=""
         className="absolute left-0 top-0 w-4 h-4 rounded-full object-cover"
-        style={{ imageRendering: "pixelated", opacity: 0.85 }}
+        style={{ opacity: 0.85 }}
       />
       <img
-        src={`/sprites/${sprites[1]}-D-1.png`}
+        src={generateAvatar(id2, 32)}
         alt=""
         className="absolute left-1.5 top-px w-4 h-4 rounded-full object-cover"
-        style={{ imageRendering: "pixelated", zIndex: 1 }}
+        style={{ zIndex: 1 }}
       />
     </span>
   );

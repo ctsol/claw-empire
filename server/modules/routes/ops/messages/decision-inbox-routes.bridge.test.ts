@@ -115,7 +115,7 @@ describe("decision inbox bridge characterization", () => {
     const { bridge } = createRouteBridge();
 
     const result = await bridge.tryHandleInboxDecisionReply({
-      text: "[DECISION:abc123] 승인",
+      text: "[DECISION:abc123]",
       channel: "telegram",
       targetId: "-100123",
     });

@@ -1,8 +1,9 @@
 import { useEffect, type MutableRefObject } from "react";
-import { AnimatedSprite, Container, Graphics, Text, TextStyle, type Texture } from "pixi.js";
+import { Container, Graphics, Sprite, Text, TextStyle, type Texture } from "pixi.js";
 import type { Agent, CeoOfficeCall, CrossDeptDelivery, MeetingPresence } from "../../types";
 import { hashStr } from "./drawing-core";
 import { type Delivery, destroyNode, trackProcessedId } from "./model";
+import { getAvatarTexture } from "./avatar-texture-cache";
 import {
   LOCALE_TEXT,
   paintMeetingBadge,
@@ -68,22 +69,14 @@ export function useMeetingPresenceSync({
         continue;
       }
 
-      const spriteNum = spriteMapRef.current.get(row.agent_id) ?? (hashStr(row.agent_id) % 13) + 1;
       const actor = new Container();
-      const frames: Texture[] = [];
-
-      for (let frame = 1; frame <= 3; frame++) {
-        const key = `${spriteNum}-D-${frame}`;
-        if (textures[key]) frames.push(textures[key]);
-      }
-
-      if (frames.length > 0) {
-        const animSprite = new AnimatedSprite(frames);
-        animSprite.anchor.set(0.5, 1);
-        const scale = 44 / animSprite.texture.height;
-        animSprite.scale.set(scale);
-        animSprite.gotoAndStop(0);
-        actor.addChild(animSprite);
+      const avatarTex = getAvatarTexture(row.agent_id);
+      if (avatarTex) {
+        const avatarSprite = new Sprite(avatarTex);
+        avatarSprite.anchor.set(0.5, 1);
+        const scale = 44 / avatarTex.height;
+        avatarSprite.scale.set(scale);
+        actor.addChild(avatarSprite);
       } else {
         const fallback = new Text({ text: "🧑‍💼", style: new TextStyle({ fontSize: 20 }) });
         fallback.anchor.set(0.5, 1);
@@ -183,22 +176,13 @@ export function useCrossDeptDeliveryAnimations({
       }
 
       const actor = new Container();
-      const spriteNum = spriteMapRef.current.get(delivery.fromAgentId) ?? (hashStr(delivery.fromAgentId) % 13) + 1;
-      const frames: Texture[] = [];
-      for (let frame = 1; frame <= 3; frame++) {
-        const key = `${spriteNum}-D-${frame}`;
-        if (textures[key]) frames.push(textures[key]);
-      }
-
-      if (frames.length > 0) {
-        const animSprite = new AnimatedSprite(frames);
-        animSprite.anchor.set(0.5, 1);
-        const scale = 44 / animSprite.texture.height;
-        animSprite.scale.set(scale);
-        animSprite.animationSpeed = 0.12;
-        animSprite.play();
-        animSprite.position.set(0, 0);
-        actor.addChild(animSprite);
+      const deliveryAvatarTex = getAvatarTexture(delivery.fromAgentId);
+      if (deliveryAvatarTex) {
+        const avatarSprite = new Sprite(deliveryAvatarTex);
+        avatarSprite.anchor.set(0.5, 1);
+        const scale = 44 / deliveryAvatarTex.height;
+        avatarSprite.scale.set(scale);
+        actor.addChild(avatarSprite);
       } else {
         const fallback = new Text({ text: "🧑‍💼", style: new TextStyle({ fontSize: 20 }) });
         fallback.anchor.set(0.5, 1);
@@ -384,22 +368,13 @@ export function useCeoOfficeCallAnimations({
 
       trackProcessedId(processedCeoOfficeRef.current, call.id);
       const actor = new Container();
-      const spriteNum = spriteMapRef.current.get(call.fromAgentId) ?? (hashStr(call.fromAgentId) % 13) + 1;
-      const frames: Texture[] = [];
-
-      for (let frame = 1; frame <= 3; frame++) {
-        const key = `${spriteNum}-D-${frame}`;
-        if (textures[key]) frames.push(textures[key]);
-      }
-
-      if (frames.length > 0) {
-        const animSprite = new AnimatedSprite(frames);
-        animSprite.anchor.set(0.5, 1);
-        const scale = 44 / animSprite.texture.height;
-        animSprite.scale.set(scale);
-        animSprite.animationSpeed = 0.12;
-        animSprite.play();
-        actor.addChild(animSprite);
+      const callAvatarTex = getAvatarTexture(call.fromAgentId);
+      if (callAvatarTex) {
+        const avatarSprite = new Sprite(callAvatarTex);
+        avatarSprite.anchor.set(0.5, 1);
+        const scale = 44 / callAvatarTex.height;
+        avatarSprite.scale.set(scale);
+        actor.addChild(avatarSprite);
       } else {
         const fallback = new Text({ text: "🧑‍💼", style: new TextStyle({ fontSize: 20 }) });
         fallback.anchor.set(0.5, 1);

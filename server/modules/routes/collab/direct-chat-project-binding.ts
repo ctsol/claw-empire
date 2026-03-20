@@ -206,7 +206,7 @@ function latestProjectMarker(lang: Lang): string {
   if (lang === "en") return " [LATEST]";
   if (lang === "ja") return " [最新]";
   if (lang === "zh") return " [最新]";
-  return " [최신]";
+  return "[]";
 }
 
 function projectPathLabel(lang: Lang): string {
@@ -214,7 +214,7 @@ function projectPathLabel(lang: Lang): string {
   if (lang === "ja") return "パス";
   if (lang === "zh") return "路径";
   if (lang === "ru") return "Путь";
-  return "경로";
+  return "";
 }
 
 function projectNameLabel(lang: Lang): string {
@@ -222,7 +222,7 @@ function projectNameLabel(lang: Lang): string {
   if (lang === "ja") return "名前";
   if (lang === "zh") return "名称";
   if (lang === "ru") return "Название";
-  return "이름";
+  return "";
 }
 
 function resolveExistingProjectDisplayName(
@@ -280,7 +280,7 @@ function extractNumberSelection(text: string): number | null {
   if (/3️⃣/.test(trimmed) || compact === "3") return 3;
   if (/4️⃣/.test(trimmed) || compact === "4") return 4;
   if (/5️⃣/.test(trimmed) || compact === "5") return 5;
-  const numeric = normalized.match(/(?:^|\s)([1-9])(?:번|번째)?(?:으로|로)?(?:\s|$)/);
+  const numeric = normalized.match(/(?:^|\s)([1-9])(?:|)?(?:|)?(?:\s|$)/);
   if (!numeric?.[1]) return null;
   const value = Number.parseInt(numeric[1], 10);
   return Number.isFinite(value) ? value : null;
@@ -346,7 +346,7 @@ function extractProjectNameCandidates(text: string): string[] {
     if (!rawValue) return;
     const cleaned = normalizeLooseProjectName(rawValue);
     if (!cleaned || cleaned.length < 2 || cleaned.length > 80) return;
-    if (/^(기존|신규|새|project|프로젝트|name)$/i.test(cleaned)) return;
+    if (/^(|||project||name)$/i.test(cleaned)) return;
     const key = cleaned.toLowerCase();
     if (seen.has(key)) return;
     seen.add(key);
@@ -354,7 +354,7 @@ function extractProjectNameCandidates(text: string): string[] {
   };
 
   for (const match of text.matchAll(
-    /(?:프로젝트\s*(?:이름|명)?|project\s*name|name)\s*[:=]?\s*["'`]?([A-Za-z0-9][A-Za-z0-9._-]{1,79})["'`]?/gi,
+    /(?:\s*(?:|)?|project\s*name|name)\s*[:=]?\s*["'`]?([A-Za-z0-9][A-Za-z0-9._-]{1,79})["'`]?/gi,
   )) {
     add(match[1]);
   }

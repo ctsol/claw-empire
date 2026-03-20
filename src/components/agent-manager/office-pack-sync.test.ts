@@ -6,7 +6,7 @@ function makeDepartment(overrides: Partial<Department> = {}): Department {
   return {
     id: "planning",
     name: "Planning",
-    name_ko: "기획팀",
+    name_ko: "",
     name_ja: "企画チーム",
     name_zh: "企划组",
     icon: "📋",
@@ -23,7 +23,7 @@ function makeAgent(overrides: Partial<Agent> = {}): Agent {
   return {
     id: "agent-1",
     name: "Planner 1",
-    name_ko: "기획자 1",
+    name_ko: "1",
     name_ja: "企画者 1",
     name_zh: "策划 1",
     department_id: "planning",
@@ -41,7 +41,7 @@ function makeAgent(overrides: Partial<Agent> = {}): Agent {
 }
 
 describe("buildOfficePackSyncPlan", () => {
-  it("변경사항이 없으면 빈 패치를 반환한다", () => {
+  it("", () => {
     const departments = [makeDepartment()];
     const agents = [makeAgent()];
 
@@ -56,7 +56,7 @@ describe("buildOfficePackSyncPlan", () => {
     expect(plan.agentPatches).toHaveLength(0);
   });
 
-  it("변경된 필드만 패치로 만든다", () => {
+  it("", () => {
     const currentDepartments = [makeDepartment()];
     const currentAgents = [makeAgent()];
     const nextDepartments = [makeDepartment({ name: "Editorial Planning", icon: "📚", name_ja: null })];

@@ -69,22 +69,22 @@ export function createPlanningArchiveTools(deps: CreatePlanningArchiveToolsDeps)
   ): string {
     const header = pickL(
       l(
-        [`# ${rootTask.title ?? "프로젝트"} 최종 취합 보고서`],
+        [`# ${rootTask.title ?? ""}   `],
         [`# Final Consolidated Report: ${rootTask.title ?? "Project"}`],
         [`# 最終統合レポート: ${rootTask.title ?? "プロジェクト"}`],
         [`# 最终汇总报告：${rootTask.title ?? "项目"}`],
       ),
       lang,
     );
-    const summaryTitle = pickL(l(["## 요약"], ["## Executive Summary"], ["## 要約"], ["## 执行摘要"], ["## Сводка"]), lang);
-    const teamTitle = pickL(l(["## 팀별 취합"], ["## Team Consolidation"], ["## チーム別統合"], ["## 团队汇总"], ["## Сводка по командам"]), lang);
+    const summaryTitle = pickL(l(["##"], ["## Executive Summary"], ["## 要約"], ["## 执行摘要"], ["## Сводка"]), lang);
+    const teamTitle = pickL(l(["##"], ["## Team Consolidation"], ["## チーム別統合"], ["## 团队汇总"], ["## Сводка по командам"]), lang);
     const lines = [
       header,
       "",
       summaryTitle,
       pickL(
         l(
-          ["프로젝트 완료 기준으로 팀별 결과를 취합했습니다. 아래 섹션에서 팀별 최신 보고/결과 스니펫을 확인하세요."],
+          [".     /  ."],
           [
             "Compiled team outputs at project completion. See the sections below for latest team report/result snippets.",
           ],
@@ -145,7 +145,7 @@ export function createPlanningArchiveTools(deps: CreatePlanningArchiveToolsDeps)
         .prepare(
           `
     SELECT t.id, t.title, t.status, t.department_id, t.assigned_agent_id, t.result, t.completed_at,
-           COALESCE(a.name, '') AS agent_name,
+           COALESCE(a.name,'') AS agent_name,
            COALESCE(a.name_ko, '') AS agent_name_ko,
            COALESCE(d.name, '') AS dept_name,
            COALESCE(d.name_ko, '') AS dept_name_ko
@@ -171,17 +171,15 @@ export function createPlanningArchiveTools(deps: CreatePlanningArchiveToolsDeps)
       const entries = relatedTasks.map((task) => {
         const latestReport = db
           .prepare(
-            `
-      SELECT m.content, m.created_at
+            `SELECT m.content, m.created_at
       FROM messages m
       WHERE m.task_id = ? AND m.message_type = 'report'
-        AND m.content NOT LIKE '%최종 취합본을 생성해 아카이빙%'
+        AND m.content NOT LIKE '%   %'
         AND m.content NOT LIKE '%consolidated final report has been generated and archived%'
         AND m.content NOT LIKE '%最終統合レポートを生成し、アーカイブ%'
         AND m.content NOT LIKE '%最终汇总报告已生成并归档%'
       ORDER BY m.created_at DESC
-      LIMIT 1
-    `,
+      LIMIT 1`,
           )
           .get(task.id) as { content: string; created_at: number } | undefined;
         return {
@@ -246,7 +244,7 @@ export function createPlanningArchiveTools(deps: CreatePlanningArchiveToolsDeps)
       }
       const evidenceHeader = pickL(
         l(
-          ["## 취합 근거 스냅샷"],
+          ["##"],
           ["## Consolidation Evidence Snapshot"],
           ["## 統合エビデンス概要"],
           ["## 汇总证据快照"],
@@ -301,7 +299,7 @@ export function createPlanningArchiveTools(deps: CreatePlanningArchiveToolsDeps)
       );
       const reportNotice = pickL(
         l(
-          ["대표님, 기획팀장 최종 취합본을 생성해 아카이빙했습니다. 보고서 팝업에서 확인하실 수 있습니다."],
+          [",     .     ."],
           [
             "CEO, the planning lead consolidated final report has been generated and archived. You can review it from the report popup.",
           ],

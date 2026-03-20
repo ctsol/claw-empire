@@ -43,7 +43,7 @@ function mockRequest(headers: Record<string, string | undefined>): Request {
 }
 
 describe("auth helpers", () => {
-  it("loopback 판별이 정확하다", () => {
+  it("loopback", () => {
     expect(isLoopbackHostname("localhost")).toBe(true);
     expect(isLoopbackHostname("127.0.0.1")).toBe(true);
     expect(isLoopbackHostname("example.com")).toBe(false);
@@ -56,7 +56,7 @@ describe("auth helpers", () => {
     expect(isLoopbackRequest({ socket: { remoteAddress: "10.1.2.3" } })).toBe(false);
   });
 
-  it("쿠키/토큰 파싱과 인증 판별이 동작한다", () => {
+  it("/", () => {
     const reqWithBearer = mockRequest({
       authorization: `Bearer ${SESSION_AUTH_TOKEN}`,
     });
@@ -77,7 +77,7 @@ describe("auth helpers", () => {
     });
   });
 
-  it("origin/path/secure-cookie 규칙을 판별한다", () => {
+  it("origin/path/secure-cookie", () => {
     expect(isTrustedOrigin("http://localhost:8800")).toBe(true);
     expect(isTrustedOrigin("https://dev.ts.net")).toBe(true);
     expect(isTrustedOrigin("file://tmp/test")).toBe(false);
@@ -102,7 +102,7 @@ describe("auth helpers", () => {
     expect(shouldUseSecureCookie(secureReq)).toBe(true);
   });
 
-  it("session cookie 발급 시 append를 호출하고 중복 발급은 방지한다", () => {
+  it("session cookie   append", () => {
     const append = vi.fn();
     const res = { append } as unknown as Response;
 
@@ -123,7 +123,7 @@ describe("auth helpers", () => {
     expect(append).not.toHaveBeenCalled();
   });
 
-  it("IncomingMessage 인증/원본 판별이 동작한다", () => {
+  it("IncomingMessage /", () => {
     const incoming = {
       headers: {
         authorization: `Bearer ${SESSION_AUTH_TOKEN}`,
@@ -138,13 +138,13 @@ describe("auth helpers", () => {
     expect(isIncomingMessageOriginTrusted(incoming)).toBe(true);
   });
 
-  it("safeSecretEquals는 값이 같을 때만 true다", () => {
+  it("safeSecretEquals    true", () => {
     expect(safeSecretEquals("abc123", "abc123")).toBe(true);
     expect(safeSecretEquals("abc123", "abc124")).toBe(false);
     expect(safeSecretEquals("short", "much-longer")).toBe(false);
   });
 
-  it("csrf / task-interrupt 제어 토큰 검증이 동작한다", () => {
+  it("csrf / task-interrupt", () => {
     const csrf = getCsrfToken();
     const req = {
       ...mockRequest({
@@ -171,7 +171,7 @@ describe("auth helpers", () => {
 });
 
 describe("installSecurityMiddleware", () => {
-  it("세션 발급 후 보호 API 접근을 허용한다", async () => {
+  it("API", async () => {
     const app = express();
     installSecurityMiddleware(app);
     app.get("/api/protected", (_req, res) => {

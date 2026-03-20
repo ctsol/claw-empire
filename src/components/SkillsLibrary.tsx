@@ -25,7 +25,7 @@ export default function SkillsLibrary({ agents }: SkillsLibraryProps) {
           <div className="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-4" />
           <div className="text-slate-400 text-sm">
             {t({
-              ko: "skills.sh 데이터 로딩중...",
+              ko: "skills.sh  ...",
               en: "Loading skills.sh data...",
               ja: "skills.sh データを読み込み中...",
               zh: "正在加载 skills.sh 数据...",
@@ -44,7 +44,7 @@ export default function SkillsLibrary({ agents }: SkillsLibraryProps) {
           <div className="text-4xl mb-3">⚠️</div>
           <div className="text-slate-400 text-sm">
             {t({
-              ko: "스킬 데이터를 불러올 수 없습니다",
+              ko: "",
               en: "Unable to load skills data",
               ja: "スキルデータを読み込めません",
               zh: "无法加载技能数据",
@@ -56,7 +56,7 @@ export default function SkillsLibrary({ agents }: SkillsLibraryProps) {
             onClick={vm.loadSkills}
             className="mt-4 px-4 py-2 text-sm bg-blue-600/20 text-blue-400 border border-blue-500/30 rounded-lg hover:bg-blue-600/30 transition-all"
           >
-            {t({ ko: "다시 시도", en: "Retry", ja: "再試行", zh: "重试", ru: "Повторить" })}
+            {t({ ko: "", en: "Retry", ja: "再試行", zh: "重试", ru: "Повторить" })}
           </button>
         </div>
       </div>
@@ -178,7 +178,7 @@ export default function SkillsLibrary({ agents }: SkillsLibraryProps) {
 
       <div className="text-center text-xs text-slate-600 py-4">
         {t({
-          ko: "데이터 출처: skills.sh · 설치: npx skills add <owner/repo>",
+          ko: ": skills.sh · : npx skills add <owner/repo>",
           en: "Source: skills.sh · Install: npx skills add <owner/repo>",
           ja: "データソース: skills.sh · インストール: npx skills add <owner/repo>",
           zh: "数据来源: skills.sh · 安装: npx skills add <owner/repo>",

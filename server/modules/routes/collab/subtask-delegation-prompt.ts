@@ -85,7 +85,7 @@ export function createSubtaskDelegationPromptBuilder(deps: PromptDeps) {
           ? getDeptName(st.target_department_id, parentDept?.workflow_pack_key ?? null)
           : getDeptName(parentDept?.department_id ?? "", parentDept?.workflow_pack_key ?? null);
         const marker = assignedIds.has(st.id)
-          ? pickL(l([" ← 당신의 담당"], [" <- assigned to you"], [" ← あなたの担당"], [" <- 你的负责项"], [" ← ваша задача"]), lang)
+          ? pickL(l([" <- assigned to you"], [" <- assigned to you"], ["← あなたの担"], [" <- 你的负责项"], [" ← ваша задача"]), lang)
           : "";
         return `${icon} ${st.title} (${dept} - ${st.status})${marker}`;
       })
@@ -160,7 +160,7 @@ export function createSubtaskDelegationPromptBuilder(deps: PromptDeps) {
 
       const completedLabel = pickL(
         l(
-          ["[모체 팀 및 이전 팀 완료 산출물 — 반드시 참고하여 작업하세요]"],
+          ["[Completed artifacts from origin & prior teams — use these as reference for your work]"],
           ["[Completed artifacts from origin & prior teams — use these as reference for your work]"],
           ["[元チーム及び先行チーム完了成果物 — 必ず参照して作業してください]"],
           ["[主体团队及前序团队已完成产出物 — 请务必参考进行工作]"],
@@ -187,11 +187,11 @@ export function createSubtaskDelegationPromptBuilder(deps: PromptDeps) {
             l(
               [
                 "[Video Runtime Rules]",
-                "- 렌더링 엔진은 반드시 Remotion을 사용하세요. ffmpeg 단독 합성/다른 생성기로 대체 금지.",
-                "- Python(moviepy/Pillow) 기반 렌더링은 금지됩니다.",
-                "- `remotion-dev/skills#remotion-best-practices` 스킬은 시스템이 자동 설치/학습 처리합니다.",
-                "- 산출물은 mp4 파일로 렌더링하고 파일 경로/용량 검증을 결과에 포함하세요.",
-                "- 화면 텍스트는 반드시 정제하세요: `\\n`/`\\t`/백틱/마크다운 기호를 문자 그대로 노출 금지.",
+                "- Rendering engine must be Remotion. Do not replace it with ffmpeg-only stitching or other generators.",
+                "- Python renderers (moviepy/Pillow) are forbidden.",
+                "- `remotion-dev/skills#remotion-best-practices` is auto-installed/recorded by the system when missing.",
+                "- Render a real mp4 artifact and include path/size verification in the result.",
+                "- Sanitize all on-screen copy: never render raw `\\n`/`\\t`, backticks, or markdown symbols literally.",
               ],
               [
                 "[Video Runtime Rules]",
@@ -225,22 +225,22 @@ export function createSubtaskDelegationPromptBuilder(deps: PromptDeps) {
     const agentDisplayName = getAgentDisplayName(execAgent, lang);
     const header = pickL(
       l(
-        [`[프로젝트 협업 업무 - ${targetDeptName}]`],
+        [`[Project collaboration task - ${targetDeptName}]`],
         [`[Project collaboration task - ${targetDeptName}]`],
         [`[プロジェクト協業タスク - ${targetDeptName}]`],
         [`[项目协作任务 - ${targetDeptName}]`],
       ),
       lang,
     );
-    const originalTaskLabel = pickL(l(["원본 업무"], ["Original task"], ["元タスク"], ["原始任务"], ["Исходная задача"]), lang);
-    const ceoRequestLabel = pickL(l(["CEO 요청"], ["CEO request"], ["CEO依頼"], ["CEO指示"], ["Запрос CEO"]), lang);
+    const originalTaskLabel = pickL(l(["Original task"], ["Original task"], ["元タスク"], ["原始任务"], ["Исходная задача"]), lang);
+    const ceoRequestLabel = pickL(l(["CEO request"], ["CEO request"], ["CEO依頼"], ["CEO指示"], ["Запрос CEO"]), lang);
     const allSubtasksLabel = pickL(
-      l(["전체 서브태스크 현황"], ["All subtask status"], ["全サブタスク状況"], ["全部 SubTask 状态"], ["Статус всех подзадач"]),
+      l(["All subtask status"], ["All subtask status"], ["全サブタスク状況"], ["全部 SubTask 状态"], ["Статус всех подзадач"]),
       lang,
     );
     const deptOwnedLabel = pickL(
       l(
-        [`[${targetDeptName} 담당 업무 묶음]`],
+        [`[${targetDeptName} owned batch]`],
         [`[${targetDeptName} owned batch]`],
         [`[${targetDeptName}担当タスク一式]`],
         [`[${targetDeptName}负责项集合]`],
@@ -248,13 +248,13 @@ export function createSubtaskDelegationPromptBuilder(deps: PromptDeps) {
       lang,
     );
     const checklistLabel = pickL(
-      l(["순차 실행 체크리스트"], ["Sequential execution checklist"], ["順次実行チェックリスト"], ["顺序执行清单"], ["Контрольный список выполнения"]),
+      l(["Sequential execution checklist"], ["Sequential execution checklist"], ["順次実行チェックリスト"], ["顺序执行清单"], ["Контрольный список выполнения"]),
       lang,
     );
     const finalInstruction = pickL(
       l(
         [
-          "위 순차 체크리스트를 1번부터 끝까지 순서대로 처리하고, 중간에 분할하지 말고 한 번의 작업 흐름으로 완료하세요.",
+          "Execute the checklist in order from 1 to end, and finish it in one continuous run without splitting into separate requests.",
         ],
         [
           "Execute the checklist in order from 1 to end, and finish it in one continuous run without splitting into separate requests.",

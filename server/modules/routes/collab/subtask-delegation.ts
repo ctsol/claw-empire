@@ -299,7 +299,9 @@ export function initializeSubtaskDelegation(deps: SubtaskDelegationDeps) {
     notifyCeo(
       pickL(
         l(
-          [`'${parentTask.title}' 의 외부 부서 서브태스크 ${eligible.length}건을 부서별 배치로 순차 위임합니다.`],
+          [
+            `Delegating ${eligible.length} external-department subtasks for '${parentTask.title}' sequentially by department, one batched request at a time.`,
+          ],
           [
             `Delegating ${eligible.length} external-department subtasks for '${parentTask.title}' sequentially by department, one batched request at a time.`,
           ],
@@ -490,14 +492,16 @@ export function initializeSubtaskDelegation(deps: SubtaskDelegationDeps) {
     subtaskDelegationCompletionNoticeSent.add(parentTaskId);
     const subtaskProgressSummary = formatTaskSubtaskProgressSummary(parentTaskId, lang);
     const progressSuffix = subtaskProgressSummary
-      ? `\n${pickL(l(["보완/협업 완료 현황"], ["Remediation/Collaboration completion"], ["補完/協業 完了状況"], ["整改/协作完成情况"], ["Статус завершения задач/сотрудничества"]), lang)}\n${subtaskProgressSummary}`
+      ? `\n${pickL(l(["Remediation/Collaboration completion"], ["Remediation/Collaboration completion"], ["補完/協業 完了状況"], ["整改/协作完成情况"], ["Статус завершения задач/сотрудничества"]), lang)}\n${subtaskProgressSummary}`
       : "";
     notifyCeo(
       pickL(
         l(
-          [`'${parentTask.title}' 의 모든 서브태스크(부서간 협업 포함)가 완료되었습니다. ✅${progressSuffix}`],
           [
-            `All subtasks for '${parentTask.title}' (including cross-department collaboration) are complete. ✅${progressSuffix}`,
+            `All subtasks for'${parentTask.title}' (including cross-department collaboration) are complete. ✅${progressSuffix}`,
+          ],
+          [
+            `All subtasks for'${parentTask.title}' (including cross-department collaboration) are complete. ✅${progressSuffix}`,
           ],
           [`'${parentTask.title}' の全サブタスク（部門間協業含む）が完了しました。✅${progressSuffix}`],
           [`'${parentTask.title}'的全部 SubTask（含跨部门协作）已完成。✅${progressSuffix}`],
@@ -541,7 +545,7 @@ export function initializeSubtaskDelegation(deps: SubtaskDelegationDeps) {
 
     const lang = getPreferredLanguage();
     const blockedReason = pickL(
-      l(["위임 작업 실패"], ["Delegated task failed"], ["委任タスク失敗"], ["委派任务失败"], ["Делегированная задача провалена"]),
+      l(["Delegated task failed"], ["Delegated task failed"], ["委任タスク失敗"], ["委派任务失败"], ["Делегированная задача провалена"]),
       lang,
     );
     const doneAt = nowMs();

@@ -21,6 +21,7 @@ export interface FormData {
   cli_provider: import("../../types").CliProvider;
   avatar_emoji: string;
   sprite_number: number | null;
+  avatar_seed: string;
   personality: string;
 }
 

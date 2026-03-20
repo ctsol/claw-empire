@@ -319,7 +319,7 @@ export function createProjectRouteHelpers({ db, normalizeTextField }: CreateProj
     });
   }
 
-  // spawn 기반 프로세스 실행 (GUI 다이얼로그 호환용)
+  // spawn-based process execution (for GUI dialog compatibility)
   interface SpawnGuiResult {
     code: number | null;
     stdout: string;
@@ -373,7 +373,7 @@ export function createProjectRouteHelpers({ db, normalizeTextField }: CreateProj
     const resultFile = path.join(os.tmpdir(), `claw-pick-result-${ts}.txt`);
     const escapedResultFile = resultFile.replace(/\\/g, "\\\\");
 
-    // Shell.Application COM → WinForms 로딩 불필요, 즉시 다이얼로그 표시
+    // Shell.Application COM — no WinForms loading needed, shows dialog immediately
     // BIF_RETURNONLYFSDIRS(1) + BIF_NEWDIALOGSTYLE(64) = 65
     const psCommand = [
       "$shell = New-Object -ComObject Shell.Application;",
@@ -426,12 +426,12 @@ export function createProjectRouteHelpers({ db, normalizeTextField }: CreateProj
       "End If",
     ].join("\r\n");
 
-    // BrowseForFolder는 동기 차단이므로 별도 helper가 다이얼로그를 포그라운드로 올림
-    const activatorFile = path.join(os.tmpdir(), `claw-pick-activate-${ts}.vbs`);
+    // BrowseForFolder    helper   
+    const activatorFile = path.join(os.tmpdir(),`claw-pick-activate-${ts}.vbs`);
     const activatorScript = [
       "WScript.Sleep 400",
       'Set sh = CreateObject("WScript.Shell")',
-      // wscript PID로 해당 프로세스의 윈도우를 포그라운드로 올림
+      // Bring the window of the wscript process (by PID) to the foreground
       "sh.AppActivate CLng(WScript.Arguments(0))",
       "WScript.Sleep 300",
       "sh.AppActivate CLng(WScript.Arguments(0))",
@@ -440,11 +440,11 @@ export function createProjectRouteHelpers({ db, normalizeTextField }: CreateProj
     fs.writeFileSync(scriptFile, vbsScript, "utf8");
     fs.writeFileSync(activatorFile, activatorScript, "utf8");
     try {
-      // 메인 다이얼로그 프로세스
+      // Main dialog process
       const mainPromise = spawnForGui("wscript.exe", [scriptFile], timeoutMs);
       const mainPid = mainPromise.pid;
 
-      // helper: 400ms 후 메인 프로세스(wscript)의 윈도우를 포그라운드로 올림
+      // Helper: after 400ms, bring the main process (wscript) window to the foreground
       const activatorChild = spawn("wscript.exe", [activatorFile, String(mainPid ?? 0)], {
         stdio: "ignore",
         windowsHide: true,
@@ -498,7 +498,7 @@ export function createProjectRouteHelpers({ db, normalizeTextField }: CreateProj
     }
 
     if (process.platform === "win32") {
-      // wscript.exe + VBS → 즉시 시작 (PowerShell은 시작이 느려 폴백으로만 사용)
+      // wscript.exe + VBS — starts immediately (PowerShell is slow to start, used only as fallback)
       try {
         return await pickNativeDirectoryPathWindowsVbs(timeoutMs);
       } catch (vbsErr) {
@@ -512,7 +512,7 @@ export function createProjectRouteHelpers({ db, normalizeTextField }: CreateProj
       }
     }
 
-    // Linux: zenity → kdialog 폴백
+    // Linux: zenity, with kdialog as fallback
     try {
       const { stdout } = await execFileText(
         "zenity",

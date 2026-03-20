@@ -67,7 +67,7 @@ function createDeps(db: DatabaseSync, logsDir = "/tmp") {
     taskWorktrees: new Map<string, { worktreePath?: string; projectPath?: string; branchName?: string }>(),
     cleanupWorktree: vi.fn(),
     findTeamLeader: vi.fn(() => null),
-    getAgentDisplayName: vi.fn(() => "팀장"),
+    getAgentDisplayName: vi.fn(() => ""),
     pickL: (pool: any) => {
       if (Array.isArray(pool?.ko)) return pool.ko[0];
       if (Array.isArray(pool?.en)) return pool.en[0];
@@ -101,7 +101,7 @@ function createDeps(db: DatabaseSync, logsDir = "/tmp") {
 }
 
 describe("run complete handler - video preprod review transition", () => {
-  it("루트 video_preprod는 서브태스크가 남아도 성공 시 review로 진입한다", () => {
+  it("video_preprod     review", () => {
     const db = createDb();
     try {
       const taskId = "task-root-video";
@@ -112,7 +112,7 @@ describe("run complete handler - video preprod review transition", () => {
           )
           VALUES (?, ?, ?, 'in_progress', 'video_preprod', NULL, ?, 'planning', 'project-1', ?, 1)
         `,
-      ).run(taskId, "메인 영상 제작", "영상 소개 제작", "video-preprod-seed-1", "/tmp/project");
+      ).run(taskId, "", "", "video-preprod-seed-1", "/tmp/project");
       db.prepare(
         `
           INSERT INTO subtasks (id, task_id, status, target_department_id, delegated_task_id, cli_tool_use_id)
@@ -122,7 +122,7 @@ describe("run complete handler - video preprod review transition", () => {
       db.prepare(
         `
           INSERT INTO agents (id, name, name_ko, status, current_task_id, department_id, stats_tasks_done, stats_xp)
-          VALUES ('video-preprod-seed-1', 'Haru', '하루', 'working', ?, 'planning', 0, 0)
+          VALUES ('video-preprod-seed-1', 'Haru', '', 'working', ?, 'planning', 0, 0)
         `,
       ).run(taskId);
 
@@ -139,7 +139,7 @@ describe("run complete handler - video preprod review transition", () => {
         "system",
         expect.stringContaining("Video sequencing notice: documentation/collaboration still in progress"),
       );
-      expect(deps.notifyTaskStatus).toHaveBeenCalledWith(taskId, "메인 영상 제작", "review", "ko");
+      expect(deps.notifyTaskStatus).toHaveBeenCalledWith(taskId, "", "review", "ko");
       expect(deps.notifyTaskStatus.mock.calls.some((call: any[]) => call[0] === taskId && call[2] === "pending")).toBe(
         false,
       );
@@ -148,7 +148,7 @@ describe("run complete handler - video preprod review transition", () => {
     }
   });
 
-  it("협업 자식 video_preprod는 산출물 게이트 없이 review로 진입한다", () => {
+  it("video_preprod    review", () => {
     const db = createDb();
     try {
       const taskId = "task-child-video";
@@ -159,11 +159,11 @@ describe("run complete handler - video preprod review transition", () => {
           )
           VALUES (?, ?, ?, 'in_progress', 'video_preprod', 'parent-task', ?, 'dev', 'project-1', ?, 1)
         `,
-      ).run(taskId, "개발팀 영상 보완", "영상 컷 보완", "video-preprod-seed-2", "/tmp/project");
+      ).run(taskId, "", "", "video-preprod-seed-2", "/tmp/project");
       db.prepare(
         `
           INSERT INTO agents (id, name, name_ko, status, current_task_id, department_id, stats_tasks_done, stats_xp)
-          VALUES ('video-preprod-seed-2', 'Liam', '리암', 'working', ?, 'dev', 0, 0)
+          VALUES ('video-preprod-seed-2', 'Liam', '', 'working', ?, 'dev', 0, 0)
         `,
       ).run(taskId);
 
@@ -185,7 +185,7 @@ describe("run complete handler - video preprod review transition", () => {
     }
   });
 
-  it("[VIDEO_FINAL_RENDER]는 Remotion 증빙이 없으면 성공 종료여도 실패 처리한다", () => {
+  it("[VIDEO_FINAL_RENDER] Remotion", () => {
     const db = createDb();
     const logsDir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-run-complete-"));
     try {
@@ -197,11 +197,11 @@ describe("run complete handler - video preprod review transition", () => {
           )
           VALUES (?, ?, ?, 'in_progress', 'video_preprod', 'parent-task', ?, 'dev', 'project-1', ?, 1)
         `,
-      ).run(taskId, "[VIDEO_FINAL_RENDER] 최종 영상 렌더링", "최종 렌더링", "video-preprod-seed-2", "/tmp/project");
+      ).run(taskId, "[VIDEO_FINAL_RENDER]", "", "video-preprod-seed-2", "/tmp/project");
       db.prepare(
         `
           INSERT INTO agents (id, name, name_ko, status, current_task_id, department_id, stats_tasks_done, stats_xp)
-          VALUES ('video-preprod-seed-2', 'Liam', '리암', 'working', ?, 'dev', 0, 0)
+          VALUES ('video-preprod-seed-2', 'Liam', '', 'working', ?, 'dev', 0, 0)
         `,
       ).run(taskId);
       fs.writeFileSync(path.join(logsDir, `${taskId}.log`), "moviepy 2.1.2 is available", "utf8");
@@ -234,7 +234,7 @@ describe("run complete handler - video preprod review transition", () => {
     }
   });
 
-  it("[VIDEO_FINAL_RENDER]는 thinking 내 정책 문구가 있어도 Remotion 렌더 증빙이 있으면 실패 처리하지 않는다", () => {
+  it("[VIDEO_FINAL_RENDER] thinking     Remotion", () => {
     const db = createDb();
     const logsDir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-run-complete-"));
     const worktreeDir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-wt-"));
@@ -248,11 +248,11 @@ describe("run complete handler - video preprod review transition", () => {
           )
           VALUES (?, ?, ?, 'in_progress', 'video_preprod', 'parent-task', ?, 'dev', 'project-1', ?, 1)
         `,
-      ).run(taskId, "[VIDEO_FINAL_RENDER] 최종 영상 렌더링", "최종 렌더링", "video-preprod-seed-2", projectPath);
+      ).run(taskId, "[VIDEO_FINAL_RENDER]", "", "video-preprod-seed-2", projectPath);
       db.prepare(
         `
           INSERT INTO agents (id, name, name_ko, status, current_task_id, department_id, stats_tasks_done, stats_xp)
-          VALUES ('video-preprod-seed-2', 'Liam', '리암', 'working', ?, 'dev', 0, 0)
+          VALUES ('video-preprod-seed-2', 'Liam', '', 'working', ?, 'dev', 0, 0)
         `,
       ).run(taskId);
       fs.writeFileSync(
@@ -301,7 +301,7 @@ describe("run complete handler - video preprod review transition", () => {
     }
   });
 
-  it("[VIDEO_FINAL_RENDER]는 렌더 산출물과 Remotion 증빙이 있으면 비정상 종료 코드도 성공으로 복구한다", () => {
+  it("[VIDEO_FINAL_RENDER]   Remotion", () => {
     const db = createDb();
     const logsDir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-run-complete-"));
     const worktreeDir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-wt-"));
@@ -315,11 +315,11 @@ describe("run complete handler - video preprod review transition", () => {
           )
           VALUES (?, ?, ?, 'in_progress', 'video_preprod', 'parent-task', ?, 'dev', 'project-1', ?, 1)
         `,
-      ).run(taskId, "[VIDEO_FINAL_RENDER] 최종 영상 렌더링", "최종 렌더링", "video-preprod-seed-2", projectPath);
+      ).run(taskId, "[VIDEO_FINAL_RENDER]", "", "video-preprod-seed-2", projectPath);
       db.prepare(
         `
           INSERT INTO agents (id, name, name_ko, status, current_task_id, department_id, stats_tasks_done, stats_xp)
-          VALUES ('video-preprod-seed-2', 'Liam', '리암', 'working', ?, 'dev', 0, 0)
+          VALUES ('video-preprod-seed-2', 'Liam', '', 'working', ?, 'dev', 0, 0)
         `,
       ).run(taskId);
       fs.writeFileSync(

@@ -41,10 +41,10 @@ const UI_TEXT: Record<
   }
 > = {
   ko: {
-    learn: "학습",
-    modalHeading: "스킬 학습 스쿼드",
-    startLearning: "학습 시작",
-    running: "학습중",
+    learn: "",
+    modalHeading: "",
+    startLearning: "",
+    running: "",
   },
   en: {
     learn: "Learn",
@@ -100,7 +100,7 @@ const originalLocalStorage = window.localStorage;
 const TEST_AGENT: Agent = {
   id: "a1",
   name: "Atlas",
-  name_ko: "아틀라스",
+  name_ko: "",
   department_id: "dep-1",
   role: "team_leader",
   cli_provider: "claude",
@@ -228,7 +228,7 @@ describe("SkillsLibrary learning modal ESC close", () => {
 
     await screen.findByText(/^학습됨$/);
     expect(screen.getByText(/^0명 선택됨$/)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "학습 취소" }));
+    fireEvent.click(screen.getByRole("button", { name: "" }));
 
     await waitFor(() => {
       expect(unlearnSkillMock).toHaveBeenCalledWith({

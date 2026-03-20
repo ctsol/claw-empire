@@ -156,7 +156,7 @@ export function useProjectPickerState({
         setFormFeedback({
           tone: "error",
           message: resolvePathHelperErrorMessage(err, {
-            ko: "경로 후보를 불러오지 못했습니다.",
+            ko: ".",
             en: "Failed to load path suggestions.",
             ja: "パス候補を読み込めませんでした。",
             zh: "无法加载路径候选。",
@@ -204,7 +204,7 @@ export function useProjectPickerState({
         } else {
           setManualPathError(
             resolvePathHelperErrorMessage(err, {
-              ko: "경로 목록을 불러오지 못했습니다.",
+              ko: ".",
               en: "Failed to load directories.",
               ja: "ディレクトリ一覧を読み込めませんでした。",
               zh: "无法加载目录列表。",
@@ -314,7 +314,7 @@ export function useProjectPickerState({
         setFormFeedback({ tone: "info", message: unsupportedPathApiMessage });
       } else {
         const message = resolvePathHelperErrorMessage(err, {
-          ko: "운영체제 폴더 선택기를 열지 못했습니다.",
+          ko: ".",
           en: "Failed to open OS folder picker.",
           ja: "OSフォルダ選択を開けませんでした。",
           zh: "无法打开系统文件夹选择器。",

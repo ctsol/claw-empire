@@ -15,7 +15,7 @@ describe("db runtime", () => {
     process.env = { ...ORIGINAL_ENV };
   });
 
-  it("readNonNegativeIntEnv는 음수/비수치 입력을 fallback으로 처리한다", async () => {
+  it("readNonNegativeIntEnv /  fallback", async () => {
     const runtime = await importRuntimeModule();
 
     delete process.env.TEST_NON_NEGATIVE_INT;
@@ -31,7 +31,7 @@ describe("db runtime", () => {
     expect(runtime.readNonNegativeIntEnv("TEST_NON_NEGATIVE_INT", 9)).toBe(9);
   });
 
-  it("SQLITE/REVIEW guardrail 상수가 상한/하한으로 clamp 된다", async () => {
+  it("SQLITE/REVIEW guardrail  / clamp", async () => {
     process.env.SQLITE_BUSY_RETRY_MAX_ATTEMPTS = "999";
     process.env.REVIEW_MAX_ROUNDS = "1";
     process.env.REVIEW_MAX_REVISION_SIGNALS_PER_DEPT_PER_ROUND = "99";
@@ -42,7 +42,7 @@ describe("db runtime", () => {
     expect(runtime.REVIEW_MAX_REVISION_SIGNALS_PER_DEPT_PER_ROUND).toBe(10);
   });
 
-  it("initializeDatabaseRuntime는 DB/로그 디렉터리를 초기화한다", async () => {
+  it("initializeDatabaseRuntime DB/", async () => {
     const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "claw-empire-runtime-test-"));
     const dbPath = path.join(tmpDir, "test.sqlite");
     const logsDir = path.join(tmpDir, "logs");

@@ -201,7 +201,7 @@ export default function AppMainLayout({
   const officePackOptions = useMemo(() => listOfficePackOptions(uiLanguage), [uiLanguage]);
   const officePackLabel =
     labels.uiLanguage === "ko"
-      ? "오피스 팩"
+      ? ""
       : labels.uiLanguage === "ja"
         ? "オフィスパック"
         : labels.uiLanguage === "zh"
@@ -211,7 +211,7 @@ export default function AppMainLayout({
             : "Office Pack";
   const officePackBootstrappingMessage = useMemo(() => {
     if (!officePackBootstrappingLabel) return null;
-    if (uiLanguage === "ko") return `${officePackBootstrappingLabel} 오피스 팩 배치중...`;
+    if (uiLanguage === "ko") return `Deploying ${officePackBootstrappingLabel} office pack...`;
     if (uiLanguage === "ja") return `${officePackBootstrappingLabel} オフィスパックを配置中...`;
     if (uiLanguage === "zh") return `${officePackBootstrappingLabel} 办公室包部署中...`;
     if (uiLanguage === "ru") return `Развёртывание офисного пакета ${officePackBootstrappingLabel}...`;
@@ -412,7 +412,7 @@ export default function AppMainLayout({
             onToggleMobileHeaderMenu={() => setMobileHeaderMenuOpen(!mobileHeaderMenuOpen)}
             onCloseMobileHeaderMenu={() => setMobileHeaderMenuOpen(false)}
             onOpenCeoMeeting={() => setView("ceo-meeting")}
-            meetingLabel={uiLanguage === "ru" ? "Совещание" : uiLanguage === "ko" ? "회의" : "Meeting"}
+            meetingLabel={uiLanguage === "ru" ? "Совещание" : uiLanguage === "ko" ? "" : "Meeting"}
           />
 
           {officePackBootstrappingMessage && (

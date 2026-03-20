@@ -132,7 +132,7 @@ function buildFindTeamLeader(db: DatabaseSync) {
 }
 
 describe("meeting leader selection - office pack scope", () => {
-  it("video_preprod task review leader 선정 시 동일 팩 리더만 참여한다", () => {
+  it("video_preprod task review leader", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO departments (id, sort_order) VALUES ('planning', 1), ('dev', 2)").run();
@@ -181,7 +181,7 @@ describe("meeting leader selection - office pack scope", () => {
     }
   });
 
-  it("manual 배정이어도 관련부서/팩 범위 팀장을 회의에 포함한다", () => {
+  it("manual  /", () => {
     const db = setupDb();
     try {
       db.prepare(
@@ -223,8 +223,8 @@ describe("meeting leader selection - office pack scope", () => {
         "INSERT INTO tasks (id, title, description, department_id, project_id, workflow_pack_key) VALUES (?, ?, ?, ?, ?, ?)",
       ).run(
         "task-manual-video",
-        "영상 프리프로덕션 킥오프",
-        "콘티/씬 설계 보강 필요",
+        "",
+        "/",
         "planning",
         "proj-manual",
         "video_preprod",

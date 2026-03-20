@@ -73,7 +73,7 @@ describe("task report helpers document extraction", () => {
     }
   });
 
-  it("PPT 보고서에서 HTML/PPTX 산출물을 모두 문서 목록에 포함한다", () => {
+  it("extracts PPT slide HTML/PPTX documents", () => {
     const db = setupDb();
     dbs.push(db);
     const tmpProject = fs.mkdtempSync(path.join(os.tmpdir(), "claw-report-docs-"));
@@ -93,7 +93,7 @@ describe("task report helpers document extraction", () => {
     const section = buildTaskSection(
       {
         id: "task-1",
-        title: "보고서 작성",
+        title: "",
         description: [
           "Target file path: docs/reports/2026-03-01-report-deck.pptx",
           "HTML source entry path: docs/reports/2026-03-01-report-slides/index.html",
@@ -107,10 +107,10 @@ describe("task report helpers document extraction", () => {
         started_at: 2,
         completed_at: 3,
         agent_name: "Planner",
-        agent_name_ko: "기획팀장",
+        agent_name_ko: "",
         agent_role: "team_leader",
         dept_name: "Planning",
-        dept_name_ko: "기획팀",
+        dept_name_ko: "",
       },
       [],
     );

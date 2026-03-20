@@ -241,7 +241,7 @@ export function createReportRoutingTools(deps: ReportRoutingDeps) {
     const requestPreview = cleanRequest.length > 64 ? `${cleanRequest.slice(0, 61).trimEnd()}...` : cleanRequest;
     const taskTitle = pickL(
       l(
-        [outputFormat === "ppt" ? `보고 자료(PPT) 작성: ${requestPreview}` : `보고 문서(MD) 작성: ${requestPreview}`],
+        [outputFormat === "ppt" ? `PPT Report: ${requestPreview}` : `MD Report: ${requestPreview}`],
         [outputFormat === "ppt" ? `PPT Report: ${requestPreview}` : `MD Report: ${requestPreview}`],
         [outputFormat === "ppt" ? `PPTレポート作成: ${requestPreview}` : `MDレポート作成: ${requestPreview}`],
         [outputFormat === "ppt" ? `PPT报告: ${requestPreview}` : `MD报告: ${requestPreview}`],
@@ -477,7 +477,7 @@ export function createReportRoutingTools(deps: ReportRoutingDeps) {
       reportAssignee,
       pickL(
         l(
-          [`${assigneeName}입니다. 보고 요청을 접수했습니다. ${outputLabel} 형식으로 작성해 제출하겠습니다.`],
+          [`${assigneeName} here. Report request received. Will deliver in ${outputLabel} format.`],
           [`${assigneeName} here. Report request received. I'll deliver it in ${outputLabel} format.`],
           [`${assigneeName}です。レポート依頼を受領しました。${outputLabel}形式で作成して提出します。`],
           [`${assigneeName}收到报告请求，将按${outputLabel}格式完成并提交。`],
@@ -494,10 +494,10 @@ export function createReportRoutingTools(deps: ReportRoutingDeps) {
       pickL(
         l(
           [
-            `[REPORT ROUTING] '${taskTitle}' 요청을 ${assigneeName}(${providerLabel})에게 배정했습니다. 출력 형식: ${outputLabel}`,
+            `[REPORT ROUTING] '${taskTitle}'${assigneeName}(${providerLabel}) .  : ${outputLabel}`,
           ],
           [
-            `[REPORT ROUTING] Assigned '${taskTitle}' to ${assigneeName} (${providerLabel}). Output format: ${outputLabel}`,
+            `[REPORT ROUTING] Assigned'${taskTitle}' to ${assigneeName} (${providerLabel}). Output format: ${outputLabel}`,
           ],
           [
             `[REPORT ROUTING] '${taskTitle}' を ${assigneeName} (${providerLabel}) に割り当てました。出力形式: ${outputLabel}`,
@@ -514,7 +514,7 @@ export function createReportRoutingTools(deps: ReportRoutingDeps) {
         pickL(
           l(
             [
-              `[CLAUDE RECOMMENDATION] 요청 대상 ${requestedName}(${routing.requestedAgent.cli_provider || "unknown"})는 Claude Code가 아니어서 Claude Code 우선 라우팅을 적용했습니다. 우선순위 추천: ${recommendationText}`,
+              `[CLAUDE RECOMMENDATION] Requested agent ${requestedName} (${routing.requestedAgent.cli_provider || "unknown"}) is not on Claude Code; Claude-priority routing applied. Recommendations: ${recommendationText}`,
             ],
             [
               `[CLAUDE RECOMMENDATION] Requested agent ${requestedName} (${routing.requestedAgent.cli_provider || "unknown"}) is not on Claude Code, so Claude-priority routing was applied. Priority recommendations: ${recommendationText}`,
@@ -536,7 +536,7 @@ export function createReportRoutingTools(deps: ReportRoutingDeps) {
         pickL(
           l(
             [
-              "[CLAUDE RECOMMENDATION] 우선순위 부서(기획>개발>디자인>QA>운영)에서 Claude Code 에이전트를 찾지 못해 현재 담당자가 PPT를 우선 시도하고, 실패 시 MD로 대체하도록 지시했습니다.",
+              "[CLAUDE RECOMMENDATION]  (>>>QA>) Claude Code      PPT  ,   MD  .",
             ],
             [
               "[CLAUDE RECOMMENDATION] No Claude Code agent was found in priority departments (Planning>Development>Design>QA>Operations). The current assignee was instructed to attempt PPT first, then fallback to MD on failure.",

@@ -82,7 +82,7 @@ describe("useWebSocket", () => {
     vi.restoreAllMocks();
   });
 
-  it("bootstrap 실패 시 연결하지 않고 재시도한다", async () => {
+  it("bootstrap", async () => {
     vi.useFakeTimers();
     bootstrapSessionMock.mockResolvedValue(false);
     const onTaskUpdate = vi.fn();
@@ -105,7 +105,7 @@ describe("useWebSocket", () => {
     expect(screen.getByTestId("connected").textContent).toBe("disconnected");
   });
 
-  it("연결 성공 후 이벤트를 타입별 리스너에 전달한다", async () => {
+  it("", async () => {
     bootstrapSessionMock.mockResolvedValue(true);
     const onTaskUpdate = vi.fn();
 
@@ -128,7 +128,7 @@ describe("useWebSocket", () => {
     expect(onTaskUpdate).toHaveBeenCalledWith({ id: "task-1" });
   });
 
-  it("소켓 종료 후 재연결 타이머가 동작하고 malformed JSON은 무시한다", async () => {
+  it("malformed JSON", async () => {
     vi.useFakeTimers();
     bootstrapSessionMock.mockResolvedValue(true);
     const onTaskUpdate = vi.fn();
@@ -161,7 +161,7 @@ describe("useWebSocket", () => {
     expect(MockWebSocket.instances.length).toBeGreaterThanOrEqual(2);
   });
 
-  it("1008 unauthorized 종료 뒤에는 강제 세션 bootstrap으로 재시도한다", async () => {
+  it("1008 unauthorized     bootstrap", async () => {
     vi.useFakeTimers();
     bootstrapSessionMock.mockResolvedValue(true);
     const onTaskUpdate = vi.fn();
@@ -194,7 +194,7 @@ describe("useWebSocket", () => {
     });
   });
 
-  it("강제 bootstrap이 에러나면 다음 재시도에서는 force를 해제한다", async () => {
+  it("bootstrap    force", async () => {
     vi.useFakeTimers();
     bootstrapSessionMock
       .mockResolvedValueOnce(true)

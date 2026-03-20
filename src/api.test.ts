@@ -19,7 +19,7 @@ describe("api client", () => {
     vi.unstubAllGlobals();
   });
 
-  it("401 응답 시 bootstrap 후 원요청을 재시도한다", async () => {
+  it("401   bootstrap", async () => {
     const fetchMock = vi.fn();
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ error: "unauthorized" }, 401))
@@ -40,7 +40,7 @@ describe("api client", () => {
     expect(firstHeaders.get("authorization")).toBe("Bearer token-1");
   });
 
-  it("저장된 csrf가 있어도 401 응답에서는 강제 bootstrap 후 재시도한다", async () => {
+  it("csrf  401   bootstrap", async () => {
     window.sessionStorage.setItem("claw_api_csrf_token", "stale-csrf-token");
     const fetchMock = vi.fn();
     fetchMock
@@ -59,7 +59,7 @@ describe("api client", () => {
     expect(window.sessionStorage.getItem("claw_api_csrf_token")).toBe("csrf-new");
   });
 
-  it("createDepartment가 JSON body로 POST 요청을 보낸다", async () => {
+  it("createDepartment JSON body POST", async () => {
     const fetchMock = vi.fn();
     fetchMock.mockResolvedValueOnce(
       jsonResponse(
@@ -75,7 +75,7 @@ describe("api client", () => {
     const created = await api.createDepartment({
       id: "dep-1",
       name: "Department 1",
-      name_ko: "부서1",
+      name_ko: "1",
     });
 
     expect(created).toMatchObject({ id: "dep-1", name: "Department 1" });
@@ -85,10 +85,10 @@ describe("api client", () => {
     expect(init?.method).toBe("POST");
     const headers = new Headers(init?.headers);
     expect(headers.get("content-type")).toContain("application/json");
-    expect(JSON.parse(String(init?.body))).toMatchObject({ id: "dep-1", name: "Department 1", name_ko: "부서1" });
+    expect(JSON.parse(String(init?.body))).toMatchObject({ id: "dep-1", name: "Department 1", name_ko: "1" });
   });
 
-  it("getTaskVerifyCommit은 verify-commit 엔드포인트를 조회한다", async () => {
+  it("getTaskVerifyCommit verify-commit", async () => {
     const fetchMock = vi.fn();
     fetchMock.mockResolvedValueOnce(
       jsonResponse(
@@ -117,7 +117,7 @@ describe("api client", () => {
     expect(fetchMock.mock.calls[0]?.[0]).toBe("/api/tasks/task-verify/verify-commit");
   });
 
-  it("getTasks는 workflow_pack_key를 포함한 필터 쿼리를 전달한다", async () => {
+  it("getTasks workflow_pack_key", async () => {
     const fetchMock = vi.fn();
     fetchMock.mockResolvedValueOnce(
       jsonResponse(
@@ -145,7 +145,7 @@ describe("api client", () => {
     );
   });
 
-  it("비정상 응답은 ApiRequestError로 변환된다", async () => {
+  it("ApiRequestError", async () => {
     const fetchMock = vi.fn();
     fetchMock.mockResolvedValueOnce(jsonResponse({ error: "project_path_required" }, 400));
     vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
@@ -157,7 +157,7 @@ describe("api client", () => {
     });
   });
 
-  it("sendMessage는 헤더/바디 idempotency key를 함께 전송한다", async () => {
+  it("sendMessage / idempotency key", async () => {
     const fetchMock = vi.fn();
     fetchMock.mockResolvedValueOnce(jsonResponse({ message: { id: "msg-1" } }, 200));
     vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
@@ -182,7 +182,7 @@ describe("api client", () => {
     expect(String(headerKey)).toMatch(/^ceo-message-/);
   });
 
-  it("bootstrapSession은 401에서 prompt 입력 토큰으로 재시도한다", async () => {
+  it("bootstrapSession 401 prompt", async () => {
     const fetchMock = vi.fn();
     fetchMock.mockResolvedValueOnce(jsonResponse({ error: "unauthorized" }, 401)).mockResolvedValueOnce(
       jsonResponse(
@@ -203,7 +203,7 @@ describe("api client", () => {
     expect(window.sessionStorage.getItem("claw_api_auth_token")).toBe("refreshed-token");
   });
 
-  it("세션 부트스트랩 csrf 토큰을 저장하고 mutation 요청에 헤더를 붙인다", async () => {
+  it("csrf   mutation", async () => {
     const fetchMock = vi.fn();
     fetchMock
       .mockResolvedValueOnce(jsonResponse({ ok: true, csrf_token: "csrf-abc" }, 200))
@@ -222,7 +222,7 @@ describe("api client", () => {
     expect(headers.get("x-csrf-token")).toBe("csrf-abc");
   });
 
-  it("bootstrapSession force 옵션은 저장된 csrf가 있어도 세션을 다시 확인한다", async () => {
+  it("bootstrapSession force   csrf", async () => {
     window.sessionStorage.setItem("claw_api_csrf_token", "stale-csrf-token");
     const fetchMock = vi.fn();
     fetchMock.mockResolvedValueOnce(jsonResponse({ ok: true, csrf_token: "csrf-fresh" }, 200));

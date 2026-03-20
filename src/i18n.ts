@@ -29,7 +29,7 @@ export function normalizeLanguage(value?: string | null): UiLanguage {
   return parseLanguage(value) ?? "en";
 }
 
-/** 로캘별 이름 반환. 해당 로캘 이름이 비어있으면 영문(name) fallback */
+/** Returns locale-specific name. Falls back to English (name) if the locale name is empty. */
 export function localeName(
   locale: UiLanguage | string,
   obj: { name: string; name_ko?: string | null; name_ja?: string | null; name_zh?: string | null; name_ru?: string | null },

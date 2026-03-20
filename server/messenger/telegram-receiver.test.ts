@@ -48,7 +48,7 @@ describe("telegram receiver", () => {
     vi.unstubAllGlobals();
   });
 
-  it("허용된 텔레그램 chat 메시지를 /api/inbox로 포워딩하고 offset을 저장한다", async () => {
+  it("chat  /api/inbox  offset", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         telegram: {
@@ -140,7 +140,7 @@ describe("telegram receiver", () => {
     }
   });
 
-  it("봇이 보낸 메시지는 무시하고 offset만 갱신한다", async () => {
+  it("offset", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         telegram: {
@@ -213,7 +213,7 @@ describe("telegram receiver", () => {
     }
   });
 
-  it("토큰이 여러 개인 경우 토큰별로 polling하고 source 힌트로 포워딩한다", async () => {
+  it("polling source", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         telegram: {

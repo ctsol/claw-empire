@@ -2,6 +2,7 @@ import type { MutableRefObject } from "react";
 import { Container, Graphics, Sprite, Text, TextStyle, type Application, type Texture } from "pixi.js";
 import type { Agent } from "../../types";
 import { localeName } from "../../i18n";
+import { getAvatarTexture } from "./avatar-texture-cache";
 import type { CallbackSnapshot, BreakAnimItem } from "./buildScene-types";
 import { BREAK_ROOM_H, TARGET_CHAR_H, type RoomTheme, type WallClockVisual } from "./model";
 import { BREAK_CHAT_MESSAGES, BREAK_SPOTS, LOCALE_TEXT, type SupportedLocale, pickLocale } from "./themes-locale";
@@ -163,21 +164,17 @@ export function buildBreakRoom({
 
     agentPosRef.current.set(agent.id, { x: spotX, y: spotY });
 
-    const spriteNum = spriteMap.get(agent.id) ?? (seed % 13) + 1;
     const charContainer = new Container();
     charContainer.position.set(spotX, spotY);
     charContainer.eventMode = "static";
     charContainer.cursor = "pointer";
     charContainer.on("pointerdown", () => cbRef.current.onSelectAgent(agent));
 
-    const dirKey = `${spriteNum}-${spot.dir}-1`;
-    const fallbackKey = `${spriteNum}-D-1`;
-    const texture = textures[dirKey] || textures[fallbackKey];
-
-    if (texture) {
-      const sprite = new Sprite(texture);
+    const avatarTex = getAvatarTexture(agent.id);
+    if (avatarTex) {
+      const sprite = new Sprite(avatarTex);
       sprite.anchor.set(0.5, 1);
-      const scale = (TARGET_CHAR_H * 0.85) / sprite.texture.height;
+      const scale = (TARGET_CHAR_H * 0.85) / avatarTex.height;
       sprite.scale.set(scale);
       charContainer.addChild(sprite);
     } else {

@@ -48,7 +48,7 @@ function setupDb(): DatabaseSync {
 }
 
 describe("direct-chat task flow pack inference", () => {
-  it("seed 에이전트 ID로 workflow pack을 우선 고정한다", async () => {
+  it("seed  ID workflow pack", async () => {
     const db = setupDb();
     try {
       const flow = createDirectTaskFlow({
@@ -68,7 +68,7 @@ describe("direct-chat task flow pack inference", () => {
           coreGoal: "goal",
         }),
         buildRoundGoal: () => "round",
-        getDeptName: () => "기획팀",
+        getDeptName: () => "",
         l: (ko: string[], en: string[], ja?: string[], zh?: string[], ru?: string[]) => ({
           ko,
           en,
@@ -88,7 +88,7 @@ describe("direct-chat task flow pack inference", () => {
         {
           id: "video_preprod-seed-1",
           name: "Rian",
-          name_ko: "리안",
+          name_ko: "",
           role: "team_leader",
           personality: null,
           status: "idle",
@@ -102,7 +102,7 @@ describe("direct-chat task flow pack inference", () => {
           cli_model: null,
           cli_reasoning_level: null,
         },
-        "영상 기획안 만들어줘",
+        "",
         { projectId: "project-1" },
       );
 

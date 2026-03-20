@@ -47,14 +47,16 @@ interface ExecutionStartParams extends MessageDeps {
 }
 
 export function teamLeadFallbackLabel(deps: MessageDeps, lang: Lang): string {
-  return deps.pickL(deps.l(["팀장"], ["Team Lead"], ["チームリーダー"], ["组长"], ["Тимлид"]), lang);
+  return deps.pickL(deps.l(["Team Lead"], ["Team Lead"], ["チームリーダー"], ["组长"], ["Тимлид"]), lang);
 }
 
 export function buildQueueProgressNotice(params: QueueProgressParams): string {
   const { l, pickL, lang, targetDeptName, queueIndex, queueTotal, itemCount } = params;
   return pickL(
     l(
-      [`서브태스크 배치 위임 진행: ${targetDeptName} (${queueIndex + 1}/${queueTotal}, ${itemCount}건)`],
+      [
+        `Batched subtask delegation in progress: ${targetDeptName} (${queueIndex + 1}/${queueTotal}, ${itemCount} item(s))`,
+      ],
       [
         `Batched subtask delegation in progress: ${targetDeptName} (${queueIndex + 1}/${queueTotal}, ${itemCount} item(s))`,
       ],
@@ -71,7 +73,7 @@ export function buildOriginRequestMessage(params: OriginRequestParams): string {
   return pickL(
     l(
       [
-        `${crossLeaderName}님, '${parentTitle}' 프로젝트의 서브태스크 ${itemCount}건(${batchTitle})을 순차 체크리스트로 일괄 처리 부탁드립니다! 🤝`,
+        `${crossLeaderName}, please process ${itemCount} subtasks (${batchTitle}) for '${parentTitle}' as one sequential checklist in a single run. 🤝`,
       ],
       [
         `${crossLeaderName}, please process ${itemCount} subtasks (${batchTitle}) for '${parentTitle}' as one sequential checklist in a single run. 🤝`,
@@ -94,7 +96,7 @@ export function buildCrossLeaderAckMessage(params: CrossLeaderAckParams): string
     return pickL(
       l(
         [
-          `네, ${originLeaderName}님! ${itemCount}건(${batchTitle})을 ${execName}에게 일괄 배정해 순차 처리하겠습니다 👍`,
+          `Got it, ${originLeaderName}! I'll assign ${itemCount} items (${batchTitle}) to ${execName} as one ordered batch. 👍`,
         ],
         [
           `Got it, ${originLeaderName}! I'll assign ${itemCount} items (${batchTitle}) to ${execName} as one ordered batch. 👍`,
@@ -113,7 +115,7 @@ export function buildCrossLeaderAckMessage(params: CrossLeaderAckParams): string
 
   return pickL(
     l(
-      [`네, ${originLeaderName}님! ${itemCount}건(${batchTitle})을 제가 직접 순차 처리하겠습니다 👍`],
+      [`Understood, ${originLeaderName}! I'll handle ${itemCount} items (${batchTitle}) myself in order. 👍`],
       [`Understood, ${originLeaderName}! I'll handle ${itemCount} items (${batchTitle}) myself in order. 👍`],
       [`承知しました、${originLeaderName}さん！${itemCount}件（${batchTitle}）を私が順次対応します 👍`],
       [`明白，${originLeaderName}！这 ${itemCount} 项（${batchTitle}）由我按顺序亲自处理 👍`],
@@ -126,7 +128,7 @@ export function buildCrossLeaderAckMessage(params: CrossLeaderAckParams): string
 export function buildDelegatedTitle(deps: MessageDeps, lang: Lang, itemCount: number, batchTitle: string): string {
   return deps.pickL(
     deps.l(
-      [`[서브태스크 일괄협업 x${itemCount}] ${batchTitle}`],
+      [`[Batched Subtask Collaboration x${itemCount}] ${batchTitle}`],
       [`[Batched Subtask Collaboration x${itemCount}] ${batchTitle}`],
       [`[サブタスク一括協業 x${itemCount}] ${batchTitle}`],
       [`[批量 SubTask 协作 x${itemCount}] ${batchTitle}`],
@@ -140,7 +142,7 @@ export function buildDelegatedDescription(params: DelegatedDescriptionParams): s
   const { l, pickL, lang, sourceDeptName, parentSummary, delegatedChecklist } = params;
   return pickL(
     l(
-      [`[서브태스크 위임 from ${sourceDeptName}] ${parentSummary}\n\n[순차 체크리스트]\n${delegatedChecklist}`],
+      [`[Subtasks delegated from ${sourceDeptName}] ${parentSummary}\n\n[Sequential checklist]\n${delegatedChecklist}`],
       [`[Subtasks delegated from ${sourceDeptName}] ${parentSummary}\n\n[Sequential checklist]\n${delegatedChecklist}`],
       [`[サブタスク委任元 ${sourceDeptName}] ${parentSummary}\n\n[順次チェックリスト]\n${delegatedChecklist}`],
       [`[SubTask 委派来源 ${sourceDeptName}] ${parentSummary}\n\n[顺序清单]\n${delegatedChecklist}`],
@@ -159,7 +161,7 @@ export function buildWorktreeCeoNote(
   if (!hasWorktree) return "";
   return deps.pickL(
     deps.l(
-      [` (격리 브랜치: climpire/${delegatedTaskId.slice(0, 8)})`],
+      [` (isolated branch: climpire/${delegatedTaskId.slice(0, 8)})`],
       [` (isolated branch: climpire/${delegatedTaskId.slice(0, 8)})`],
       [` (分離ブランチ: climpire/${delegatedTaskId.slice(0, 8)})`],
       [`（隔离分支: climpire/${delegatedTaskId.slice(0, 8)}）`],
@@ -173,7 +175,7 @@ export function buildExecutionStartNotice(params: ExecutionStartParams): string 
   const { l, pickL, lang, targetDeptName, execName, itemCount, worktreeCeoNote } = params;
   return pickL(
     l(
-      [`${targetDeptName} ${execName}가 서브태스크 ${itemCount}건 일괄 작업을 시작했습니다.${worktreeCeoNote}`],
+      [`${targetDeptName} ${execName} started one batched run for ${itemCount} subtasks.${worktreeCeoNote}`],
       [`${targetDeptName} ${execName} started one batched run for ${itemCount} subtasks.${worktreeCeoNote}`],
       [`${targetDeptName}の${execName}がサブタスク${itemCount}件の一括作業を開始しました。${worktreeCeoNote}`],
       [`${targetDeptName} 的 ${execName} 已开始 ${itemCount} 个 SubTask 的批量处理。${worktreeCeoNote}`],

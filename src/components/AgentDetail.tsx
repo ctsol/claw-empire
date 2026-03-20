@@ -127,14 +127,14 @@ export default function AgentDetail({
     (effort: string, fallback?: string) => {
       switch (effort) {
         case "low":
-          return t({ ko: "빠름, 낮은 깊이", en: "Faster, lower depth", ja: "高速・浅い推論", zh: "更快，较浅推理", ru: "Быстрее, меньшая глубина" });
+          return t({ ko: ",", en: "Faster, lower depth", ja: "高速・浅い推論", zh: "更快，较浅推理", ru: "Быстрее, меньшая глубина" });
         case "medium":
-          return t({ ko: "균형 기본값", en: "Balanced default", ja: "バランス既定", zh: "均衡默认", ru: "Сбалансированный" });
+          return t({ ko: "", en: "Balanced default", ja: "バランス既定", zh: "均衡默认", ru: "Сбалансированный" });
         case "high":
-          return t({ ko: "높은 추론 깊이", en: "Higher reasoning depth", ja: "高い推論深度", zh: "更高推理深度", ru: "Высокая глубина рассуждений" });
+          return t({ ko: "", en: "Higher reasoning depth", ja: "高い推論深度", zh: "更高推理深度", ru: "Высокая глубина рассуждений" });
         case "xhigh":
           return t({
-            ko: "최대 추론 깊이",
+            ko: "",
             en: "Maximum reasoning depth",
             ja: "最大推論深度",
             zh: "最高推理深度",
@@ -279,17 +279,17 @@ export default function AgentDetail({
     (packKey: WorkflowPackKey) => {
       switch (packKey) {
         case "development":
-          return t({ ko: "개발", en: "Development", ja: "開発", zh: "开发", ru: "Разработка" });
+          return t({ ko: "", en: "Development", ja: "開発", zh: "开发", ru: "Разработка" });
         case "novel":
-          return t({ ko: "소설", en: "Novel", ja: "小説", zh: "小说", ru: "Роман" });
+          return t({ ko: "", en: "Novel", ja: "小説", zh: "小说", ru: "Роман" });
         case "report":
-          return t({ ko: "리포트", en: "Report", ja: "レポート", zh: "报告", ru: "Отчёт" });
+          return t({ ko: "", en: "Report", ja: "レポート", zh: "报告", ru: "Отчёт" });
         case "video_preprod":
-          return t({ ko: "영상 프리프로덕션", en: "Video Pre-production", ja: "動画プリプロ", zh: "视频前期", ru: "Видео Препродакшн" });
+          return t({ ko: "", en: "Video Pre-production", ja: "動画プリプロ", zh: "视频前期", ru: "Видео Препродакшн" });
         case "web_research_report":
-          return t({ ko: "웹 리서치 리포트", en: "Web Research Report", ja: "Webリサーチ", zh: "网页调研报告", ru: "Веб-исследование" });
+          return t({ ko: "", en: "Web Research Report", ja: "Webリサーチ", zh: "网页调研报告", ru: "Веб-исследование" });
         case "roleplay":
-          return t({ ko: "역할놀이", en: "Roleplay", ja: "ロールプレイ", zh: "角色扮演", ru: "Ролевая игра" });
+          return t({ ko: "", en: "Roleplay", ja: "ロールプレイ", zh: "角色扮演", ru: "Ролевая игра" });
         default:
           return packKey;
       }
@@ -324,13 +324,13 @@ export default function AgentDetail({
           const existingLeaderName = String(
             details.existing_leader?.name_ko ||
               details.existing_leader?.name ||
-              t({ ko: "기존 리더", en: "current leader", ru: "текущий руководитель" }),
+              t({ ko: "", en: "current leader", ru: "текущий руководитель" }),
           ).trim();
           const packKey = details.pack_key ?? activeOfficeWorkflowPack;
           const packLabel = resolvePackLabel(packKey);
           const confirmed = window.confirm(
             t({
-              ko: `이미 ${existingLeaderName}가 ${packLabel} 오피스팩의 리더입니다. 변경하시겠습니까?`,
+              ko: ``,
               en: `${existingLeaderName} is already the leader for the ${packLabel} office pack. Change leader?`,
               ja: `${existingLeaderName}さんが既に${packLabel}オフィスパックのリーダーです。変更しますか？`,
               zh: `${existingLeaderName} 已是 ${packLabel} 办公包负责人。要变更吗？`,
@@ -399,7 +399,7 @@ export default function AgentDetail({
                 onClick={() => { setShowAvatarEditor((v) => !v); setSpritePreviews(null); setSpriteRegistered(false); }}
                 className="absolute inset-0 rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                 style={{ background: "rgba(0,0,0,0.55)" }}
-                title={t({ ko: "아바타 편집", en: "Edit avatar", ja: "アバター編集", zh: "编辑头像", ru: "Редактировать аватар" })}
+                title={t({ ko: "", en: "Edit avatar", ja: "アバター編集", zh: "编辑头像", ru: "Редактировать аватар" })}
               >
                 <span className="text-lg">✏️</span>
               </button>
@@ -439,7 +439,7 @@ export default function AgentDetail({
                   />
                   <span>
                     {t({
-                      ko: "Lead (기획 리더)",
+                      ko: "Lead ( )",
                       en: "Lead (Planning lead)",
                       ja: "Lead（企画リード）",
                       zh: "Lead（企划负责人）",
@@ -448,7 +448,7 @@ export default function AgentDetail({
                   </span>
                   {savingPlanningLead && (
                     <span className="text-[10px] text-slate-400">
-                      {t({ ko: "저장중...", en: "Saving...", ja: "保存中...", zh: "保存中...", ru: "Сохранение..." })}
+                      {t({ ko: "...", en: "Saving...", ja: "保存中...", zh: "保存中...", ru: "Сохранение..." })}
                     </span>
                   )}
                 </label>
@@ -477,7 +477,7 @@ export default function AgentDetail({
                         {cliModelsLoading ? (
                           <span className="text-[10px] text-slate-400">
                             {t({
-                              ko: "모델 로딩...",
+                              ko: "...",
                               en: "Loading models...",
                               ja: "モデル読み込み中...",
                               zh: "正在加载模型...",
@@ -498,7 +498,7 @@ export default function AgentDetail({
                             >
                               <option value="">
                                 {t({
-                                  ko: "기본값(설정창 모델)",
+                                  ko: "( )",
                                   en: "Default (Settings model)",
                                   ja: "デフォルト（設定モデル）",
                                   zh: "默认（设置中的模型）",
@@ -519,7 +519,7 @@ export default function AgentDetail({
                               >
                                 <option value="">
                                   {t({
-                                    ko: "기본값(설정창 추론)",
+                                    ko: "( )",
                                     en: "Default (Settings reasoning)",
                                     ja: "デフォルト（設定推論）",
                                     zh: "默认（设置中的推理）",
@@ -540,7 +540,7 @@ export default function AgentDetail({
                         ) : (
                           <span className="text-[10px] text-slate-400">
                             {t({
-                              ko: "모델 목록이 없습니다",
+                              ko: "",
                               en: "No model list available",
                               ja: "モデル一覧がありません",
                               zh: "暂无模型列表",
@@ -552,7 +552,7 @@ export default function AgentDetail({
                       <div className="flex flex-wrap items-center gap-1">
                         <span className="text-[10px] text-slate-400">
                           {t({
-                            ko: "알바생 모델은 설정창 값을 따릅니다",
+                            ko: "",
                             en: "Sub-agent model follows Settings",
                             ja: "サブエージェントモデルは設定値を使用",
                             zh: "子代理模型沿用设置值",
@@ -566,13 +566,13 @@ export default function AgentDetail({
                           }}
                           className="text-[10px] px-1.5 py-0.5 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors disabled:opacity-50"
                         >
-                          {savingCli ? "..." : t({ ko: "저장", en: "Save", ja: "保存", zh: "保存", ru: "Сохранить" })}
+                          {savingCli ? "..." : t({ ko: "", en: "Save", ja: "保存", zh: "保存", ru: "Сохранить" })}
                         </button>
                         <button
                           onClick={handleCancelCliEdit}
                           className="text-[10px] px-1.5 py-0.5 bg-slate-600 hover:bg-slate-500 text-slate-300 rounded transition-colors"
                         >
-                          {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消", ru: "Отмена" })}
+                          {t({ ko: "", en: "Cancel", ja: "キャンセル", zh: "取消", ru: "Отмена" })}
                         </button>
                       </div>
                     </div>
@@ -598,7 +598,7 @@ export default function AgentDetail({
                         (oauthLoading ? (
                           <span className="text-[10px] text-slate-400">
                             {t({
-                              ko: "계정 로딩...",
+                              ko: "...",
                               en: "Loading accounts...",
                               ja: "アカウント読み込み中...",
                               zh: "正在加载账号...",
@@ -620,10 +620,10 @@ export default function AgentDetail({
                         ) : (
                           <span className="text-[10px] text-amber-300">
                             {t({
-                              ko: "활성 OAuth 계정 없음",
+                              ko: "OAuth",
                               en: "No active OAuth account",
                               ja: "有効な OAuth アカウントなし",
-                              zh: "没有可용的 OAuth 账号",
+                              zh: "没有可的 OAuth 账号",
                               ru: "Нет активного OAuth аккаунта",
                             })}
                           </span>
@@ -631,7 +631,7 @@ export default function AgentDetail({
                       {requiresApiProvider && (
                         <span className="text-[10px] text-amber-300">
                           {t({
-                            ko: "⚙️ 설정 > API 탭에서 모델을 배정하세요",
+                            ko: "⚙️  > API",
                             en: "⚙️ Assign models in Settings > API tab",
                             ja: "⚙️ 設定 > API タブでモデルを割り当ててください",
                             zh: "⚙️ 请在设置 > API 标签页中分配模型",
@@ -643,7 +643,7 @@ export default function AgentDetail({
                         (cliModelsLoading ? (
                           <span className="text-[10px] text-slate-400">
                             {t({
-                              ko: "모델 로딩...",
+                              ko: "...",
                               en: "Loading models...",
                               ja: "モデル読み込み中...",
                               zh: "正在加载模型...",
@@ -662,7 +662,7 @@ export default function AgentDetail({
                             >
                               <option value="">
                                 {t({
-                                  ko: "기본값(설정창 모델)",
+                                  ko: "( )",
                                   en: "Default (Settings model)",
                                   ja: "デフォルト（設定モデル）",
                                   zh: "默认（设置中的模型）",
@@ -677,10 +677,10 @@ export default function AgentDetail({
                             </select>
                             <span className="text-[10px] text-slate-400">
                               {t({
-                                ko: "알바생 모델은 설정창 값을 따릅니다",
+                                ko: "",
                                 en: "Sub-agent model follows Settings",
                                 ja: "サブエージェントモデルは設定値を使用",
-                                zh: "子代리모型沿用设置値",
+                                zh: "子代型沿用设置値",
                                 ru: "Модель суб-агентов берётся из настроек",
                               })}
                             </span>
@@ -688,7 +688,7 @@ export default function AgentDetail({
                         ) : (
                           <span className="text-[10px] text-slate-400">
                             {t({
-                              ko: "모델 목록이 없습니다",
+                              ko: "",
                               en: "No model list available",
                               ja: "モデル一覧がありません",
                               zh: "暂无模型列表",
@@ -703,13 +703,13 @@ export default function AgentDetail({
                         }}
                         className="text-[10px] px-1.5 py-0.5 bg-blue-600 hover:bg-blue-500 text-white rounded transition-colors disabled:opacity-50"
                       >
-                        {savingCli ? "..." : t({ ko: "저장", en: "Save", ja: "保存", zh: "保存", ru: "Сохранить" })}
+                        {savingCli ? "..." : t({ ko: "", en: "Save", ja: "保存", zh: "保存", ru: "Сохранить" })}
                       </button>
                       <button
                         onClick={handleCancelCliEdit}
                         className="text-[10px] px-1.5 py-0.5 bg-slate-600 hover:bg-slate-500 text-slate-300 rounded transition-colors"
                       >
-                        {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消", ru: "Отмена" })}
+                        {t({ ko: "", en: "Cancel", ja: "キャンセル", zh: "取消", ru: "Отмена" })}
                       </button>
                     </div>
                   )
@@ -718,7 +718,7 @@ export default function AgentDetail({
                     onClick={() => setEditingCli(true)}
                     className="flex items-center gap-1 hover:text-slate-300 transition-colors"
                     title={t({
-                      ko: "클릭하여 CLI 변경",
+                      ko: "CLI",
                       en: "Click to change CLI",
                       ja: "クリックして CLI を変更",
                       zh: "点击更改 CLI",
@@ -757,12 +757,12 @@ export default function AgentDetail({
         {showAvatarEditor && (
           <div className="px-4 pb-3 border-b border-slate-700 space-y-2">
             <div className="text-[10px] font-semibold uppercase tracking-widest text-slate-500 pt-2">
-              {t({ ko: "스프라이트 편집", en: "Edit Sprite", ja: "スプライト編集", zh: "编辑精灵", ru: "Редактор спрайта" })}
+              {t({ ko: "", en: "Edit Sprite", ja: "スプライト編集", zh: "编辑精灵", ru: "Редактор спрайта" })}
             </div>
             {!spritePreviews && !spriteProcessing && (
               <label className="flex items-center gap-2 py-3 rounded-lg border border-dashed border-slate-600 cursor-pointer hover:border-blue-500/50 transition-colors justify-center text-slate-400 text-xs">
                 <span>🖼️</span>
-                <span>{t({ ko: "스프라이트 시트 업로드 (2×2)", en: "Upload sprite sheet (2×2)", ja: "スプライトシートをアップロード (2×2)", zh: "上传精灵表 (2×2)", ru: "Загрузить sprite sheet (2×2)" })}</span>
+                <span>{t({ ko: "(2×2)", en: "Upload sprite sheet (2×2)", ja: "スプライトシートをアップロード (2×2)", zh: "上传精灵表 (2×2)", ru: "Загрузить sprite sheet (2×2)" })}</span>
                 <input
                   type="file"
                   accept="image/*"
@@ -790,7 +790,7 @@ export default function AgentDetail({
             {spriteProcessing && (
               <div className="flex items-center justify-center gap-2 py-3 text-slate-400 text-xs">
                 <span className="animate-spin">⏳</span>
-                <span>{t({ ko: "처리 중...", en: "Processing...", ja: "処理中...", zh: "处理中...", ru: "Обработка..." })}</span>
+                <span>{t({ ko: "...", en: "Processing...", ja: "処理中...", zh: "处理中...", ru: "Обработка..." })}</span>
               </div>
             )}
             {spritePreviews && !spriteProcessing && (
@@ -799,7 +799,7 @@ export default function AgentDetail({
                   {(["D", "L", "R"] as const).map((dir) => (
                     <div key={dir} className="flex-1 text-center">
                       <div className="text-[10px] text-slate-500 mb-1">
-                        {dir === "D" ? t({ ko: "정면", en: "Front", ja: "正面", zh: "正面", ru: "Перед" }) : dir === "L" ? t({ ko: "좌측", en: "Left", ja: "左", zh: "左", ru: "Лево" }) : t({ ko: "우측", en: "Right", ja: "右", zh: "右", ru: "Право" })}
+                        {dir === "D" ? t({ ko: "", en: "Front", ja: "正面", zh: "正面", ru: "Перед" }) : dir === "L" ? t({ ko: "", en: "Left", ja: "左", zh: "左", ru: "Лево" }) : t({ ko: "", en: "Right", ja: "右", zh: "右", ru: "Право" })}
                       </div>
                       <div className="rounded bg-slate-700 p-1 h-16 flex items-center justify-center">
                         {spritePreviews[dir] && <img src={spritePreviews[dir]} alt={dir} className="max-h-14 object-contain" style={{ imageRendering: "pixelated" }} />}
@@ -808,7 +808,7 @@ export default function AgentDetail({
                   ))}
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-slate-400">{t({ ko: "번호", en: "Sprite #", ja: "番号", zh: "编号", ru: "№" })}</span>
+                  <span className="text-xs text-slate-400">{t({ ko: "", en: "Sprite #", ja: "番号", zh: "编号", ru: "№" })}</span>
                   <input
                     type="number"
                     value={spriteNum}
@@ -834,13 +834,13 @@ export default function AgentDetail({
                     disabled={spriteRegistering || spriteRegistered}
                     className={`px-3 py-1 rounded text-xs font-medium transition-all ${spriteRegistered ? "bg-emerald-600/20 text-emerald-400 border border-emerald-500/30" : "bg-blue-600 hover:bg-blue-500 text-white"} disabled:opacity-50`}
                   >
-                    {spriteRegistering ? t({ ko: "등록 중...", en: "Saving...", ja: "保存中...", zh: "保存中...", ru: "Сохранение..." }) : spriteRegistered ? "✓" : t({ ko: "저장", en: "Save", ja: "保存", zh: "保存", ru: "Сохранить" })}
+                    {spriteRegistering ? t({ ko: "...", en: "Saving...", ja: "保存中...", zh: "保存中...", ru: "Сохранение..." }) : spriteRegistered ? "✓" : t({ ko: "", en: "Save", ja: "保存", zh: "保存", ru: "Сохранить" })}
                   </button>
                   <button
                     onClick={() => { setSpritePreviews(null); setSpriteRegistered(false); }}
                     className="text-xs px-2 py-1 rounded text-slate-400 hover:text-slate-200 hover:bg-slate-700 transition-colors"
                   >
-                    {t({ ko: "다시", en: "Redo", ja: "やり直し", zh: "重新", ru: "Заново" })}
+                    {t({ ko: "", en: "Redo", ja: "やり直し", zh: "重新", ru: "Заново" })}
                   </button>
                 </div>
               </div>
@@ -850,14 +850,14 @@ export default function AgentDetail({
 
         <div className="flex border-b border-slate-700">
           {[
-            { key: "info", label: t({ ko: "정보", en: "Info", ja: "情報", zh: "信息", ru: "Инфо" }) },
+            { key: "info", label: t({ ko: "", en: "Info", ja: "情報", zh: "信息", ru: "Инфо" }) },
             {
               key: "tasks",
-              label: `${t({ ko: "업무", en: "Tasks", ja: "タスク", zh: "任务", ru: "Задачи" })} (${agentTasks.length})`,
+              label: `${t({ ko: "", en: "Tasks", ja: "タスク", zh: "任务", ru: "Задачи" })} (${agentTasks.length})`,
             },
             {
               key: "alba",
-              label: `${t({ ko: "알바생", en: "Sub-agents", ja: "サブエージェント", zh: "子代理", ru: "Суб-агенты" })} (${agentSubAgents.length})`,
+              label: `${t({ ko: "", en: "Sub-agents", ja: "サブエージェント", zh: "子代理", ru: "Суб-агенты" })} (${agentSubAgents.length})`,
             },
           ].map((tabItem) => (
             <button

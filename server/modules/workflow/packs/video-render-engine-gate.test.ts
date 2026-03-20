@@ -68,7 +68,7 @@ describe("evaluateRemotionOnlyGateFromLogFiles", () => {
     fs.writeFileSync(
       path.join(logsDir, "task-d.log"),
       [
-        "최종 렌더링 엔진은 반드시 Remotion만 사용하세요. Python(moviepy/Pillow) 기반 렌더링은 금지됩니다.",
+        "Remotion . Python(moviepy/Pillow)   .",
         "pnpm exec remotion render src/index.tsx Intro video_output/final.mp4 --log=verbose",
       ].join("\n"),
       "utf8",

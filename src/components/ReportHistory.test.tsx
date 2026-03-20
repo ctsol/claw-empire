@@ -29,10 +29,10 @@ describe("ReportHistory", () => {
         created_at: 1000,
         completed_at: 2000,
         agent_name: "Ari",
-        agent_name_ko: "아리",
+        agent_name_ko: "",
         agent_role: "team_leader",
         dept_name: "Planning",
-        dept_name_ko: "기획팀",
+        dept_name_ko: "",
         project_name: "Project",
       },
     ]);

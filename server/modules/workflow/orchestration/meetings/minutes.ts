@@ -251,7 +251,7 @@ export function createMeetingMinutesTools(deps: MeetingMinutesDeps) {
           ? `[PROJECT MEMO] ${phaseLabel} ラウンド ${round} 未解決の補完項目 (${stamp})`
           : lang === "zh"
             ? `[PROJECT MEMO] ${phaseLabel} 第 ${round} 轮未解决改进项 (${stamp})`
-            : `[PROJECT MEMO] ${phaseLabel} 라운드 ${round} 미해결 보완 항목 (${stamp})`;
+            : ``;
     const fallbackLine =
       lang === "en"
         ? "- No explicit issue line captured; follow-up verification is still required."
@@ -259,7 +259,7 @@ export function createMeetingMinutesTools(deps: MeetingMinutesDeps) {
           ? "- 明示的な課題行は抽出されませんでしたが、後続検証は継続が必要です。"
           : lang === "zh"
             ? "- 未捕获到明确问题行，但后续验证仍需继续。"
-            : "- 명시적 이슈 문장을 추출하지 못했지만 후속 검증은 계속 필요합니다.";
+            : "-         .";
     const body = notes.length > 0 ? notes.map((note) => `- ${note}`).join("\n") : fallbackLine;
 
     const block = `${header}\n${body}`;
@@ -294,11 +294,11 @@ export function createMeetingMinutesTools(deps: MeetingMinutesDeps) {
           ? `[PROJECT MEMO] Review ラウンド ${round} 最終パッケージ (${stamp})`
           : lang === "zh"
             ? `[PROJECT MEMO] Review 第 ${round} 轮最终输出包 (${stamp})`
-            : `[PROJECT MEMO] Review 라운드 ${round} 최종 결과 패키지 (${stamp})`;
+            : ``;
     const decisionLine = hasResidualRisk
       ? pickL(
           l(
-            ["잔여 리스크를 문서화한 조건부 최종 승인으로 종료합니다."],
+            ["."],
             ["Finalized with conditional approval and documented residual risks."],
             ["残余リスクを文書化した条件付き最終承認で締結します。"],
             ["以记录剩余风险的条件性最终批准完成收口。"],
@@ -307,7 +307,7 @@ export function createMeetingMinutesTools(deps: MeetingMinutesDeps) {
         )
       : pickL(
           l(
-            ["전원 승인 기준으로 최종 승인 및 머지 준비를 완료했습니다."],
+            ["."],
             ["Final approval completed based on full leader alignment and merge readiness."],
             ["全リーダー承認に基づき最終承認とマージ準備を完了しました。"],
             ["已基于全体负责人一致意见完成最终批准与合并准备。"],

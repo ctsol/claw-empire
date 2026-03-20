@@ -328,13 +328,14 @@ export function registerAgentCrudRoutes(ctx: RuntimeContext): void {
       const sprite_number =
         typeof body.sprite_number === "number" && body.sprite_number > 0 ? body.sprite_number : null;
       const personality = typeof body.personality === "string" ? body.personality.trim() || null : null;
+      const avatar_seed = typeof body.avatar_seed === "string" && body.avatar_seed.trim() ? body.avatar_seed.trim() : null;
 
       const id = randomUUID();
       try {
         if (hasAgentWorkflowPackColumn) {
           db.prepare(
-            `INSERT INTO agents (id, name, name_ko, name_ja, name_zh, department_id, workflow_pack_key, role, cli_provider, avatar_emoji, sprite_number, personality)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO agents (id, name, name_ko, name_ja, name_zh, department_id, workflow_pack_key, role, cli_provider, avatar_emoji, sprite_number, avatar_seed, personality)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           ).run(
             id,
             name,
@@ -347,12 +348,13 @@ export function registerAgentCrudRoutes(ctx: RuntimeContext): void {
             cli_provider,
             avatar_emoji,
             sprite_number,
+            avatar_seed,
             personality,
           );
         } else {
           db.prepare(
-            `INSERT INTO agents (id, name, name_ko, name_ja, name_zh, department_id, role, cli_provider, avatar_emoji, sprite_number, personality)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+            `INSERT INTO agents (id, name, name_ko, name_ja, name_zh, department_id, role, cli_provider, avatar_emoji, sprite_number, avatar_seed, personality)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
           ).run(
             id,
             name,
@@ -364,6 +366,7 @@ export function registerAgentCrudRoutes(ctx: RuntimeContext): void {
             cli_provider,
             avatar_emoji,
             sprite_number,
+            avatar_seed,
             personality,
           );
         }
@@ -579,6 +582,7 @@ export function registerAgentCrudRoutes(ctx: RuntimeContext): void {
       "cli_reasoning_level",
       "avatar_emoji",
       "sprite_number",
+      "avatar_seed",
       "personality",
       "status",
       "current_task_id",

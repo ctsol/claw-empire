@@ -67,25 +67,25 @@ type SupportedLocale = UiLanguage;
 
 const LOCALE_TEXT = {
   ceoOffice: {
-    ko: "CEO 오피스",
+    ko: "CEO",
     en: "CEO OFFICE",
     ja: "CEOオフィス",
     zh: "CEO办公室",
     ru: "ОФИС CEO",
   },
   collabTable: {
-    ko: "6인 협업 테이블",
+    ko: "6",
     en: "6P COLLAB TABLE",
     ja: "6人コラボテーブル",
     zh: "6人协作桌",
     ru: "СТОЛ НА 6 ЧЕЛОВЕК",
   },
-  statsEmployees: { ko: "직원", en: "Staff", ja: "スタッフ", zh: "员工", ru: "Сотрудники" },
-  statsWorking: { ko: "작업중", en: "Working", ja: "作業中", zh: "处理中", ru: "Работают" },
-  statsProgress: { ko: "진행", en: "In Progress", ja: "進行", zh: "进行中", ru: "В процессе" },
-  statsDone: { ko: "완료", en: "Done", ja: "完了", zh: "已完成", ru: "Готово" },
+  statsEmployees: { ko: "", en: "Staff", ja: "スタッフ", zh: "员工", ru: "Сотрудники" },
+  statsWorking: { ko: "", en: "Working", ja: "作業中", zh: "处理中", ru: "Работают" },
+  statsProgress: { ko: "", en: "In Progress", ja: "進行", zh: "进行中", ru: "В процессе" },
+  statsDone: { ko: "", en: "Done", ja: "完了", zh: "已完成", ru: "Готово" },
   hint: {
-    ko: "WASD/방향키/가상패드: CEO 이동  |  Enter: 상호작용",
+    ko: "WASD//: CEO   |  Enter:",
     en: "WASD/Arrow/Virtual Pad: CEO Move  |  Enter: Interact",
     ja: "WASD/矢印キー/仮想パッド: CEO移動  |  Enter: 操作",
     zh: "WASD/方向键/虚拟手柄: CEO移动  |  Enter: 交互",
@@ -99,70 +99,70 @@ const LOCALE_TEXT = {
     ru: "Enter",
   },
   noAssignedAgent: {
-    ko: "배정된 직원 없음",
+    ko: "",
     en: "No assigned staff",
     ja: "担当スタッフなし",
     zh: "暂无分配员工",
     ru: "Нет назначенных",
   },
   breakRoom: {
-    ko: "🚬 흡연실",
+    ko: "🚬",
     en: "🚬 Smoking Area",
     ja: "🚬 喫煙室",
     zh: "🚬 吸烟区",
     ru: "🚬 Курилка",
   },
   role: {
-    team_leader: { ko: "팀장", en: "Lead", ja: "リーダー", zh: "组长", ru: "Лид" },
-    senior: { ko: "시니어", en: "Senior", ja: "シニア", zh: "资深", ru: "Синьор" },
-    junior: { ko: "주니어", en: "Junior", ja: "ジュニア", zh: "初级", ru: "Джуниор" },
-    intern: { ko: "인턴", en: "Intern", ja: "インターン", zh: "实习", ru: "Стажёр" },
-    part_time: { ko: "알바", en: "Part-time", ja: "アルバイト", zh: "兼职", ru: "Частичная" },
+    team_leader: { ko: "", en: "Lead", ja: "リーダー", zh: "组长", ru: "Лид" },
+    senior: { ko: "", en: "Senior", ja: "シニア", zh: "资深", ru: "Синьор" },
+    junior: { ko: "", en: "Junior", ja: "ジュニア", zh: "初级", ru: "Джуниор" },
+    intern: { ko: "", en: "Intern", ja: "インターン", zh: "实习", ru: "Стажёр" },
+    part_time: { ko: "", en: "Part-time", ja: "アルバイト", zh: "兼职", ru: "Частичная" },
   },
   partTime: {
-    ko: "알바",
+    ko: "",
     en: "Part-time",
     ja: "アルバイト",
     zh: "兼职",
     ru: "Частичная занятость",
   },
   collabBadge: {
-    ko: "🤝 협업",
+    ko: "🤝",
     en: "🤝 Collaboration",
     ja: "🤝 協業",
     zh: "🤝 协作",
     ru: "🤝 Коллаборация",
   },
   meetingBadgeKickoff: {
-    ko: "📣 회의",
+    ko: "📣",
     en: "📣 Meeting",
     ja: "📣 会議",
     zh: "📣 会议",
     ru: "📣 Совещание",
   },
   meetingBadgeReviewing: {
-    ko: "🔎 검토중",
+    ko: "🔎",
     en: "🔎 Reviewing",
     ja: "🔎 検討中",
     zh: "🔎 评审中",
     ru: "🔎 Проверка",
   },
   meetingBadgeApproved: {
-    ko: "✅ 승인",
+    ko: "✅",
     en: "✅ Approval",
     ja: "✅ 承認",
     zh: "✅ 审批",
     ru: "✅ Одобрено",
   },
   meetingBadgeHold: {
-    ko: "⚠ 보류",
+    ko: "⚠",
     en: "⚠ Hold",
     ja: "⚠ 保留",
     zh: "⚠ 暂缓",
     ru: "⚠ Отложено",
   },
   kickoffLines: {
-    ko: ["유관부서 영향도 확인중", "리스크/의존성 공유중", "일정/우선순위 조율중", "담당 경계 정의중"],
+    ko: ["", "/", "/", ""],
     en: [
       "Checking cross-team impact",
       "Sharing risks/dependencies",
@@ -179,7 +179,7 @@ const LOCALE_TEXT = {
     ],
   },
   reviewLines: {
-    ko: ["보완사항 반영 확인중", "최종안 Approved 검토중", "수정 아이디어 공유중", "결과물 교차 검토중"],
+    ko: ["", "Approved", "", ""],
     en: [
       "Verifying follow-up updates",
       "Reviewing final approval draft",
@@ -196,77 +196,77 @@ const LOCALE_TEXT = {
     ],
   },
   meetingTableHint: {
-    ko: "📝 회의 중: 테이블 클릭해 회의록 보기",
+    ko: "📝  :",
     en: "📝 Meeting live: click table for minutes",
     ja: "📝 会議中: テーブルをクリックして会議録を見る",
     zh: "📝 会议进行中：点击桌子查看纪要",
     ru: "📝 Идёт совещание: нажмите на стол для просмотра протокола",
   },
   cliUsageTitle: {
-    ko: "CLI 사용량",
+    ko: "CLI",
     en: "CLI Usage",
     ja: "CLI使用量",
     zh: "CLI 使用量",
     ru: "Использование CLI",
   },
   cliConnected: {
-    ko: "연결됨",
+    ko: "",
     en: "connected",
     ja: "接続中",
     zh: "已连接",
     ru: "подключено",
   },
   cliRefreshTitle: {
-    ko: "사용량 새로고침",
+    ko: "",
     en: "Refresh usage data",
     ja: "使用量を更新",
     zh: "刷新用量数据",
     ru: "Обновить данные",
   },
   cliNotSignedIn: {
-    ko: "로그인되지 않음",
+    ko: "",
     en: "not signed in",
     ja: "未サインイン",
     zh: "未登录",
     ru: "не авторизован",
   },
   cliNoApi: {
-    ko: "사용량 API 없음",
+    ko: "API",
     en: "no usage API",
     ja: "使用量APIなし",
     zh: "无用量 API",
     ru: "нет API использования",
   },
   cliUnavailable: {
-    ko: "사용 불가",
+    ko: "",
     en: "unavailable",
     ja: "利用不可",
     zh: "不可用",
     ru: "недоступно",
   },
   cliLoading: {
-    ko: "불러오는 중...",
+    ko: "...",
     en: "loading...",
     ja: "読み込み中...",
     zh: "加载中...",
     ru: "загрузка...",
   },
   cliResets: {
-    ko: "리셋까지",
+    ko: "",
     en: "resets",
     ja: "リセットまで",
     zh: "重置剩余",
     ru: "сброс через",
   },
   cliNoData: {
-    ko: "데이터 없음",
+    ko: "",
     en: "no data",
     ja: "データなし",
     zh: "无数据",
     ru: "нет данных",
   },
   soon: {
-    ko: "곧",
+    ko: "",
     en: "soon",
     ja: "まもなく",
     zh: "即将",
@@ -294,22 +294,22 @@ const BREAK_CHAT_MESSAGES: Record<SupportedLocale, string[]> = {
     "Хочу домой~",
   ],
   ko: [
-    "커피 한 잔 더~",
-    "오늘 점심 뭐 먹지?",
-    "아 졸려...",
-    "주말에 뭐 해?",
-    "이번 프로젝트 힘들다ㅋ",
-    "카페라떼 최고!",
-    "오늘 날씨 좋다~",
-    "야근 싫어ㅠ",
-    "맛있는 거 먹고 싶다",
-    "조금만 쉬자~",
-    "ㅋㅋㅋㅋ",
-    "간식 왔다!",
-    "5분만 더~",
-    "힘내자 파이팅!",
-    "에너지 충전 중...",
-    "집에 가고 싶다~",
+    "~",
+    "?",
+    "...",
+    "?",
+    "",
+    "!",
+    "~",
+    "",
+    "",
+    "~",
+    "",
+    "!",
+    "5 ~",
+    "!",
+    "...",
+    "~",
   ],
   en: [
     "One more cup of coffee~",
@@ -451,14 +451,14 @@ function paintMeetingBadge(
 // Break spots: positive x = offset from room left; negative x = offset from room right
 // These are calibrated to match furniture positions drawn in buildScene
 const BREAK_SPOTS = [
-  { x: 86, y: 72, dir: "D" }, // 왼쪽 소파 좌측 (sofa at baseX+50, width 80)
-  { x: 110, y: 72, dir: "D" }, // 왼쪽 소파 중앙
-  { x: 134, y: 72, dir: "D" }, // 왼쪽 소파 우측
-  { x: 30, y: 58, dir: "R" }, // 커피머신 앞 (machine at baseX, y+20)
-  { x: -112, y: 72, dir: "D" }, // 우측 소파 좌측 (sofa at rightX-120, width 80)
-  { x: -82, y: 72, dir: "D" }, // 우측 소파 우측
-  { x: -174, y: 56, dir: "L" }, // 하이테이블 왼쪽 (table at rightX-170, width 36)
-  { x: -144, y: 56, dir: "R" }, // 하이테이블 오른쪽
+  { x: 86, y: 72, dir: "D" }, // left sofa left side (sofa at baseX+50, width 80)
+  { x: 110, y: 72, dir: "D" }, // left sofa center
+  { x: 134, y: 72, dir: "D" }, // left sofa right side
+  { x: 30, y: 58, dir: "R" }, // in front of coffee machine (machine at baseX, y+20)
+  { x: -112, y: 72, dir: "D" }, // right sofa left side (sofa at rightX-120, width 80)
+  { x: -82, y: 72, dir: "D" }, // right sofa right side
+  { x: -174, y: 56, dir: "L" }, // high table left (table at rightX-170, width 36)
+  { x: -144, y: 56, dir: "R" }, // high table right
 ];
 
 const DEPT_THEME_LIGHT: Record<string, RoomTheme> = {

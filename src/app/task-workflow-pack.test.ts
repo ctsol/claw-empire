@@ -23,7 +23,7 @@ function makeTask(overrides: Partial<Task> = {}): Task {
 }
 
 describe("task workflow pack routing", () => {
-  it("활성 오피스팩에 맞는 업무만 필터링한다", () => {
+  it("", () => {
     const tasks = [
       makeTask({ id: "dev-default" }),
       makeTask({ id: "dev-explicit", workflow_pack_key: "development" }),
@@ -37,7 +37,7 @@ describe("task workflow pack routing", () => {
     expect(filterTasksByOfficePack(tasks, "report").map((task) => task.id)).toEqual(["report"]);
   });
 
-  it("업무 생성 입력값에 활성 오피스팩을 강제로 주입한다", () => {
+  it("", () => {
     const input = {
       title: "Pack task",
       description: "desc",

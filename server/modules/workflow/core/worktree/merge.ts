@@ -51,7 +51,7 @@ export function createWorktreeMergeTools(deps: CreateWorktreeMergeToolsDeps) {
             message: pickL(
               l(
                 [
-                  `병합 전 제한된 미추적 파일(${autoCommit.restrictedUntrackedCount}개) 때문에 자동 커밋이 차단되었습니다. 제한 파일을 정리한 뒤 다시 시도하세요.`,
+                  ``,
                 ],
                 [
                   `Pre-merge auto-commit was blocked by restricted untracked files (${autoCommit.restrictedUntrackedCount}). Remove/review restricted files and retry.`,
@@ -71,7 +71,7 @@ export function createWorktreeMergeTools(deps: CreateWorktreeMergeToolsDeps) {
           success: false,
           message: pickL(
             l(
-              [`병합 전 변경사항 자동 커밋에 실패했습니다: ${autoCommit.error}`],
+              [``],
               [`Failed to auto-commit pending changes before merge: ${autoCommit.error}`],
               [`マージ前の未コミット変更の自動コミットに失敗しました: ${autoCommit.error}`],
               [`合并前自动提交未提交更改失败：${autoCommit.error}`],
@@ -102,7 +102,7 @@ export function createWorktreeMergeTools(deps: CreateWorktreeMergeToolsDeps) {
             success: true,
             message: pickL(
               l(
-                ["변경사항이 없어 병합이 필요하지 않습니다."],
+                ["."],
                 ["No changes to merge."],
                 ["マージする変更がありません。"],
                 ["没有可合并的更改。"],
@@ -126,7 +126,7 @@ export function createWorktreeMergeTools(deps: CreateWorktreeMergeToolsDeps) {
         success: true,
         message: pickL(
           l(
-            [`병합 완료: ${info.branchName} → ${currentBranch}`],
+            [``],
             [`Merge completed: ${info.branchName} -> ${currentBranch}`],
             [`マージ完了: ${info.branchName} -> ${currentBranch}`],
             [`合并完成: ${info.branchName} -> ${currentBranch}`],
@@ -156,7 +156,7 @@ export function createWorktreeMergeTools(deps: CreateWorktreeMergeToolsDeps) {
             success: false,
             message: pickL(
               l(
-                [`병합 충돌 발생: ${conflicts.length}개 파일에서 충돌이 있습니다. 수동 해결이 필요합니다.`],
+                [``],
                 [`Merge conflict: ${conflicts.length} file(s) have conflicts and need manual resolution.`],
                 [`マージ競合: ${conflicts.length}件のファイルで競合が発生し、手動解決が必要です。`],
                 [`合并冲突：${conflicts.length} 个文件存在冲突，需要手动解决。`],
@@ -180,7 +180,7 @@ export function createWorktreeMergeTools(deps: CreateWorktreeMergeToolsDeps) {
       return {
         success: false,
         message: pickL(
-          l([`병합 실패: ${msg}`], [`Merge failed: ${msg}`], [`マージ失敗: ${msg}`], [`合并失败: ${msg}`], [`Ошибка слияния: ${msg}`]),
+          l([``], [`Merge failed: ${msg}`], [`マージ失敗: ${msg}`], [`合并失败: ${msg}`], [`Ошибка слияния: ${msg}`]),
           lang,
         ),
       };

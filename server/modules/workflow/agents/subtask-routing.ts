@@ -132,11 +132,11 @@ export function createSubtaskRoutingTools(deps: SubtaskRoutingDeps) {
       "ownerdepartment",
       "same",
       "sameasowner",
-      "자체",
-      "내부",
-      "동일부서",
-      "원부서",
-      "없음",
+      "",
+      "",
+      "",
+      "",
+      "",
       "无",
       "同部门",
       "同部門",
@@ -343,7 +343,7 @@ export function createSubtaskRoutingTools(deps: SubtaskRoutingDeps) {
           nextStatus = "blocked";
           nextBlockedReason = pickL(
             l(
-              [`${targetDeptName} 협업 대기`],
+              [`Waiting for ${targetDeptName} collaboration`],
               [`Waiting for ${targetDeptName} collaboration`],
               [`${targetDeptName}の協業待ち`],
               [`等待${targetDeptName}协作`],
@@ -380,7 +380,7 @@ export function createSubtaskRoutingTools(deps: SubtaskRoutingDeps) {
           pickL(
             l(
               [
-                `'${task.title}' 서브태스크 분배를 기획팀장이 재판정하여 ${updated}건을 재배치했습니다. (${summaryText})`,
+                `Planning leader rerouted ${updated} subtasks for '${task.title}'. (${summaryText})`,
               ],
               [`Planning leader rerouted ${updated} subtasks for '${task.title}'. (${summaryText})`],
               [

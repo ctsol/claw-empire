@@ -50,7 +50,7 @@ function insertLearnedSkill(
 }
 
 describe("createPromptSkillsHelper", () => {
-  it("provider 학습 스킬을 우선 노출하고 MCP/글로벌 규칙을 포함한다", () => {
+  it("provider     MCP/", () => {
     const db = createDb();
     try {
       insertLearnedSkill(db, {
@@ -83,7 +83,7 @@ describe("createPromptSkillsHelper", () => {
     }
   });
 
-  it("kimi provider도 provider 학습 스킬을 우선 노출한다", () => {
+  it("kimi provider provider", () => {
     const db = createDb();
     try {
       insertLearnedSkill(db, {
@@ -106,7 +106,7 @@ describe("createPromptSkillsHelper", () => {
     }
   });
 
-  it("provider 학습 스킬이 없으면 global 학습 스킬을 사용한다", () => {
+  it("provider    global", () => {
     const db = createDb();
     try {
       insertLearnedSkill(db, {
@@ -129,7 +129,7 @@ describe("createPromptSkillsHelper", () => {
     }
   });
 
-  it("학습 이력이 없으면 empty 안내를 반환한다", () => {
+  it("empty", () => {
     const db = createDb();
     try {
       const { buildAvailableSkillsPromptBlock } = createPromptSkillsHelper(db);

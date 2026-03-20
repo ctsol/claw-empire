@@ -5,6 +5,8 @@ import * as api from "../../api";
 import { CLI_PROVIDERS, ROLE_BADGE, ROLE_LABEL, ROLES } from "./constants";
 import EmojiPicker from "./EmojiPicker";
 import type { FormData } from "./types";
+import { generateAvatar } from "../avatar-generator";
+import AvatarBuilder from "./AvatarBuilder";
 
 function fileToBase64(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -45,9 +47,10 @@ export default function AgentFormModal({
   const [previews, setPreviews] = useState<Record<string, string> | null>(null);
   const [spriteNum, setSpriteNum] = useState(form.sprite_number ?? 0);
   const [registering, setRegistering] = useState(false);
+  const [showAvatarBuilder, setShowAvatarBuilder] = useState(false);
   const [registered, setRegistered] = useState(false);
 
-  // ESC 키로 닫기
+  // Close on ESC key
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -84,7 +87,7 @@ export default function AgentFormModal({
         {/* Modal header */}
         <div className="flex items-center justify-between mb-5">
           <h3 className="text-base font-bold" style={{ color: "var(--th-text-heading)" }}>
-            {isEdit ? tr("직원 정보 수정", "Edit Agent") : tr("신규 직원 채용", "Hire New Agent")}
+            {isEdit ? tr("", "Edit Agent") : tr("", "Hire New Agent")}
           </h3>
           <button
             onClick={onClose}
@@ -97,67 +100,53 @@ export default function AgentFormModal({
 
         {/* 2-column layout */}
         <div className="grid grid-cols-2 gap-5">
-          {/* ── Left column: 기본 정보 ── */}
+          {/* ── Left column: Basic Info ── */}
           <div className="space-y-4">
             <div
               className="text-[10px] font-semibold uppercase tracking-widest"
               style={{ color: "var(--th-text-muted)" }}
             >
-              {tr("기본 정보", "Basic Info")}
+              {tr("", "Basic Info")}
             </div>
-            {/* ── 스프라이트 얼굴 미리보기 + 위/아래 변경 ── */}
+            {/* ── Avatar preview + name ── */}
             <div className="flex items-center gap-3">
               <div className="flex flex-col items-center gap-1">
-                <button
-                  type="button"
-                  className="w-6 h-6 rounded flex items-center justify-center text-xs hover:bg-[var(--th-bg-surface-hover)] transition-colors"
-                  style={{ color: "var(--th-text-muted)", border: "1px solid var(--th-input-border)" }}
-                  onClick={() => {
-                    const next = Math.max(1, spriteNum || 0) + 1;
-                    setSpriteNum(next);
-                    setForm({ ...form, sprite_number: next });
-                  }}
-                >
-                  ▲
-                </button>
                 <div
-                  className="w-14 h-14 rounded-xl overflow-hidden bg-gray-700 flex items-center justify-center flex-shrink-0"
-                  style={{ border: "2px solid var(--th-input-border)" }}
+                  className="w-16 h-16 rounded-xl overflow-hidden flex items-center justify-center flex-shrink-0"
+                  style={{ border: "2px solid var(--th-input-border)", background: "var(--th-bg-surface-hover)" }}
                 >
-                  {spriteNum > 0 ? (
-                    <img
-                      src={`/sprites/${spriteNum}-D-1.png`}
-                      alt={`sprite ${spriteNum}`}
-                      className="w-full h-full object-cover"
-                      style={{ imageRendering: "pixelated" }}
-                    />
-                  ) : (
-                    <span className="text-2xl">{form.avatar_emoji || "🤖"}</span>
-                  )}
+                  <img
+                    src={generateAvatar(form.avatar_seed || form.name || "agent", 128)}
+                    alt="avatar"
+                    className="w-full h-full object-cover"
+                  />
                 </div>
-                <button
-                  type="button"
-                  className="w-6 h-6 rounded flex items-center justify-center text-xs hover:bg-[var(--th-bg-surface-hover)] transition-colors"
-                  style={{ color: "var(--th-text-muted)", border: "1px solid var(--th-input-border)" }}
-                  onClick={() => {
-                    const next = Math.max(1, (spriteNum || 1) - 1);
-                    setSpriteNum(next);
-                    setForm({ ...form, sprite_number: next });
-                  }}
-                >
-                  ▼
-                </button>
+                <div className="flex gap-1">
+                  <button
+                    type="button"
+                    className="text-[10px] px-2 py-0.5 rounded hover:bg-[var(--th-bg-surface-hover)] transition-colors"
+                    style={{ color: "var(--th-accent)", border: "1px solid var(--th-input-border)" }}
+                    onClick={() => {
+                      const seed = `${form.name || "agent"}-${Date.now()}`;
+                      setForm({ ...form, avatar_seed: seed });
+                    }}
+                  >
+                    🎲
+                  </button>
+                  <button
+                    type="button"
+                    className="text-[10px] px-2 py-0.5 rounded hover:bg-[var(--th-bg-surface-hover)] transition-colors"
+                    style={{ color: "var(--th-accent)", border: "1px solid var(--th-input-border)" }}
+                    onClick={() => setShowAvatarBuilder(true)}
+                  >
+                    🎨 {tr("", "Build")}
+                  </button>
+                </div>
               </div>
               <div className="flex-1 min-w-0">
-                <span
-                  className="text-xs font-mono px-1.5 py-0.5 rounded"
-                  style={{ color: "var(--th-text-muted)", background: "var(--th-bg-surface-hover)" }}
-                >
-                  #{spriteNum || "—"}
-                </span>
-                <div className="mt-2">
+                <div>
                   <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                    {tr("영문 이름", "Name")} <span className="text-red-400">*</span>
+                    {tr("", "Name")} <span className="text-red-400">*</span>
                   </label>
                   <input
                     type="text"
@@ -168,12 +157,25 @@ export default function AgentFormModal({
                     style={inputStyle}
                   />
                 </div>
+                <div className="mt-2">
+                  <label className="block text-xs mb-1 font-medium" style={{ color: "var(--th-text-secondary)" }}>
+                    {tr("", "Avatar Seed")}
+                  </label>
+                  <input
+                    type="text"
+                    value={form.avatar_seed || ""}
+                    onChange={(e) => setForm({ ...form, avatar_seed: e.target.value })}
+                    placeholder={tr("", "Leave empty for auto-generated")}
+                    className={inputCls}
+                    style={inputStyle}
+                  />
+                </div>
               </div>
             </div>
             <div className="grid grid-cols-[72px_1fr] gap-2">
               <div>
                 <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                  {tr("이모지", "Emoji")}
+                  {tr("", "Emoji")}
                 </label>
                 <EmojiPicker
                   tr={tr}
@@ -183,7 +185,7 @@ export default function AgentFormModal({
               </div>
               <div>
                 <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                  {tr("소속 부서", "Department")}
+                  {tr("", "Department")}
                 </label>
                 <select
                   value={form.department_id}
@@ -191,7 +193,7 @@ export default function AgentFormModal({
                   className={`${inputCls} cursor-pointer`}
                   style={inputStyle}
                 >
-                  <option value="">{tr("— 미배정 —", "— Unassigned —")}</option>
+                  <option value="">{tr("—  —", "— Unassigned —")}</option>
                   {departments.map((d) => (
                     <option key={d.id} value={d.id}>
                       {d.icon} {localeName(locale, d)}
@@ -202,18 +204,18 @@ export default function AgentFormModal({
             </div>
           </div>
 
-          {/* ── Right column: 역할 설정 ── */}
+          {/* ── Right column: Role Config ── */}
           <div className="space-y-4">
             <div
               className="text-[10px] font-semibold uppercase tracking-widest"
               style={{ color: "var(--th-text-muted)" }}
             >
-              {tr("역할 설정", "Role Config")}
+              {tr("", "Role Config")}
             </div>
-            {/* 직급 */}
+            {/* Role/Rank */}
             <div>
               <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                {tr("직급", "Role")}
+                {tr("", "Role")}
               </label>
               <div className="grid grid-cols-4 gap-1.5">
                 {ROLES.map((r) => {
@@ -238,7 +240,7 @@ export default function AgentFormModal({
             {/* CLI Provider */}
             <div>
               <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                {tr("CLI 도구", "CLI Provider")}
+                {tr("CLI", "CLI Provider")}
               </label>
               <div className="flex flex-wrap gap-1.5">
                 {CLI_PROVIDERS.map((p) => {
@@ -260,16 +262,16 @@ export default function AgentFormModal({
                 })}
               </div>
             </div>
-            {/* 성격/프롬프트 */}
+            {/* Personality/Prompt */}
             <div>
               <label className="block text-xs mb-1.5 font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                {tr("성격 / 역할 프롬프트", "Personality / Prompt")}
+                {tr("/", "Personality / Prompt")}
               </label>
               <textarea
                 value={form.personality}
                 onChange={(e) => setForm({ ...form, personality: e.target.value })}
                 rows={3}
-                placeholder={tr("전문 분야나 성격 설명...", "Expertise or personality...")}
+                placeholder={tr("...", "Expertise or personality...")}
                 className={`${inputCls} resize-none`}
                 style={inputStyle}
               />
@@ -283,7 +285,7 @@ export default function AgentFormModal({
             className="text-[10px] font-semibold uppercase tracking-widest mb-3"
             style={{ color: "var(--th-text-muted)" }}
           >
-            {tr("캐릭터 스프라이트", "Character Sprite")}
+            {tr("", "Character Sprite")}
           </div>
 
           {!previews && !processing && (
@@ -293,12 +295,12 @@ export default function AgentFormModal({
             >
               <span className="text-2xl">🖼️</span>
               <span className="text-xs">
-                {tr("4방향 스프라이트 시트 업로드 (2x2 그리드)", "Upload 4-direction sprite sheet (2x2 grid)")}
+                {tr("4    (2x2 )", "Upload 4-direction sprite sheet (2x2 grid)")}
               </span>
-              <span className="text-xs">{tr("앞 / 왼 / 뒤 / 오른 순서", "Front / Left / Back / Right order")}</span>
+              <span className="text-xs">{tr("/  /  /", "Front / Left / Back / Right order")}</span>
               <span className="text-xs">
                 {t({
-                  ko: "(흰색배경)",
+                  ko: "()",
                   en: "(White background)",
                   ja: "（白背景）",
                   zh: "（白色背景）",
@@ -334,7 +336,7 @@ export default function AgentFormModal({
             <div className="flex items-center justify-center gap-2 py-8" style={{ color: "var(--th-text-muted)" }}>
               <span className="animate-spin text-lg">⏳</span>
               <span className="text-sm">
-                {tr("배경 제거 및 분할 처리 중...", "Removing background & splitting...")}
+                {tr("...", "Removing background & splitting...")}
               </span>
             </div>
           )}
@@ -346,7 +348,7 @@ export default function AgentFormModal({
                 {(["D", "L", "R"] as const).map((dir) => (
                   <div key={dir} className="text-center">
                     <div className="text-[10px] font-medium mb-1" style={{ color: "var(--th-text-muted)" }}>
-                      {dir === "D" ? tr("정면", "Front") : dir === "L" ? tr("좌측", "Left") : tr("우측", "Right")}
+                      {dir === "D" ? tr("", "Front") : dir === "L" ? tr("", "Left") : tr("", "Right")}
                     </div>
                     <div
                       className="rounded-lg p-2 flex items-center justify-center h-24"
@@ -373,7 +375,7 @@ export default function AgentFormModal({
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-2">
                   <label className="text-xs font-medium" style={{ color: "var(--th-text-secondary)" }}>
-                    {tr("스프라이트 번호", "Sprite #")}
+                    {tr("", "Sprite #")}
                   </label>
                   <input
                     type="number"
@@ -410,10 +412,10 @@ export default function AgentFormModal({
                   } disabled:opacity-50`}
                 >
                   {registering
-                    ? tr("등록 중...", "Registering...")
+                    ? tr("...", "Registering...")
                     : registered
-                      ? tr("등록 완료!", "Registered!")
-                      : tr("스프라이트 등록", "Register Sprite")}
+                      ? tr("!", "Registered!")
+                      : tr("", "Register Sprite")}
                 </button>
                 {previews && (
                   <button
@@ -425,7 +427,7 @@ export default function AgentFormModal({
                     className="text-xs px-2 py-1 rounded-lg hover:bg-[var(--th-bg-surface-hover)] transition-colors"
                     style={{ color: "var(--th-text-muted)" }}
                   >
-                    {tr("다시 업로드", "Re-upload")}
+                    {tr("", "Re-upload")}
                   </button>
                 )}
               </div>
@@ -441,20 +443,31 @@ export default function AgentFormModal({
             className="flex-1 px-4 py-2.5 rounded-lg text-sm font-medium transition-all bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white disabled:opacity-40 shadow-sm shadow-blue-600/20"
           >
             {saving
-              ? tr("처리 중...", "Saving...")
+              ? tr("...", "Saving...")
               : isEdit
-                ? tr("변경사항 저장", "Save Changes")
-                : tr("채용 확정", "Confirm Hire")}
+                ? tr("", "Save Changes")
+                : tr("", "Confirm Hire")}
           </button>
           <button
             onClick={onClose}
             className="px-4 py-2.5 rounded-lg text-sm font-medium transition-all hover:bg-[var(--th-bg-surface-hover)]"
             style={{ border: "1px solid var(--th-input-border)", color: "var(--th-text-secondary)" }}
           >
-            {tr("취소", "Cancel")}
+            {tr("", "Cancel")}
           </button>
         </div>
       </div>
+      {showAvatarBuilder && (
+        <AvatarBuilder
+          initialSeed={form.avatar_seed}
+          tr={tr}
+          onApply={(seed) => {
+            setForm({ ...form, avatar_seed: seed });
+            setShowAvatarBuilder(false);
+          }}
+          onClose={() => setShowAvatarBuilder(false)}
+        />
+      )}
     </div>
   );
 }

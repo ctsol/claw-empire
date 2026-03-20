@@ -29,7 +29,7 @@ type CreateReplyCoreToolsDeps = {
 };
 
 const MEETING_BUBBLE_EMPTY: LocalizedLines = {
-  ko: ["의견 공유드립니다."],
+  ko: [""],
   en: ["Sharing thoughts shortly."],
   ja: ["ご意見を共有します。"],
   zh: ["稍后分享意见。"],
@@ -178,38 +178,38 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
         if (lang === "en") return `${name}: Kickoff noted. Please share concise feedback in order.`;
         if (lang === "ja") return `${name}: キックオフを開始します。順番に簡潔なフィードバックを共有してください。`;
         if (lang === "zh") return `${name}: 现在开始会议，请各位按顺序简要反馈。`;
-        return `${name}: 킥오프 회의를 시작합니다. 순서대로 핵심 피드백을 간단히 공유해주세요.`;
+        return `${name}: Kickoff noted. Please share concise feedback in order.`;
       case "feedback":
         if (lang === "en")
           return `${name}: We have identified key gaps and a top-priority validation item before execution.`;
         if (lang === "ja") return `${name}: 着手前の補完項目と最優先の検証課題を確認しました。`;
         if (lang === "zh") return `${name}: 已确认执行前的补充项与最高优先验证课题。`;
-        return `${name}: 착수 전 보완 항목과 최우선 검증 과제를 확인했습니다.`;
+        return `${name}: We have identified key gaps and a top-priority validation item before execution.`;
       case "summary":
         if (lang === "en")
           return `${name}: I will consolidate all leader feedback and proceed with the agreed next step.`;
         if (lang === "ja") return `${name}: 各チームリーダーの意見を統合し、合意した次のステップへ進めます。`;
         if (lang === "zh") return `${name}: 我将汇总各负责人意见，并按约定进入下一步。`;
-        return `${name}: 각 팀장 의견을 취합해 합의된 다음 단계로 진행하겠습니다.`;
+        return `${name}: I will consolidate all leader feedback and proceed with the agreed next step.`;
       case "approval":
         if (lang === "en")
           return `${name}: Decision noted. We will proceed according to the current meeting conclusion.`;
         if (lang === "ja") return `${name}: 本会議の結論に従って進行します。`;
         if (lang === "zh") return `${name}: 已确认决策，将按本轮会议结论执行。`;
-        return `${name}: 본 회의 결론에 따라 진행하겠습니다.`;
+        return `${name}: Decision noted. We will proceed according to the current meeting conclusion.`;
       case "direct":
       default:
         if (lang === "en") return `${name}: Acknowledged. Proceeding with the requested direction.`;
         if (lang === "ja") return `${name}: 承知しました。ご指示の方向で進めます。`;
         if (lang === "zh") return `${name}: 收到，将按您的指示推进。`;
-        return `${name}: 확인했습니다. 요청하신 방향으로 진행하겠습니다.`;
+        return `${name}: Acknowledged. Proceeding with the requested direction.`;
     }
   }
 
   function buildAgentReplyText(
     lang: string,
     agent: AgentRow | undefined,
-    messages: { ko: string; en: string; ja: string; zh: string; ru?: string },
+    messages: { ko?: string; en: string; ja: string; zh: string; ru?: string },
   ): string {
     const body =
       lang === "ru" && messages.ru
@@ -220,7 +220,7 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
             ? messages.ja
             : lang === "zh"
               ? messages.zh
-              : messages.ko;
+              : messages.en;
     const name = agent ? getAgentDisplayName(agent, lang) : "";
     return name ? `${name}: ${body}` : body;
   }
@@ -274,7 +274,6 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
   function buildRunFailureReply(kind: RunFailureKind, lang: string, agent?: AgentRow, detail = ""): string {
     if (kind === "permission") {
       return buildAgentReplyText(lang, agent, {
-        ko: "파일 접근 권한에 의해 작업이 차단되었습니다. 프로젝트 디렉터리 설정을 확인해주세요.",
         en: "The requested operation was blocked by a file-access permission. Please check the project directory settings.",
         ja: "ファイルアクセス権限により操作がブロックされました。プロジェクトディレクトリ設定を確認してください。",
         zh: "操作因文件访问权限被阻止，请检查项目目录设置。",
@@ -283,7 +282,6 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
     }
     if (kind === "stale_file") {
       return buildAgentReplyText(lang, agent, {
-        ko: "파일이 읽은 뒤 변경되어 작업이 중단되었습니다. 파일을 다시 읽고 재시도해주세요.",
         en: "The file changed after it was read, so the operation was stopped. Please re-read the file and retry.",
         ja: "読み取り後にファイルが変更されたため、処理が停止しました。再読込して再試行してください。",
         zh: "文件在读取后被修改，操作已中止。请重新读取该文件后再试。",
@@ -292,7 +290,6 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
     }
     if (kind === "tool_calls_only") {
       return buildAgentReplyText(lang, agent, {
-        ko: "도구 호출 단계에서 종료되어 최종 답변이 생성되지 않았습니다. 다시 시도해주세요.",
         en: "The run ended at tool-calls without producing a final reply. Please retry.",
         ja: "ツール呼び出し段階で終了し、最終回答が生成されませんでした。再試行してください。",
         zh: "执行在工具调用阶段结束，未生成最终回复。请重试。",
@@ -301,7 +298,6 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
     }
     if (kind === "timeout") {
       return buildAgentReplyText(lang, agent, {
-        ko: "응답 생성 시간이 초과되어 작업이 중단되었습니다. 잠시 후 다시 시도해주세요.",
         en: "Response generation timed out, so the run was stopped. Please try again shortly.",
         ja: "応答生成がタイムアウトしたため処理を停止しました。しばらくして再試行してください。",
         zh: "回复生成超时，任务已中止。请稍后重试。",
@@ -310,7 +306,6 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
     }
     const suffix = detail ? ` (${detail})` : "";
     return buildAgentReplyText(lang, agent, {
-      ko: `CLI 실행 중 오류가 발생했습니다${suffix}.`,
       en: `CLI execution failed${suffix}.`,
       ja: `CLI 実行中にエラーが発生しました${suffix}。`,
       zh: `CLI 执行失败${suffix}。`,
@@ -328,7 +323,7 @@ export function createReplyCoreTools(deps: CreateReplyCoreToolsDeps) {
     }
     const cleaned = normalizeConversationReply(rawText, maxReplyChars, { maxSentences: 0 });
     if (!cleaned) return fallbackTurnReply(kind, lang, agent);
-    if (/timeout after|CLI 응답 생성에 실패|response failed|one-shot-error/i.test(cleaned)) {
+    if (/timeout after|CLI 응답 생성에 실패|response failed|one-shot-error/i.test(cleaned)) { // Korean in regex kept for backward compat
       return fallbackTurnReply(kind, lang, agent);
     }
     if (isInternalWorkNarration(cleaned)) return fallbackTurnReply(kind, lang, agent);

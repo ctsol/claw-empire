@@ -22,7 +22,7 @@ export function createProgressNotifyTools(deps: CreateProgressNotifyToolsDeps) {
           leader,
           pickL(
             l(
-              [`대표님, '${taskTitle}' 작업 진행 중입니다. 현재 순조롭게 진행되고 있어요.`],
+              [`CEO, '${taskTitle}' is in progress and currently going smoothly.`],
               [`CEO, '${taskTitle}' is in progress and currently going smoothly.`],
               [`CEO、'${taskTitle}' は進行中で、現在は順調です。`],
               [`CEO，'${taskTitle}' 正在进行中，目前进展顺利。`],

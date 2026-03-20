@@ -213,7 +213,7 @@ export function registerAgentSpawnRoute(ctx: RuntimeContext): void {
         departmentPromptBlock,
         pickL(
           l(
-            ["위 작업을 충분히 완수하세요."],
+            ["."],
             ["Please complete the task above thoroughly."],
             ["上記タスクを丁寧に完了してください。"],
             ["请完整地完成上述任务。"],

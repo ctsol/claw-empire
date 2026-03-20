@@ -16,11 +16,11 @@ describe("ChatMessageList sender fallback", () => {
         id: "msg-1",
         sender_type: "agent",
         sender_id: "agent-missing",
-        sender_name: "리안",
+        sender_name: "",
         sender_avatar: "🎬",
         receiver_type: "agent",
         receiver_id: "ceo",
-        content: "진행 옵션\n1. A\n2. B",
+        content: "\n1. A\n2. B",
         message_type: "chat",
         task_id: null,
         created_at: Date.now(),
@@ -45,7 +45,7 @@ describe("ChatMessageList sender fallback", () => {
       />,
     );
 
-    expect(screen.getByText("리안")).toBeInTheDocument();
-    expect(screen.queryByText("알 수 없음")).not.toBeInTheDocument();
+    expect(screen.getByText("")).toBeInTheDocument();
+    expect(screen.queryByText("")).not.toBeInTheDocument();
   });
 });

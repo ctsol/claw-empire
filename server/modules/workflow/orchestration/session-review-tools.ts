@@ -110,7 +110,7 @@ export function createSessionReviewTools(deps: CreateSessionReviewToolsDeps) {
       pickL(
         l(
           [
-            `[CEO OFFICE] '${taskTitle}' 리뷰 라운드 ${currentRound} 취합이 완료되어 라운드 ${nextRound} 최종 승인 회의로 즉시 전환합니다.`,
+            `[CEO OFFICE] '${taskTitle}' review round ${currentRound} consolidation is complete. Moving directly to final approval round ${nextRound}.`,
           ],
           [
             `[CEO OFFICE] '${taskTitle}' review round ${currentRound} consolidation is complete. Moving directly to final approval round ${nextRound}.`,

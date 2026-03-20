@@ -27,12 +27,11 @@ import {
   drawRug,
   drawRoomAtmosphere,
   drawTiledFloor,
-  drawTrashCan,
   drawWallClock,
   drawWindow,
 } from "./drawing-core";
 import { drawChair, drawDesk, drawPlant, drawWhiteboard } from "./drawing-furniture-a";
-import { drawBookshelf } from "./drawing-furniture-b";
+import { drawBookshelf, drawDoneTrashCan } from "./drawing-furniture-b";
 import { renderDeskAgentAndSubClones } from "./buildScene-department-agent";
 
 interface BuildDepartmentRoomsParams {
@@ -161,7 +160,15 @@ export function buildDepartmentRooms({
     signTxt.position.set(signX + 23, signY + signH / 2);
     room.addChild(signTxt);
 
-    drawCeilingAndDecor(room, rx, ry, roomW, roomH, theme, deptIdx, wallClocksRef);
+    const deptTasks = tasks
+      .filter((t) => t.department_id === dept.id && t.status !== "cancelled" && t.status !== "done")
+      .sort((a, b) => (b.priority ?? 3) - (a.priority ?? 3))
+      .slice(0, 6)
+      .map((t) => ({ title: t.title, status: t.status }));
+    const deptDoneCount = tasks.filter(
+      (t) => t.department_id === dept.id && t.status === "done",
+    ).length;
+    drawCeilingAndDecor(room, rx, ry, roomW, roomH, theme, deptIdx, wallClocksRef, deptDoneCount, activeLocale);
 
     if (deptAgents.length > 0) {
       drawRug(
@@ -237,6 +244,9 @@ export function buildDepartmentRooms({
       }
     });
 
+    // Whiteboard on top of everything
+    drawWhiteboard(room, rx + roomW - 122, ry + 28, deptTasks);
+
     app.stage.addChild(room);
   });
 }
@@ -250,6 +260,8 @@ function drawCeilingAndDecor(
   theme: { accent: number; wall: number },
   deptIdx: number,
   wallClocksRef: MutableRefObject<WallClockVisual[]>,
+  doneCount: number,
+  locale: SupportedLocale,
 ): void {
   drawCeilingLight(room, rx + roomW / 2, ry + 14, theme.accent);
   drawAmbientGlow(room, rx + roomW / 2, ry + roomH / 2, roomW * 0.4, theme.accent, 0.04);
@@ -263,7 +275,6 @@ function drawCeilingAndDecor(
     0.52,
   );
 
-  drawWhiteboard(room, rx + roomW - 48, ry + 18);
   drawBookshelf(room, rx + 6, ry + 18);
   wallClocksRef.current.push(drawWallClock(room, rx + roomW - 16, ry + 12));
   drawWindow(room, rx + roomW / 2 - 12, ry + 16);
@@ -277,7 +288,7 @@ function drawCeilingAndDecor(
 
   drawPlant(room, rx + 8, ry + roomH - 14, deptIdx);
   drawPlant(room, rx + roomW - 12, ry + roomH - 14, deptIdx + 1);
-  drawTrashCan(room, rx + roomW - 14, ry + roomH - 26);
+  drawDoneTrashCan(room, rx + roomW - 14, ry + roomH - 26, doneCount, locale);
 }
 
 function renderAgentHeader(
@@ -328,7 +339,7 @@ function renderAgentHeader(
 
     // Tooltip
     const tipLabel = pickLocale(activeLocale, {
-      ko: "읽지 않은 메시지",
+      ko: "",
       en: "Unread messages",
       ja: "未読メッセージ",
       zh: "未读消息",

@@ -230,7 +230,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
             lang === "ru"
               ? `✅ Создано ${(data.taskIds as string[])?.length ?? 0} задач. Команды приступают к работе.`
               : lang === "ko"
-                ? `✅ ${(data.taskIds as string[])?.length ?? 0}개의 태스크가 생성되었습니다. 팀이 작업을 시작합니다.`
+                ? ``
                 : `✅ Created ${(data.taskIds as string[])?.length ?? 0} tasks. Teams are starting work.`,
           timestamp: Date.now(),
         },
@@ -256,17 +256,17 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
       lang === "ru"
         ? "Руководители готовят ответы..."
         : lang === "ko"
-          ? "팀장들이 답변 중..."
+          ? "..."
           : "Heads responding...",
     waiting_ceo:
       lang === "ru"
         ? "Ожидает вашего ответа"
         : lang === "ko"
-          ? "답변 대기중"
+          ? ""
           : "Waiting for your reply",
-    ready: lang === "ru" ? "Готовы к разработке" : lang === "ko" ? "개발 준비 완료" : "Ready to begin",
+    ready: lang === "ru" ? "Готовы к разработке" : lang === "ko" ? "" : "Ready to begin",
     done:
-      lang === "ru" ? "Совещание завершено" : lang === "ko" ? "회의 완료" : "Meeting completed",
+      lang === "ru" ? "Совещание завершено" : lang === "ko" ? "" : "Meeting completed",
   }[meetingState];
 
   return (
@@ -285,14 +285,14 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
           style={{ background: "var(--th-bg-hover)", color: "var(--th-text-muted)" }}
         >
           ←{" "}
-          {lang === "ru" ? "Офис" : lang === "ko" ? "오피스" : "Office"}
+          {lang === "ru" ? "Офис" : lang === "ko" ? "" : "Office"}
         </button>
         <div className="flex-1 min-w-0">
           <h2 className="text-sm font-semibold truncate" style={{ color: "var(--th-text-heading)" }}>
             {lang === "ru"
               ? "Совещание руководителей"
               : lang === "ko"
-                ? "팀장 회의"
+                ? ""
                 : "Leadership Meeting"}
             {isStarted && mode === "planning" && round > 0 && (
               <span className="ml-2 text-[11px] font-normal opacity-60">
@@ -337,14 +337,14 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                 {lang === "ru"
                   ? "Созвать совещание с руководителями"
                   : lang === "ko"
-                    ? "팀장 회의 소집"
+                    ? ""
                     : "Call a Leadership Meeting"}
               </h3>
               <p className="text-sm mt-1" style={{ color: "var(--th-text-muted)" }}>
                 {lang === "ru"
                   ? "Соберите всех руководителей отделов для планирования или отчётности"
                   : lang === "ko"
-                    ? "모든 팀장을 소집하여 계획 수립 또는 보고를 진행합니다"
+                    ? ""
                     : "Gather all department heads for planning or reporting"}
               </p>
             </div>
@@ -361,13 +361,13 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
               >
                 <span className="text-2xl">📋</span>
                 <span className="text-sm font-medium" style={{ color: "var(--th-text-heading)" }}>
-                  {lang === "ru" ? "Планирование" : lang === "ko" ? "계획 수립" : "Planning"}
+                  {lang === "ru" ? "Планирование" : lang === "ko" ? "" : "Planning"}
                 </span>
                 <span className="text-xs text-center" style={{ color: "var(--th-text-muted)" }}>
                   {lang === "ru"
                     ? "Руководители задают вопросы, вы выбираете ответы"
                     : lang === "ko"
-                      ? "팀장들이 질문, 답변 선택"
+                      ? ","
                       : "Heads ask questions, you choose answers"}
                 </span>
               </button>
@@ -381,13 +381,13 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
               >
                 <span className="text-2xl">📊</span>
                 <span className="text-sm font-medium" style={{ color: "var(--th-text-heading)" }}>
-                  {lang === "ru" ? "Отчётность" : lang === "ko" ? "현황 보고" : "Reporting"}
+                  {lang === "ru" ? "Отчётность" : lang === "ko" ? "" : "Reporting"}
                 </span>
                 <span className="text-xs text-center" style={{ color: "var(--th-text-muted)" }}>
                   {lang === "ru"
                     ? "Каждый руководитель докладывает статус"
                     : lang === "ko"
-                      ? "각 팀장이 현황 보고"
+                      ? ""
                       : "Each head reports their status"}
                 </span>
               </button>
@@ -397,7 +397,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
             {mode === "planning" && (
               <div className="mb-4">
                 <label className="text-xs font-medium block mb-1.5" style={{ color: "var(--th-text-muted)" }}>
-                  {lang === "ru" ? "Тема планирования" : lang === "ko" ? "계획 주제" : "Planning Topic"}
+                  {lang === "ru" ? "Тема планирования" : lang === "ko" ? "" : "Planning Topic"}
                 </label>
                 <input
                   type="text"
@@ -408,7 +408,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                     lang === "ru"
                       ? "Например: Создать мобильное приложение для доставки еды"
                       : lang === "ko"
-                        ? "예: 음식 배달 모바일 앱 개발"
+                        ? ":"
                         : "e.g. Build a food delivery mobile app"
                   }
                   className="w-full px-3 py-2.5 rounded-lg text-sm outline-none"
@@ -424,7 +424,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
             {/* Project selector */}
             <div className="mb-4">
               <label className="text-xs font-medium block mb-1.5" style={{ color: "var(--th-text-muted)" }}>
-                {lang === "ru" ? "Проект (необязательно)" : lang === "ko" ? "프로젝트 (선택)" : "Project (optional)"}
+                {lang === "ru" ? "Проект (необязательно)" : lang === "ko" ? "()" : "Project (optional)"}
               </label>
               <select
                 value={selectedProjectId}
@@ -437,7 +437,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                 }}
               >
                 <option value="">
-                  {lang === "ru" ? "— Без проекта —" : lang === "ko" ? "— 프로젝트 없음 —" : "— No project —"}
+                  {lang === "ru" ? "— Без проекта —" : lang === "ko" ? "—   —" : "— No project —"}
                 </option>
                 {projects.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -457,12 +457,12 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                 ? lang === "ru"
                   ? "Созываем..."
                   : lang === "ko"
-                    ? "소집 중..."
+                    ? "..."
                     : "Starting..."
                 : lang === "ru"
                   ? "🔔 Созвать совещание"
                   : lang === "ko"
-                    ? "🔔 회의 소집"
+                    ? "🔔"
                     : "🔔 Call Meeting"}
             </button>
           </div>
@@ -478,7 +478,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
             style={{ borderRight: "1px solid var(--th-border)", background: "var(--th-bg-surface)" }}
           >
             <div className="text-[10px] font-semibold uppercase tracking-wider mb-1 px-1" style={{ color: "var(--th-text-muted)" }}>
-              {lang === "ru" ? "Участники" : lang === "ko" ? "참석자" : "Participants"}
+              {lang === "ru" ? "Участники" : lang === "ko" ? "" : "Participants"}
             </div>
             {participants.map((p) => (
               <div
@@ -597,13 +597,13 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                               : lang === "ru"
                                 ? `Отправить (${selectedOptions.get(msg.id)?.size})`
                                 : lang === "ko"
-                                  ? `전송 (${selectedOptions.get(msg.id)?.size})`
+                                  ? ``
                                   : `Send (${selectedOptions.get(msg.id)?.size})`}
                           </button>
                         )}
                         {sentMessages.has(msg.id) && (
                           <div className="text-[10px]" style={{ color: "var(--th-text-muted)" }}>
-                            ✓ {lang === "ru" ? "Отправлено" : lang === "ko" ? "전송됨" : "Sent"}:{" "}
+                            ✓ {lang === "ru" ? "Отправлено" : lang === "ko" ? "" : "Sent"}:{" "}
                             {Array.from(selectedOptions.get(msg.id) ?? []).join(", ")}
                           </div>
                         )}
@@ -628,7 +628,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                     {lang === "ru"
                       ? "Руководители готовят ответы..."
                       : lang === "ko"
-                        ? "팀장들이 답변 중..."
+                        ? "..."
                         : "Heads responding..."}
                   </div>
                 </div>
@@ -650,14 +650,14 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                       {lang === "ru"
                         ? "Совещание завершено — запустить задачи?"
                         : lang === "ko"
-                          ? "회의 완료 — 태스크를 시작할까요?"
+                          ? "—  ?"
                           : "Meeting complete — start the tasks?"}
                     </div>
                     <div className="text-xs text-green-200 mt-0.5">
                       {lang === "ru"
                         ? `Будет создано ${participants.length} задач, по одной для каждого отдела`
                         : lang === "ko"
-                          ? `${participants.length}개의 태스크가 생성됩니다`
+                          ? ``
                           : `${participants.length} tasks will be created, one per department`}
                     </div>
                   </div>
@@ -672,7 +672,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                       : lang === "ru"
                         ? "Создать задачи"
                         : lang === "ko"
-                          ? "태스크 생성"
+                          ? ""
                           : "Create Tasks"}
                   </button>
                 </div>
@@ -694,7 +694,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                     {lang === "ru"
                       ? "Руководители ждут вашего ответа. Выберите вариант или напишите свой:"
                       : lang === "ko"
-                        ? "팀장들이 답변을 기다립니다. 옵션을 선택하거나 직접 입력:"
+                        ? ".    :"
                         : "Heads are waiting. Choose an option above or type your reply:"}
                   </div>
                 )}
@@ -718,7 +718,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                         : lang === "ru"
                           ? "Ваш вопрос или ответ..."
                           : lang === "ko"
-                            ? "질문 또는 답변 입력..."
+                            ? "..."
                             : "Your question or reply..."
                     }
                     className="flex-1 px-3 py-2 rounded-lg text-sm outline-none disabled:opacity-50"
@@ -750,7 +750,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                   {lang === "ru"
                     ? "Совещание завершено. "
                     : lang === "ko"
-                      ? "회의가 완료되었습니다. "
+                      ? "."
                       : "Meeting completed. "}
                 </span>
                 <button
@@ -761,7 +761,7 @@ export default function CeoMeetingPanel({ onBack, lang }: CeoMeetingPanelProps) 
                   {lang === "ru"
                     ? "Вернуться в офис"
                     : lang === "ko"
-                      ? "오피스로 돌아가기"
+                      ? ""
                       : "Return to office"}
                 </button>
               </div>

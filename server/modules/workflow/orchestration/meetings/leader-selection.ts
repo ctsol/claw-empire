@@ -123,7 +123,7 @@ export function createMeetingLeaderSelectionTools(deps: LeaderSelectionDeps) {
       department_id: taskMeta?.department_id ?? fallbackDeptId ?? null,
     });
 
-    // 프로젝트 manual 모드 확인 — 지정 직원의 부서 팀장만 참석
+    // Check project manual mode — only department leaders of assigned staff attend
     if (taskMeta?.project_id) {
       const proj = db.prepare("SELECT assignment_mode FROM projects WHERE id = ?").get(taskMeta.project_id) as
         | { assignment_mode: string }
@@ -141,7 +141,7 @@ export function createMeetingLeaderSelectionTools(deps: LeaderSelectionDeps) {
         const leaders = getLeadersByDepartmentIds(desiredDeptIds, constrainedAgentIds);
         const seen = new Set(leaders.map((l) => l.id));
 
-        // manual 스코프로 찾지 못한 관련부서 팀장은 팩 스코프로 한 번 더 시도한다.
+        // For related-department leaders not found via manual scope, retry with pack scope.
         for (const deptId of relatedDeptIds) {
           const hasDeptLeader = leaders.some((leader) => leader.department_id === deptId);
           if (hasDeptLeader) continue;
@@ -152,7 +152,7 @@ export function createMeetingLeaderSelectionTools(deps: LeaderSelectionDeps) {
         }
 
         if (includePlanning) {
-          // 기획팀장은 항상 포함
+          // Planning team leader is always included
           const planningLeader =
             findTeamLeader("planning", constrainedAgentIds) ?? findTeamLeader("planning", packScopedAgentIds);
           if (planningLeader && !seen.has(planningLeader.id)) {
@@ -161,7 +161,7 @@ export function createMeetingLeaderSelectionTools(deps: LeaderSelectionDeps) {
           }
         }
 
-        // manual 모드에서도 관련부서를 감지하지 못했거나 소수일 때는 팩 범위 팀장으로 보강한다.
+        // Even in manual mode, supplement with pack-scoped leaders when related departments are undetected or too few.
         if (fallbackAll && leaders.length < minLeaders) {
           const fallbackScope =
             Array.isArray(packScopedAgentIds) && packScopedAgentIds.length > 0

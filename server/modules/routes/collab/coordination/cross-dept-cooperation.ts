@@ -305,7 +305,7 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
       notifyCeo(
         pickL(
           l(
-            [`협업 요청 진행 중: ${crossDeptName} (${index + 1}/${deptIds.length}, 남은 ${remaining}팀 순차 진행)`],
+            [``],
             [
               `Collaboration request in progress: ${crossDeptName} (${index + 1}/${deptIds.length}, ${remaining} team(s) remaining in queue)`,
             ],
@@ -322,8 +322,8 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
     const coopReq = pickL(
       l(
         [
-          `${crossCoordinatorName}님, 안녕하세요! 대표님 지시로 "${taskTitle}" 업무 진행 중인데, ${crossDeptName} 협조가 필요합니다. 도움 부탁드려요! 🤝`,
-          `${crossCoordinatorName}님! "${taskTitle}" 건으로 ${crossDeptName} 지원이 필요합니다. 시간 되시면 협의 부탁드립니다.`,
+          ``,
+          ``,
         ],
         [
           `Hi ${crossCoordinatorName}! We're working on "${taskTitle}" per CEO's directive and need ${crossDeptName}'s support. Could you help? 🤝`,
@@ -379,8 +379,8 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
           ? pickL(
               l(
                 [
-                  `네, ${leaderName}님! 확인했습니다. ${execName}에게 바로 배정하겠습니다 👍`,
-                  `알겠습니다! ${execName}가 지원하도록 하겠습니다. 진행 상황 공유드릴게요.`,
+                  `, ${leaderName}! . ${execName}   👍`,
+                  `! ${execName}  .   .`,
                 ],
                 [
                   `Sure, ${leaderName}! I'll assign ${execName} to support right away 👍`,
@@ -397,7 +397,7 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
             )
           : pickL(
               l(
-                [`네, ${leaderName}님! 확인했습니다. 제가 직접 처리하겠습니다 👍`],
+                [`, ${leaderName}! .    👍`],
                 [`Sure, ${leaderName}! I'll handle it personally 👍`],
                 [`了解しました！私が直接対応します 👍`],
                 [`好的！我亲自来处理 👍`],
@@ -412,7 +412,7 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
       const ct = nowMs();
       const crossTaskTitle = pickL(
         l(
-          [`[협업] ${taskTitle}`],
+          [``],
           [`[Collaboration] ${taskTitle}`],
           [`[協業] ${taskTitle}`],
           [`[协作] ${taskTitle}`],
@@ -560,7 +560,7 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
               deptPromptBlock,
               pickL(
                 l(
-                  ["위 작업을 충분히 완수하세요. 필요 시 위 대화 맥락을 참고하세요."],
+                  [".      ."],
                   ["Please complete the task above thoroughly. Use the conversation context above if relevant."],
                   ["上記タスクを丁寧に完了してください。必要に応じて会話コンテキストを参照してください。"],
                   ["请完整地完成上述任务。可按需参考上方会话上下文。"],
@@ -639,7 +639,7 @@ export function createCrossDeptCooperationTools(deps: CrossDeptCooperationDeps) 
           notifyCeo(
             pickL(
               l(
-                [`${crossDeptName} ${execName}가 '${taskTitle}' 협업 작업을 시작했습니다.`],
+                [``],
                 [`${crossDeptName} ${execName} started collaboration work for '${taskTitle}'.`],
                 [`${crossDeptName}の${execName}が「${taskTitle}」の協業作業を開始しました。`],
                 [`${crossDeptName} 的 ${execName} 已开始「${taskTitle}」协作工作。`],

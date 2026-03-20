@@ -114,7 +114,7 @@ export default function ProjectEditorPanel({
   return (
     <div className="min-w-0 space-y-3 rounded-xl border border-slate-700 bg-slate-800/50 p-4">
       <label className="block text-xs text-slate-400">
-        {t({ ko: "프로젝트 이름", en: "Project Name", ja: "プロジェクト名", zh: "项目名称", ru: "Название проекта" })}
+        {t({ ko: "", en: "Project Name", ja: "プロジェクト名", zh: "项目名称", ru: "Название проекта" })}
         <input
           type="text"
           value={name}
@@ -127,7 +127,7 @@ export default function ProjectEditorPanel({
         />
       </label>
       <label className="block text-xs text-slate-400">
-        {t({ ko: "프로젝트 경로", en: "Project Path", ja: "プロジェクトパス", zh: "项目路径", ru: "Путь проекта" })}
+        {t({ ko: "", en: "Project Path", ja: "プロジェクトパス", zh: "项目路径", ru: "Путь проекта" })}
         <input
           type="text"
           value={projectPath}
@@ -154,7 +154,7 @@ export default function ProjectEditorPanel({
               className="rounded-md border border-slate-600 px-2.5 py-1 text-xs font-semibold text-slate-200 transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
             >
               {t({
-                ko: "앱 내 폴더 탐색",
+                ko: "",
                 en: "In-App Folder Browser",
                 ja: "アプリ内フォルダ閲覧",
                 zh: "应用内文件夹浏览",
@@ -171,8 +171,8 @@ export default function ProjectEditorPanel({
               className="rounded-md border border-slate-600 px-2.5 py-1 text-xs font-semibold text-slate-200 transition hover:bg-slate-800 disabled:cursor-not-allowed disabled:opacity-40"
             >
               {pathSuggestionsOpen
-                ? t({ ko: "자동 경로찾기 닫기", en: "Close Auto Finder", ja: "自動候補を閉じる", zh: "关闭自动查找", ru: "Закрыть автопоиск" })
-                : t({ ko: "자동 경로찾기", en: "Auto Path Finder", ja: "自動パス検索", zh: "自动路径查找", ru: "Автопоиск пути" })}
+                ? t({ ko: "", en: "Close Auto Finder", ja: "自動候補を閉じる", zh: "关闭自动查找", ru: "Закрыть автопоиск" })
+                : t({ ko: "", en: "Auto Path Finder", ja: "自動パス検索", zh: "自动路径查找", ru: "Автопоиск пути" })}
             </button>
             <button
               type="button"
@@ -194,7 +194,7 @@ export default function ProjectEditorPanel({
                     setFormFeedback({ tone: "info", message: unsupportedPathApiMessage });
                   } else {
                     const message = resolvePathHelperErrorMessage(err, {
-                      ko: "운영체제 폴더 선택기를 열지 못했습니다.",
+                      ko: ".",
                       en: "Failed to open OS folder picker.",
                       ja: "OSフォルダ選択を開けませんでした。",
                       zh: "无法打开系统文件夹选择器。",
@@ -220,7 +220,7 @@ export default function ProjectEditorPanel({
             >
               {nativePathPicking
                 ? t({
-                    ko: "수동 경로찾기 여는 중...",
+                    ko: "...",
                     en: "Opening Manual Picker...",
                     ja: "手動パス選択を開いています...",
                     zh: "正在打开手动路径选择...",
@@ -228,13 +228,13 @@ export default function ProjectEditorPanel({
                   })
                 : nativePickerUnsupported
                   ? t({
-                      ko: "수동 경로찾기(사용불가)",
+                      ko: "()",
                       en: "Manual Path Finder (Unavailable)",
                       ja: "手動パス選択（利用不可）",
                       zh: "手动路径选择（不可用）",
                       ru: "Выбор пути вручную (Недоступно)",
                     })
-                  : t({ ko: "수동 경로찾기", en: "Manual Path Finder", ja: "手動パス選択", zh: "手动路径选择", ru: "Выбор пути вручную" })}
+                  : t({ ko: "", en: "Manual Path Finder", ja: "手動パス選択", zh: "手动路径选择", ru: "Выбор пути вручную" })}
             </button>
           </div>
           {pathSuggestionsOpen && (
@@ -242,7 +242,7 @@ export default function ProjectEditorPanel({
               {pathSuggestionsLoading ? (
                 <p className="px-3 py-2 text-xs text-slate-400">
                   {t({
-                    ko: "경로 후보를 불러오는 중...",
+                    ko: "...",
                     en: "Loading path suggestions...",
                     ja: "パス候補を読み込み中...",
                     zh: "正在加载路径候选...",
@@ -252,7 +252,7 @@ export default function ProjectEditorPanel({
               ) : pathSuggestions.length === 0 ? (
                 <p className="px-3 py-2 text-xs text-slate-400">
                   {t({
-                    ko: "추천 경로가 없습니다. 직접 입력해주세요.",
+                    ko: ".  .",
                     en: "No suggested path. Enter one manually.",
                     ja: "候補パスがありません。手入力してください。",
                     zh: "没有推荐路径，请手动输入。",
@@ -281,7 +281,7 @@ export default function ProjectEditorPanel({
           {missingPathPrompt && (
             <p className="text-xs text-amber-300">
               {t({
-                ko: "해당 경로가 아직 존재하지 않습니다. 저장 시 생성 여부를 확인합니다.",
+                ko: ".     .",
                 en: "This path does not exist yet. Save will ask whether to create it.",
                 ja: "このパスはまだ存在しません。保存時に作成確認を行います。",
                 zh: "该路径尚不存在，保存时会先确认是否创建。",
@@ -303,7 +303,7 @@ export default function ProjectEditorPanel({
         </div>
       )}
       <label className="block text-xs text-slate-400">
-        {t({ ko: "핵심 목표", en: "Core Goal", ja: "コア目標", zh: "核心目标", ru: "Основная цель" })}
+        {t({ ko: "", en: "Core Goal", ja: "コア目標", zh: "核心目标", ru: "Основная цель" })}
         <textarea
           rows={5}
           value={coreGoal}
@@ -347,8 +347,8 @@ export default function ProjectEditorPanel({
             className="rounded-lg bg-blue-600 px-3 py-1.5 text-xs font-medium text-white hover:bg-blue-500 disabled:opacity-40"
           >
             {editingProjectId
-              ? t({ ko: "수정 저장", en: "Save", ja: "保存", zh: "保存", ru: "Сохранить" })
-              : t({ ko: "프로젝트 등록", en: "Create", ja: "作成", zh: "创建", ru: "Создать" })}
+              ? t({ ko: "", en: "Save", ja: "保存", zh: "保存", ru: "Сохранить" })
+              : t({ ko: "", en: "Create", ja: "作成", zh: "创建", ru: "Создать" })}
           </button>
         )}
         {(isCreating || !!editingProjectId) && (
@@ -357,7 +357,7 @@ export default function ProjectEditorPanel({
             onClick={onCancelEdit}
             className="rounded-lg border border-slate-700 px-3 py-1.5 text-xs text-slate-300"
           >
-            {t({ ko: "취소", en: "Cancel", ja: "キャンセル", zh: "取消", ru: "Отмена" })}
+            {t({ ko: "", en: "Cancel", ja: "キャンセル", zh: "取消", ru: "Отмена" })}
           </button>
         )}
         <button
@@ -366,7 +366,7 @@ export default function ProjectEditorPanel({
           disabled={!selectedProject || isCreating || !!editingProjectId}
           className="rounded-lg border border-slate-700 px-3 py-1.5 text-xs text-slate-300 disabled:opacity-40"
         >
-          {t({ ko: "선택 프로젝트 편집", en: "Edit Selected", ja: "選択編集", zh: "编辑选中项", ru: "Редактировать выбранный" })}
+          {t({ ko: "", en: "Edit Selected", ja: "選択編集", zh: "编辑选中项", ru: "Редактировать выбранный" })}
         </button>
         <button
           type="button"
@@ -374,7 +374,7 @@ export default function ProjectEditorPanel({
           disabled={!selectedProject}
           className="rounded-lg border border-red-700/70 px-3 py-1.5 text-xs text-red-300 disabled:opacity-40"
         >
-          {t({ ko: "삭제", en: "Delete", ja: "削除", zh: "删除", ru: "Удалить" })}
+          {t({ ko: "", en: "Delete", ja: "削除", zh: "删除", ru: "Удалить" })}
         </button>
       </div>
     </div>

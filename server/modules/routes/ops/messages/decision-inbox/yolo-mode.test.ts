@@ -25,7 +25,7 @@ function createItem(overrides: Partial<DecisionInboxRouteItem>): DecisionInboxRo
 }
 
 describe("readYoloModeEnabled", () => {
-  it("settings.yoloMode=true를 읽으면 활성화된다", () => {
+  it("settings.yoloMode=true", () => {
     const db = new DatabaseSync(":memory:");
     try {
       db.exec("CREATE TABLE settings (key TEXT PRIMARY KEY, value TEXT)");
@@ -36,7 +36,7 @@ describe("readYoloModeEnabled", () => {
     }
   });
 
-  it("값이 없으면 비활성으로 본다", () => {
+  it("", () => {
     const db = new DatabaseSync(":memory:");
     try {
       db.exec("CREATE TABLE settings (key TEXT PRIMARY KEY, value TEXT)");
@@ -48,7 +48,7 @@ describe("readYoloModeEnabled", () => {
 });
 
 describe("buildYoloDecisionReplyPayload", () => {
-  it("project_review_ready에서 대표선택 이후 start_project_review를 자동 선택한다", () => {
+  it("project_review_ready   start_project_review", () => {
     const payload = buildYoloDecisionReplyPayload(
       createItem({
         kind: "project_review_ready",
@@ -61,7 +61,7 @@ describe("buildYoloDecisionReplyPayload", () => {
     expect(payload).toEqual({ option_number: 1 });
   });
 
-  it("project_review_ready에 대표선택과 start가 함께 있으면 대표선택을 우선한다", () => {
+  it("project_review_ready  start", () => {
     const payload = buildYoloDecisionReplyPayload(
       createItem({
         kind: "project_review_ready",
@@ -74,7 +74,7 @@ describe("buildYoloDecisionReplyPayload", () => {
     expect(payload).toEqual({ option_number: 2 });
   });
 
-  it("review_round_pick에서 summary 권장 번호를 다중 선택으로 반영한다", () => {
+  it("review_round_pick summary", () => {
     const payload = buildYoloDecisionReplyPayload(
       createItem({
         id: "decision-round",
@@ -94,7 +94,7 @@ describe("buildYoloDecisionReplyPayload", () => {
     expect(payload).toEqual({ option_number: 2, selected_option_numbers: [2, 1] });
   });
 
-  it("task_timeout_resume은 resume 옵션을 우선 선택한다", () => {
+  it("task_timeout_resume resume", () => {
     const payload = buildYoloDecisionReplyPayload(
       createItem({
         id: "decision-timeout",
@@ -112,7 +112,7 @@ describe("buildYoloDecisionReplyPayload", () => {
 });
 
 describe("runYoloDecisionAutopilot", () => {
-  it("project 대표선택 -> 회의시작까지 연속 자동 진행한다", () => {
+  it("project  ->", () => {
     const selected = new Set<string>();
     let started = false;
 
@@ -175,7 +175,7 @@ describe("runYoloDecisionAutopilot", () => {
     expect(started).toBe(true);
   });
 
-  it("일시적 409 오류(project_not_ready_for_review_meeting)는 같은 사이클에서 재시도한다", () => {
+  it("409 (project_not_ready_for_review_meeting)", () => {
     let attempts = 0;
     let resolved = false;
     const getDecisionInboxItems = (): DecisionInboxRouteItem[] =>
@@ -208,7 +208,7 @@ describe("runYoloDecisionAutopilot", () => {
     expect(applied).toBe(1);
   });
 
-  it("shouldSkipItem=true 인 항목은 자동 의사결정에서 제외한다", () => {
+  it("shouldSkipItem=true", () => {
     let attempts = 0;
     const getDecisionInboxItems = (): DecisionInboxRouteItem[] => [
       createItem({

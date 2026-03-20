@@ -1,4 +1,4 @@
-import { type Container, Graphics } from "pixi.js";
+import { Container, Graphics, Text, TextStyle } from "pixi.js";
 import { DESK_H, DESK_W, TARGET_CHAR_H } from "./model";
 import { blendColor } from "./drawing-core";
 import { OFFICE_PASTEL } from "./themes-locale";
@@ -301,37 +301,187 @@ function drawPlant(parent: Container, x: number, y: number, variant: number = 0)
   parent.addChild(g);
 }
 
-function drawWhiteboard(parent: Container, x: number, y: number) {
+interface WhiteboardTask {
+  title: string;
+  status: string;
+}
+
+const WB_STATUS_COLOR: Record<string, number> = {
+  inbox: 0x64748b,
+  planned: 0x3b82f6,
+  collaborating: 0x6366f1,
+  in_progress: 0xf59e0b,
+  review: 0xa855f7,
+  done: 0x22c55e,
+  pending: 0xf97316,
+  cancelled: 0xef4444,
+};
+
+const WB_STATUS_DOT: Record<string, number> = {
+  inbox: 0x94a3b8,
+  planned: 0x60a5fa,
+  collaborating: 0x818cf8,
+  in_progress: 0xfbbf24,
+  review: 0xc084fc,
+  done: 0x4ade80,
+  pending: 0xfb923c,
+  cancelled: 0xf87171,
+};
+
+/** Pastel sticky-note backgrounds keyed by task status. */
+const WB_NOTE_BG: Record<string, number> = {
+  inbox: 0xc8d6e5,
+  planned: 0xbbd4f8,
+  collaborating: 0xc5c6f8,
+  in_progress: 0xfde68a,
+  review: 0xe0c4fc,
+  done: 0xbbf7d0,
+  pending: 0xfed7aa,
+  cancelled: 0xfecaca,
+};
+
+/** Slight per-slot rotation (degrees) for a natural "pinned" look. */
+const NOTE_ROTATIONS = [-2, 1.5, -1, 2.5, -1.8, 1];
+
+function drawWhiteboard(parent: Container, x: number, y: number, tasks?: WhiteboardTask[]) {
+  const W = 110;
+  const H = 72;
   const g = new Graphics();
-  // Shadow behind board (deeper, offset)
-  g.roundRect(x + 2, y + 2, 38, 22, 2).fill({ color: 0x000000, alpha: 0.15 });
-  g.roundRect(x + 1, y + 1, 38, 22, 2).fill({ color: 0x000000, alpha: 0.08 });
-  // Frame (warmer silver)
-  g.roundRect(x, y, 38, 22, 2).fill(0xcccccc);
-  g.roundRect(x, y, 38, 22, 2).stroke({ width: 0.5, color: 0xaaaaaa });
-  // Frame highlight (top edge)
-  g.moveTo(x + 2, y + 0.5)
-    .lineTo(x + 36, y + 0.5)
-    .stroke({ width: 0.5, color: 0xffffff, alpha: 0.15 });
+  // Shadow
+  g.roundRect(x + 3, y + 3, W, H, 3).fill({ color: 0x000000, alpha: 0.12 });
+  // Frame
+  g.roundRect(x, y, W, H, 3).fill(0xcccccc);
+  g.roundRect(x, y, W, H, 3).stroke({ width: 0.5, color: 0xaaaaaa });
+  // Top edge highlight
+  g.moveTo(x + 3, y + 0.5).lineTo(x + W - 3, y + 0.5).stroke({ width: 0.5, color: 0xffffff, alpha: 0.2 });
   // White surface
-  g.roundRect(x + 2, y + 2, 34, 18, 1).fill(0xfaf8f2);
-  // Content: colored lines + shapes
-  const cc = [0x3b82f6, 0xef4444, 0x22c55e, 0xf59e0b];
-  for (let i = 0; i < 3; i++) {
-    g.moveTo(x + 5, y + 5 + i * 5)
-      .lineTo(x + 5 + 8 + Math.random() * 16, y + 5 + i * 5)
-      .stroke({ width: 1, color: cc[i], alpha: 0.6 });
-  }
-  // Small sticky notes
-  g.rect(x + 26, y + 4, 6, 5).fill({ color: 0xffee88, alpha: 0.8 });
-  g.rect(x + 26, y + 11, 6, 5).fill({ color: 0x88eeff, alpha: 0.8 });
+  g.roundRect(x + 2, y + 2, W - 4, H - 4, 2).fill(0xfaf8f2);
   // Marker tray
-  g.roundRect(x + 8, y + 21, 22, 3, 1).fill(0x999999);
-  // Markers
-  g.roundRect(x + 10, y + 20, 2, 3, 0.5).fill(0x3366ff);
-  g.roundRect(x + 13, y + 20, 2, 3, 0.5).fill(0xff3333);
-  g.roundRect(x + 16, y + 20, 2, 3, 0.5).fill(0x33aa33);
+  g.roundRect(x + 28, y + H - 2, 54, 3, 1).fill(0x999999);
+  g.roundRect(x + 32, y + H - 3, 2, 3, 0.5).fill(0x3366ff);
+  g.roundRect(x + 36, y + H - 3, 2, 3, 0.5).fill(0xff3333);
+  g.roundRect(x + 40, y + H - 3, 2, 3, 0.5).fill(0x33aa33);
   parent.addChild(g);
+
+  // ── Sticky notes ──
+  const maxItems = 6; // 2 cols x 3 rows
+  const items = tasks?.slice(0, maxItems) ?? [];
+
+  if (items.length === 0) {
+    // Empty board — decorative lines
+    const cc = [0x3b82f6, 0xef4444, 0x22c55e, 0xf59e0b];
+    const deco = new Graphics();
+    for (let i = 0; i < 4; i++) {
+      deco.moveTo(x + 8, y + 10 + i * 14).lineTo(x + 8 + 30 + Math.random() * 50, y + 10 + i * 14)
+        .stroke({ width: 1, color: cc[i % 4], alpha: 0.5 });
+    }
+    parent.addChild(deco);
+    return;
+  }
+
+  const noteW = 20;
+  const noteH = 16;
+  const cols = 2;
+  const padX = 8;
+  const padY = 6;
+  const gapX = (W - padX * 2 - noteW * cols) / (cols - 1 || 1); // horizontal gap between columns
+  const gapY = 2;
+
+  items.forEach((task, i) => {
+    const col = i % cols;
+    const row = Math.floor(i / cols);
+    const nx = x + padX + col * (noteW + gapX);
+    const ny = y + padY + row * (noteH + gapY);
+
+    const bgColor = WB_NOTE_BG[task.status] ?? 0xf5f5dc;
+    const borderColor = WB_STATUS_DOT[task.status] ?? 0x94a3b8;
+    const rotation = (NOTE_ROTATIONS[i % NOTE_ROTATIONS.length] * Math.PI) / 180;
+
+    // Container for each note (allows rotation + interactivity)
+    const noteContainer = new Container();
+    noteContainer.position.set(nx + noteW / 2, ny + noteH / 2);
+    noteContainer.rotation = rotation;
+
+    // Note background
+    const noteGfx = new Graphics();
+    // Tiny shadow
+    noteGfx.roundRect(-noteW / 2 + 1, -noteH / 2 + 1, noteW, noteH, 1.5).fill({ color: 0x000000, alpha: 0.10 });
+    // Main sticky note
+    noteGfx.roundRect(-noteW / 2, -noteH / 2, noteW, noteH, 1.5).fill(bgColor);
+    // Top "tape" strip
+    noteGfx.rect(-noteW / 2, -noteH / 2, noteW, 3).fill({ color: borderColor, alpha: 0.45 });
+    // Subtle bottom-right fold
+    noteGfx.moveTo(noteW / 2 - 4, noteH / 2)
+      .lineTo(noteW / 2, noteH / 2 - 4)
+      .lineTo(noteW / 2, noteH / 2)
+      .fill({ color: 0x000000, alpha: 0.06 });
+    noteContainer.addChild(noteGfx);
+
+    // Tiny label
+    const label = task.title.length > 6 ? task.title.slice(0, 5) + "…" : task.title;
+    const txt = new Text({
+      text: label,
+      style: new TextStyle({
+        fontSize: 5,
+        fill: 0x334155,
+        fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
+      }),
+    });
+    txt.anchor.set(0.5, 0.5);
+    txt.position.set(0, 1);
+    noteContainer.addChild(txt);
+
+    // ── Interactivity & tooltip ──
+    noteGfx.eventMode = "static";
+    noteGfx.cursor = "pointer";
+
+    // Build tooltip (hidden by default)
+    const tipText = new Text({
+      text: task.title,
+      style: new TextStyle({
+        fontSize: 7,
+        fill: 0xffffff,
+        fontFamily: "'Inter', 'Segoe UI', system-ui, sans-serif",
+        wordWrap: true,
+        wordWrapWidth: 90,
+      }),
+    });
+    const tipPadX = 5;
+    const tipPadY = 3;
+    const tipW = Math.min(tipText.width + tipPadX * 2, 100);
+    const tipH = tipText.height + tipPadY * 2;
+    const tipBg = new Graphics();
+    tipBg.roundRect(0, 0, tipW, tipH, 3).fill({ color: 0x1e293b, alpha: 0.92 });
+    tipBg.roundRect(0, 0, tipW, tipH, 3).stroke({ width: 0.5, color: borderColor, alpha: 0.6 });
+
+    const tipContainer = new Container();
+    tipContainer.addChild(tipBg);
+    tipText.position.set(tipPadX, tipPadY);
+    tipContainer.addChild(tipText);
+    // Position above the note (in parent coordinate space)
+    tipContainer.position.set(nx - tipW / 2 + noteW / 2, ny - tipH - 3);
+    tipContainer.visible = false;
+    parent.addChild(tipContainer);
+
+    noteGfx.on("pointerover", () => { tipContainer.visible = true; });
+    noteGfx.on("pointerout", () => { tipContainer.visible = false; });
+
+    parent.addChild(noteContainer);
+  });
+
+  // Task count badge if more tasks
+  if (tasks && tasks.length > maxItems) {
+    const badge = new Text({
+      text: `+${tasks.length - maxItems}`,
+      style: new TextStyle({
+        fontSize: 6,
+        fill: 0x94a3b8,
+        fontFamily: "'Inter', system-ui, sans-serif",
+      }),
+    });
+    badge.position.set(x + W - 18, y + H - 14);
+    parent.addChild(badge);
+  }
 }
 
 export { drawDesk, drawChair, drawPlant, drawWhiteboard };

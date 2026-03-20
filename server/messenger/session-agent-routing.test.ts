@@ -8,7 +8,7 @@ import {
 } from "./session-agent-routing.ts";
 
 describe("session-agent-routing", () => {
-  it("텔레그램 세션 targetId와 chat이 일치하면 agentId를 반환한다", () => {
+  it("targetId chat  agentId", () => {
     const route = resolveSessionAgentRouteFromSettings({
       settingsValue: {
         telegram: {
@@ -28,7 +28,7 @@ describe("session-agent-routing", () => {
     });
   });
 
-  it("agentId가 없으면 매핑하지 않는다", () => {
+  it("agentId", () => {
     const route = resolveSessionAgentRouteFromSettings({
       settingsValue: {
         telegram: {
@@ -42,7 +42,7 @@ describe("session-agent-routing", () => {
     expect(route).toBeNull();
   });
 
-  it("agentId가 없어도 세션 타깃 라우트는 해석할 수 있다", () => {
+  it("agentId", () => {
     const route = resolveSessionTargetRouteFromSettings({
       settingsValue: {
         telegram: {
@@ -61,7 +61,7 @@ describe("session-agent-routing", () => {
     });
   });
 
-  it("source 토큰 힌트가 있으면 동일 chat_id에서도 일치하는 토큰 세션을 우선 매핑한다", () => {
+  it("source     chat_id", () => {
     const tokenA = "tg-token-a";
     const tokenB = "tg-token-b";
     const tokenBKey = buildMessengerTokenKey("telegram", tokenB);
@@ -87,7 +87,7 @@ describe("session-agent-routing", () => {
     });
   });
 
-  it("session.id가 비어 있어도 동일 chat_id 다중 세션을 인덱스 기반으로 구분한다", () => {
+  it("session.id    chat_id", () => {
     const tokenA = "tg-token-a";
     const tokenB = "tg-token-b";
     const tokenBKey = buildMessengerTokenKey("telegram", tokenB);
@@ -113,7 +113,7 @@ describe("session-agent-routing", () => {
     });
   });
 
-  it("비활성 세션은 매핑하지 않는다", () => {
+  it("", () => {
     const route = resolveSessionAgentRouteFromSettings({
       settingsValue: {
         discord: {
@@ -129,7 +129,7 @@ describe("session-agent-routing", () => {
     expect(route).toBeNull();
   });
 
-  it("agentId로 매핑된 활성 세션 목록을 채널별로 역조회한다", () => {
+  it("agentId", () => {
     const routes = resolveAgentSessionRoutesFromSettings({
       settingsValue: {
         telegram: {
@@ -166,7 +166,7 @@ describe("session-agent-routing", () => {
     ]);
   });
 
-  it("source/chat 만으로 기본 라우트를 해석한다", () => {
+  it("source/chat", () => {
     expect(resolveSourceChatRoute({ source: "google_chat", chat: "space:spaces/AAAABBBB" })).toEqual({
       channel: "googlechat",
       targetId: "spaces/AAAABBBB",

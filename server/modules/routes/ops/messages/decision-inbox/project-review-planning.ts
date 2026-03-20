@@ -81,9 +81,9 @@ export function createProjectReviewPlanningHelpers(deps: ProjectReviewPlanningDe
       if (!normalized) return "";
       return normalized.length > max ? `${normalized.slice(0, max - 3).trimEnd()}...` : normalized;
     };
-    const taskLabel = pickL(l(["작업"], ["Task"], ["タスク"], ["任务"], ["Задача"]), lang);
-    const selectedLabel = pickL(l(["선택"], ["Picked"], ["選択"], ["已选"], ["Выбрано"]), lang);
-    const noteLabel = pickL(l(["추가의견"], ["Note"], ["追加意見"], ["追加意见"], ["Примечание"]), lang);
+    const taskLabel = pickL(l(["Task"], ["Task"], ["タスク"], ["任务"], ["Задача"]), lang);
+    const selectedLabel = pickL(l(["Picked"], ["Picked"], ["選択"], ["已选"], ["Выбрано"]), lang);
+    const noteLabel = pickL(l(["Note"], ["Note"], ["追加意見"], ["追加意见"], ["Примечание"]), lang);
     const out: string[] = [];
     const seen = new Set<string>();
 
@@ -122,7 +122,7 @@ export function createProjectReviewPlanningHelpers(deps: ProjectReviewPlanningDe
     const lines = topTasks.map((title, idx) => `${idx + 1}. ${title}`);
     const noTaskLine = pickL(
       l(
-        ["- 검토 항목 정보 없음"],
+        ["- No review-item details available"],
         ["- No review-item details available"],
         ["- レビュー項目情報なし"],
         ["- 无可用评审项信息"],
@@ -132,7 +132,7 @@ export function createProjectReviewPlanningHelpers(deps: ProjectReviewPlanningDe
     const taskBlock = lines.length > 0 ? lines.join("\n") : noTaskLine;
     const noRoundDecisionLine = pickL(
       l(
-        ["- 라운드 의사결정 이력 없음"],
+        ["- No round-level decision history yet"],
         ["- No round-level decision history yet"],
         ["- ラウンド判断履歴なし"],
         ["- 暂无轮次决策记录"],
@@ -144,7 +144,7 @@ export function createProjectReviewPlanningHelpers(deps: ProjectReviewPlanningDe
     return pickL(
       l(
         [
-          `프로젝트 '${projectName}' 검토 항목을 기획팀장 기준으로 취합했습니다.\n- 주요 검토 포인트를 기준으로 대표 항목을 선택한 뒤 팀장 회의를 시작하세요.\n- 필요 시 추가요청 입력으로 보완 작업을 먼저 열 수 있습니다.\n\n검토 대상:\n${taskBlock}\n\n최근 리뷰 라운드 의사결정:\n${roundDecisionBlock}`,
+          `Planning-lead consolidation is complete for project '${projectName}'.\n- Choose representative review item(s) from key checkpoints, then start the team-lead meeting.\n- If needed, open remediation first with Add Follow-up Request.\n\nReview targets:\n${taskBlock}\n\nRecent review-round decisions:\n${roundDecisionBlock}`,
         ],
         [
           `Planning-lead consolidation is complete for project '${projectName}'.\n- Choose representative review item(s) from key checkpoints, then start the team-lead meeting.\n- If needed, open remediation first with Add Follow-up Request.\n\nReview targets:\n${taskBlock}\n\nRecent review-round decisions:\n${roundDecisionBlock}`,
@@ -203,7 +203,7 @@ export function createProjectReviewPlanningHelpers(deps: ProjectReviewPlanningDe
           | undefined)
       : undefined;
     const picked = stateAgent ?? fallbackLead;
-    const defaultName = pickL(l(["기획팀장"], ["Planning Lead"], ["企画リード"], ["规划负责人"], ["Руководитель планирования"]), lang);
+    const defaultName = pickL(l(["Planning Lead"], ["Planning Lead"], ["企画リード"], ["规划负责人"], ["Руководитель планирования"]), lang);
     const normalizePlanningLeadAvatar = (rawAvatar: string | null | undefined): string => {
       const avatar = String(rawAvatar ?? "").trim();
       if (!avatar || avatar === "🧠") return "🧑‍💼";
@@ -212,7 +212,7 @@ export function createProjectReviewPlanningHelpers(deps: ProjectReviewPlanningDe
     return {
       agent_id: picked?.id ?? null,
       agent_name: (picked?.name || decisionState?.planner_agent_name || defaultName).trim(),
-      agent_name_ko: (picked?.name_ko || decisionState?.planner_agent_name || "기획팀장").trim(),
+      agent_name_ko: (picked?.name_ko || decisionState?.planner_agent_name || "").trim(),
       agent_avatar: normalizePlanningLeadAvatar(picked?.avatar_emoji),
     };
   }
@@ -276,7 +276,7 @@ export function createProjectReviewPlanningHelpers(deps: ProjectReviewPlanningDe
         const roundDecisionLines = getProjectReviewRoundDecisionContext(projectId, lang, 8);
         const noRoundDecisionPromptLine = pickL(
           l(
-            ["- 라운드 의사결정 이력 없음"],
+            ["- No round-level decision history yet"],
             ["- No round-level decision history yet"],
             ["- ラウンド判断履歴なし"],
             ["- 暂无轮次决策记录"],
@@ -366,7 +366,7 @@ export function createProjectReviewPlanningHelpers(deps: ProjectReviewPlanningDe
       } catch {
         const failMsg = pickL(
           l(
-            ["기획팀장 의견 취합이 일시 지연되었습니다. 자동 재시도 중입니다."],
+            ["Planning-lead consolidation is temporarily delayed. Auto retry in progress."],
             ["Planning-lead consolidation is temporarily delayed. Auto retry in progress."],
             ["企画リード意見の集約が一時遅延しました。自動再試行中です。"],
             ["规划负责人意见汇总暂时延迟，正在自动重试。"],

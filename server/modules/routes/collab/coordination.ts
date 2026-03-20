@@ -89,7 +89,7 @@ export function initializeCollabCoordination(ctx: RuntimeContext): any {
    * Detect project path from CEO message.
    * Recognizes:
    * 1. Absolute paths: /home/user/Projects/foo, ~/Projects/bar
-   * 2. Project names: "climpire 프로젝트", "claw-kanban에서"
+   * 2. Project names: "climpire", "claw-kanban"
    * 3. Known project directories under ~/Projects
    */
   function detectProjectPath(message: string): string | null {

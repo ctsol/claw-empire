@@ -41,9 +41,9 @@ export function createAnnouncementReplyScheduler(deps: AnnouncementReplyDeps): {
       return pickL(
         l(
           [
-            `${dept} ${name}, 확인했습니다! 즉시 팀에 전달하고 대응하겠습니다! 🚨`,
-            `네, 긴급 확인! ${dept}에서 바로 조치 취하겠습니다.`,
-            `${name} 확인했습니다! 팀원들에게 즉시 공유하겠습니다.`,
+            ``,
+            ``,
+            ``,
           ],
           [
             `${name} from ${dept} — acknowledged! I'll relay this to my team immediately! 🚨`,
@@ -59,9 +59,9 @@ export function createAnnouncementReplyScheduler(deps: AnnouncementReplyDeps): {
       return pickL(
         l(
           [
-            `축하합니다! ${dept}도 함께 기뻐요! 🎉`,
-            `좋은 소식이네요! ${dept} 팀원들에게도 공유하겠습니다 😊`,
-            `${name} 확인! 정말 좋은 소식입니다! 👏`,
+            `! ${dept}  ! 🎉`,
+            ` ! ${dept}   😊`,
+            `${name} !   ! 👏`,
           ],
           [
             `Congratulations! ${dept} is thrilled! 🎉`,
@@ -77,9 +77,9 @@ export function createAnnouncementReplyScheduler(deps: AnnouncementReplyDeps): {
       return pickL(
         l(
           [
-            `${dept} ${name}, 확인했습니다! 일정 잡아두겠습니다 📅`,
-            `네, 참석하겠습니다! ${dept} 팀원들에게도 전달할게요.`,
-            `${name} 확인! 미팅 준비하겠습니다.`,
+            ``,
+            ``,
+            ``,
           ],
           [
             `${name} from ${dept} — noted! I'll block the time 📅`,
@@ -95,8 +95,8 @@ export function createAnnouncementReplyScheduler(deps: AnnouncementReplyDeps): {
       return pickL(
         l(
           [
-            `${dept} ${name}, 확인했습니다. 팀 내 공유하고 반영하겠습니다 📋`,
-            `네, 정책 변경 확인! ${dept}에서 필요한 조치 검토하겠습니다.`,
+            `${dept} ${name}, .     📋`,
+            `,   ! ${dept}   .`,
           ],
           [
             `${name} from ${dept} — understood. I'll share with the team and align accordingly 📋`,
@@ -110,10 +110,10 @@ export function createAnnouncementReplyScheduler(deps: AnnouncementReplyDeps): {
     return pickL(
       l(
         [
-          `${dept} ${name}, 확인했습니다! 👍`,
-          `네, 공지 확인! ${dept}에서 참고하겠습니다.`,
-          `${name} 확인했습니다. 팀에 공유하겠습니다!`,
-          `알겠습니다! ${dept} 업무에 반영하겠습니다 📝`,
+          ``,
+          ``,
+          ``,
+          ``,
         ],
         [
           `${name} from ${dept} — acknowledged! 👍`,

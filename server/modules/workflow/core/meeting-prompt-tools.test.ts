@@ -6,7 +6,7 @@ function createAgent(overrides: Partial<AgentRow> = {}): AgentRow {
   return {
     id: "agent-1",
     name: "DORO",
-    name_ko: "도로롱",
+    name_ko: "",
     role: "junior",
     personality: null,
     status: "idle",
@@ -42,7 +42,7 @@ describe("buildDirectReplyPrompt", () => {
   it("includes character persona block when personality exists", () => {
     const tools = createTools();
     const agent = createAgent({
-      personality: "Playful design specialist. Call CEO '대표님' and keep warm expressive tone.",
+      personality: "Playful design specialist. Call CEO '' and keep warm expressive tone.",
     });
     const built = tools.buildDirectReplyPrompt(agent, "Can you help me now?", "chat");
     expect(built.prompt).toContain("[Character Persona - Highest Priority]");
@@ -62,27 +62,27 @@ describe("buildDirectReplyPrompt", () => {
 
 describe("buildMeetingPrompt", () => {
   it("passes workflow pack key into department name lookup", () => {
-    const getDeptName = vi.fn(() => "씬 엔진팀");
+    const getDeptName = vi.fn(() => "");
     const tools = createMeetingPromptTools({
       getDeptName,
       getDeptRoleConstraint: () => "",
-      getRoleLabel: () => "팀장",
+      getRoleLabel: () => "",
       getRecentConversationContext: () => "",
       getAgentDisplayName: (agent) => agent.name_ko,
       formatMeetingTranscript: () => "",
       compactTaskDescriptionForMeeting: () => "",
       normalizeMeetingLang: () => "ko",
-      localeInstruction: () => "한국어로 응답하세요.",
+      localeInstruction: () => ".",
       resolveLang: () => "ko",
     });
     const prompt = tools.buildMeetingPrompt(createAgent({ department_id: "dev", role: "team_leader" }), {
       meetingType: "planned",
       round: 1,
-      taskTitle: "영상 제작",
-      taskDescription: "킥오프",
+      taskTitle: "",
+      taskDescription: "",
       workflowPackKey: "video_preprod",
       transcript: [],
-      turnObjective: "킥오프",
+      turnObjective: "",
       lang: "ko",
     });
     expect(getDeptName).toHaveBeenCalledWith("dev", "video_preprod");

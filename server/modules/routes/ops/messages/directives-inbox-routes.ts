@@ -55,7 +55,7 @@ function detectLangForResetAck(text: string): "ko" | "en" | "ja" | "zh" {
 
 function buildSessionResetAck(text: string): string {
   const lang = detectLangForResetAck(text);
-  if (lang === "ko") return "🧹 현재 대화 세션을 초기화했습니다. 새 대화를 시작할게요.";
+  if (lang === "ko") return "🧹    .   .";
   if (lang === "ja") return "🧹 現在の会話セッションを初期化しました。新しい会話を開始します。";
   if (lang === "zh") return "🧹 已重置当前会话。现在开始新的对话。";
   return "🧹 Current conversation session was reset. Starting a new chat.";
@@ -86,7 +86,7 @@ const buildAgentUpgradeRequiredPayload = () => {
     error: "agent_upgrade_required",
     reason: "install_first",
     message: `OpenClaw AGENTS is outdated (HTTP 428). Install path: ${installerPaths.mac_linux} (or ${installerPaths.windows_powershell}). Target AGENTS path: ${agentsTargetPath}. Should I install it now?`,
-    message_ko: `OpenClaw AGENTS가 구버전입니다(HTTP 428). 설치 경로: ${installerPaths.mac_linux} (또는 ${installerPaths.windows_powershell}), 대상 AGENTS: ${agentsTargetPath}. 지금 제가 직접 설치해드릴까요?`,
+    message_ko: ``,
     required_agent_rules_version: 2,
     required_action: "install_latest_agents_rules",
     installer_files: ["scripts/openclaw-setup.sh", "scripts/openclaw-setup.ps1", "templates/AGENTS-empire.md"],
@@ -96,10 +96,9 @@ const buildAgentUpgradeRequiredPayload = () => {
     install_commands_absolute: absoluteInstallCommands,
     recommended_install_command: recommendedInstallCommand,
     user_prompt: {
-      ko: `OpenClaw AGENTS 규칙이 구버전입니다. 설치 파일: ${installerPaths.mac_linux} / ${installerPaths.windows_powershell}, 대상 AGENTS: ${agentsTargetPath}. 지금 제가 직접 설치해드릴까요? (예/아니오)`,
       en: `OpenClaw AGENTS rules are outdated. Installer files: ${installerPaths.mac_linux} / ${installerPaths.windows_powershell}, target AGENTS: ${agentsTargetPath}. Should I install it now? (yes/no)`,
     },
-    next_step_ko: "사용자가 동의하면 설치 스크립트를 실행한 뒤 같은 directive를 1회 재시도하세요.",
+    next_step_ko: "directive 1 .",
     next_step_en: "If the user agrees, run installer script and retry the same directive once.",
   };
 };

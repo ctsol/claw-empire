@@ -57,7 +57,7 @@ function extractOptions(text: string): string[] {
 function buildReportingPrompt(participant: CeoMeetingParticipant, lang: string): string {
   const langInstruction =
     lang === "ko"
-      ? "한국어로 답하세요."
+      ? "."
       : lang === "ja"
         ? "日本語で答えてください。"
         : lang === "zh"
@@ -92,7 +92,7 @@ function buildPlanningRound1Prompt(
     lang === "ru"
       ? "Отвечайте на русском языке."
       : lang === "ko"
-        ? "한국어로 답하세요."
+        ? "."
         : lang === "ja"
           ? "日本語で答えてください。"
           : lang === "zh"
@@ -140,7 +140,7 @@ function buildPlanningRound2Prompt(
     lang === "ru"
       ? "Отвечайте на русском языке."
       : lang === "ko"
-        ? "한국어로 답하세요."
+        ? "."
         : lang === "ja"
           ? "日本語で答えてください。"
           : lang === "zh"

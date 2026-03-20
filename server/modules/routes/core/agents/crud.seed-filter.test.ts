@@ -105,10 +105,10 @@ function createHarness(): { db: DatabaseSync; routes: Map<string, RouteHandler> 
 }
 
 describe("agent CRUD seed filter", () => {
-  it("GET /api/agents 기본 응답은 seed 에이전트를 제외한다", () => {
+  it("GET /api/agents   seed", () => {
     const { db, routes } = createHarness();
     try {
-      db.prepare("INSERT INTO departments (id, name, name_ko, color) VALUES ('dev', 'Dev', '개발팀', '#3b82f6')").run();
+      db.prepare("INSERT INTO departments (id, name, name_ko, color) VALUES ('dev', 'Dev', '', '#3b82f6')").run();
       db.prepare(
         "INSERT INTO agents (id, name, department_id, role, status, created_at) VALUES (?, ?, 'dev', 'team_leader', 'idle', 1)",
       ).run("dev-leader", "Dev Leader");
@@ -130,10 +130,10 @@ describe("agent CRUD seed filter", () => {
     }
   });
 
-  it("GET /api/agents?include_seed=true 는 seed 에이전트를 포함한다", () => {
+  it("GET /api/agents?include_seed=true  seed", () => {
     const { db, routes } = createHarness();
     try {
-      db.prepare("INSERT INTO departments (id, name, name_ko, color) VALUES ('dev', 'Dev', '개발팀', '#3b82f6')").run();
+      db.prepare("INSERT INTO departments (id, name, name_ko, color) VALUES ('dev', 'Dev', '', '#3b82f6')").run();
       db.prepare(
         "INSERT INTO agents (id, name, department_id, role, status, created_at) VALUES (?, ?, 'dev', 'team_leader', 'idle', 1)",
       ).run("dev-leader", "Dev Leader");
@@ -155,7 +155,7 @@ describe("agent CRUD seed filter", () => {
     }
   });
 
-  it("PATCH /api/agents/:id 는 팩 내 기존 Lead가 있으면 409를 반환한다", () => {
+  it("PATCH /api/agents/:id     Lead  409", () => {
     const { db, routes } = createHarness();
     try {
       db.prepare("INSERT INTO settings (key, value) VALUES (?, ?)").run("officeWorkflowPack", "video_preprod");
@@ -196,7 +196,7 @@ describe("agent CRUD seed filter", () => {
     }
   });
 
-  it("PATCH /api/agents/:id force override 로 팩 리더를 교체한다", () => {
+  it("PATCH /api/agents/:id force override", () => {
     const { db, routes } = createHarness();
     try {
       db.prepare("INSERT INTO settings (key, value) VALUES (?, ?)").run("officeWorkflowPack", "video_preprod");

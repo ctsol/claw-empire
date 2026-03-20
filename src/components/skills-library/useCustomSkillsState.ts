@@ -59,7 +59,7 @@ export function useCustomSkillsState({
       setCustomSkillContent(reader.result as string);
     };
     reader.onerror = () => {
-      setCustomSkillError("파일 읽기 실패");
+      setCustomSkillError("");
     };
     reader.readAsText(file);
   }, []);
@@ -75,7 +75,7 @@ export function useCustomSkillsState({
     if (!/^[a-zA-Z0-9_-]{1,80}$/.test(customSkillName.trim())) {
       setCustomSkillError(
         t({
-          ko: "스킬명은 영문, 숫자, 하이픈, 언더스코어만 사용 가능합니다 (최대 80자)",
+          ko: ", , ,    ( 80)",
           en: "Skill name must be alphanumeric, dash or underscore (max 80 chars)",
           ja: "スキル名は英数字、ハイフン、アンダースコアのみ使用可能です（最大80文字）",
           zh: "技能名称仅限字母数字、短划线或下划线（最多80个字符）",

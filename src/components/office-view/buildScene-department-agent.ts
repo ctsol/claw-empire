@@ -1,6 +1,7 @@
 import type { MutableRefObject } from "react";
-import { AnimatedSprite, Container, Graphics, Sprite, Text, TextStyle, type Texture } from "pixi.js";
+import { Container, Graphics, Sprite, Text, TextStyle, type Texture } from "pixi.js";
 import type { Agent, SubAgent, Task } from "../../types";
+import { getAvatarTexture } from "./avatar-texture-cache";
 import type { AnimItem, CallbackSnapshot, SubCloneAnimItem } from "./buildScene-types";
 import {
   DESK_W,
@@ -60,34 +61,30 @@ export function renderDeskAgentAndSubClones({
   animMode = "game",
 }: RenderDeskAgentAndSubClonesParams): void {
   const fireworkInterval = ANIM_PROFILES[animMode].subCloneFireworkInterval;
-  const spriteNum = spriteMap.get(agent.id) ?? (hashStr(agent.id) % 13) + 1;
   const charContainer = new Container();
   charContainer.position.set(ax, charFeetY);
   charContainer.eventMode = "static";
   charContainer.cursor = "pointer";
   charContainer.on("pointerdown", () => cbRef.current.onSelectAgent(agent));
 
-  const frames: Texture[] = [];
-  for (let frame = 1; frame <= 3; frame++) {
-    const key = `${spriteNum}-D-${frame}`;
-    if (textures[key]) frames.push(textures[key]);
-  }
-
-  if (frames.length > 0) {
-    const animSprite = new AnimatedSprite(frames);
-    animSprite.anchor.set(0.5, 1);
-    const scale = TARGET_CHAR_H / animSprite.texture.height;
-    animSprite.scale.set(scale);
-    animSprite.gotoAndStop(0);
-    if (isOffline) {
-      animSprite.alpha = 0.3;
-      animSprite.tint = 0x888899;
+  // Avataaars-style generated avatar (fluttermoji) — preloaded synchronously
+  {
+    const tex = getAvatarTexture(agent.id);
+    if (tex) {
+      const avatarSprite = new Sprite(tex);
+      avatarSprite.anchor.set(0.5, 1);
+      const scale = TARGET_CHAR_H / tex.height;
+      avatarSprite.scale.set(scale);
+      if (isOffline) {
+        avatarSprite.alpha = 0.3;
+        avatarSprite.tint = 0x888899;
+      }
+      charContainer.addChild(avatarSprite);
+    } else {
+      const fallback = new Text({ text: agent.avatar_emoji || "🤖", style: new TextStyle({ fontSize: 24 }) });
+      fallback.anchor.set(0.5, 1);
+      charContainer.addChild(fallback);
     }
-    charContainer.addChild(animSprite);
-  } else {
-    const fallback = new Text({ text: agent.avatar_emoji || "🤖", style: new TextStyle({ fontSize: 24 }) });
-    fallback.anchor.set(0.5, 1);
-    charContainer.addChild(fallback);
   }
   room.addChild(charContainer);
 
@@ -179,22 +176,19 @@ export function renderDeskAgentAndSubClones({
       aura.ellipse(0, 2.0, 8.1, 2.7).fill({ color: 0x1f2937, alpha: 0.12 });
       cloneContainer.addChild(aura);
 
-      const cloneSpriteNum = (hashStr(`${sub.id}:clone`) % 13) + 1;
-      const cloneFrames: Texture[] = [];
-      for (let frame = 1; frame <= 3; frame++) {
-        const key = `${cloneSpriteNum}-D-${frame}`;
-        if (textures[key]) cloneFrames.push(textures[key]);
+      // Sub-clone: use parent agent's avatar texture, slightly smaller
+      const cloneTex = getAvatarTexture(agent.id);
+      const baseScale = 0.76;
+      let cloneVisual: Sprite;
+      if (cloneTex) {
+        cloneVisual = new Sprite(cloneTex);
+        cloneVisual.anchor.set(0.5, 1);
+        cloneVisual.scale.set((TARGET_CHAR_H / cloneTex.height) * baseScale);
+        cloneVisual.alpha = 0.6;
+      } else {
+        cloneVisual = new Sprite();
+        cloneVisual.anchor.set(0.5, 1);
       }
-      const baseTexture = cloneFrames[0];
-      if (!baseTexture) return;
-      const baseScale = (TARGET_CHAR_H / baseTexture.height) * 0.76;
-
-      const cloneVisual = cloneFrames.length > 1 ? new AnimatedSprite(cloneFrames) : new Sprite(baseTexture);
-      cloneVisual.anchor.set(0.5, 1);
-      cloneVisual.scale.set(baseScale);
-      cloneVisual.tint = 0xffffff;
-      cloneVisual.alpha = 0.97;
-      if (cloneVisual instanceof AnimatedSprite) cloneVisual.gotoAndStop((index + 1) % cloneFrames.length);
       cloneContainer.addChild(cloneVisual);
 
       const charIdx = room.children.indexOf(charContainer);
@@ -212,9 +206,9 @@ export function renderDeskAgentAndSubClones({
         container: cloneContainer,
         aura,
         cloneVisual,
-        animated: cloneVisual instanceof AnimatedSprite ? cloneVisual : undefined,
-        frameCount: cloneFrames.length,
-        baseScale,
+        animated: undefined,
+        frameCount: 1,
+        baseScale: cloneTex ? (TARGET_CHAR_H / cloneTex.height) * baseScale : baseScale,
         baseX: sx,
         baseY: sy,
         phase: (hashStr(sub.id) % 360) / 57.2958 + index * 0.3,

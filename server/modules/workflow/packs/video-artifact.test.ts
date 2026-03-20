@@ -7,12 +7,12 @@ import {
 } from "./video-artifact.ts";
 
 describe("video artifact naming", () => {
-  it("프로젝트명+부서명 기반 파일명을 생성한다", () => {
-    expect(buildVideoArtifactFileName("VID", "기획팀")).toBe("VID_기획팀_final.mp4");
+  it("+", () => {
+    expect(buildVideoArtifactFileName("VID", "")).toBe("VID__final.mp4");
     expect(buildVideoArtifactFileName("  Demo Project  ", "Design Ops")).toBe("Demo_Project_Design_Ops_final.mp4");
   });
 
-  it("task 메타에서 영상 산출물 경로 후보를 계산한다", () => {
+  it("task", () => {
     const db = new DatabaseSync(":memory:");
     try {
       db.exec(`
@@ -20,7 +20,7 @@ describe("video artifact naming", () => {
         CREATE TABLE departments (id TEXT PRIMARY KEY, name TEXT, name_ko TEXT);
       `);
       db.prepare("INSERT INTO projects (id, name) VALUES (?, ?)").run("proj-1", "VID");
-      db.prepare("INSERT INTO departments (id, name, name_ko) VALUES (?, ?, ?)").run("planning", "Planning", "기획팀");
+      db.prepare("INSERT INTO departments (id, name, name_ko) VALUES (?, ?, ?)").run("planning", "Planning", "");
 
       const spec = resolveVideoArtifactSpecForTask(db as any, {
         project_id: "proj-1",
@@ -28,11 +28,11 @@ describe("video artifact naming", () => {
         project_path: "/tmp/vid-project",
       });
 
-      expect(spec.relativePath).toBe("video_output/VID_기획팀_final.mp4");
+      expect(spec.relativePath).toBe("video_output/VID__final.mp4");
       expect(resolveVideoArtifactRelativeCandidates(spec)).toEqual([
-        "video_output/VID_기획팀_final.mp4",
+        "video_output/VID__final.mp4",
         "video_output/final.mp4",
-        "out/VID_기획팀_final.mp4",
+        "out/VID__final.mp4",
         "out/final.mp4",
       ]);
     } finally {

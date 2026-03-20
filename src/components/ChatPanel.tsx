@@ -103,7 +103,7 @@ export function ChatPanel({
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [onClose]);
 
-  // 스트리밍 중인 메시지가 현재 에이전트 것인지 판별
+  // Determine whether the currently streaming message belongs to the selected agent
   const isStreamingForAgent = streamingMessage && selectedAgent && streamingMessage.agent_id === selectedAgent.id;
 
   // Auto-scroll to bottom on new messages or streaming delta
@@ -211,7 +211,7 @@ export function ChatPanel({
     if (!picked) {
       setExistingProjectError(
         tr(
-          "번호(1-10) 또는 프로젝트명을 다시 입력해주세요.",
+          "(1-10)    .",
           "Please enter a number (1-10) or a project name.",
           "番号(1-10)またはプロジェクト名を入力してください。",
           "请输入编号(1-10)或项目名称。",
@@ -332,7 +332,7 @@ export function ChatPanel({
     } else if (mode === "report" && selectedAgent) {
       action = {
         kind: "report",
-        content: `[${tr("보고 요청", "Report Request", "レポート依頼", "报告请求", "Запрос отчёта")}] ${trimmed}`,
+        content: `[${tr("", "Report Request", "レポート依頼", "报告请求", "Запрос отчёта")}] ${trimmed}`,
         receiverId: selectedAgent.id,
       };
     } else if (mode === "btw" && selectedAgent) {

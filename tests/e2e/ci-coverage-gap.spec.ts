@@ -91,7 +91,7 @@ async function establishApiSession(request: APIRequestContext): Promise<string> 
   const storage = await request.storageState();
   const sessionCookie = storage.cookies.find((cookie) => cookie.name === "claw_session");
   if (!sessionCookie) {
-    throw new Error("WebSocket 테스트용 claw_session 쿠키를 찾을 수 없습니다.");
+    throw new Error("WebSocket  claw_session    .");
   }
   return `${sessionCookie.name}=${sessionCookie.value}`;
 }
@@ -193,7 +193,7 @@ async function reorderDepartmentsWithRetry(
     }
     throw new Error(`PATCH /api/departments/reorder 실패 (status=${response.status()}): ${text.slice(0, 500)}`);
   }
-  throw new Error("PATCH /api/departments/reorder 재시도 초과");
+  throw new Error("PATCH /api/departments/reorder");
 }
 
 async function connectWsWithSessionCookie(cookieHeader: string): Promise<WebSocket> {
@@ -208,7 +208,7 @@ async function connectWsWithSessionCookie(cookieHeader: string): Promise<WebSock
 
   await new Promise<void>((resolve, reject) => {
     const timer = setTimeout(() => {
-      reject(new Error("WebSocket 연결 타임아웃"));
+      reject(new Error("WebSocket"));
     }, 10_000);
 
     ws.once("open", () => {

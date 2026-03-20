@@ -33,7 +33,7 @@ export function useDecisionReplyHandlers({
       if (!receiverId) return;
 
       const replyContent = tr(
-        `[의사결정 회신] ${option.number}번으로 진행해 주세요. (${option.label})`,
+        `[Decision Reply] Please proceed with option ${option.number}. (${option.label})`,
         `[Decision Reply] Please proceed with option ${option.number}. (${option.label})`,
         `[意思決定返信] ${option.number}番で進めてください。(${option.label})`,
         `[决策回复] 请按选项 ${option.number} 推进。（${option.label}）`,
@@ -55,7 +55,7 @@ export function useDecisionReplyHandlers({
       setMode("chat");
       setInput(
         tr(
-          `${option.number}번으로 진행해 주세요. 추가 코멘트: `,
+          `Please proceed with option ${option.number}. Additional note: `,
           `Please proceed with option ${option.number}. Additional note: `,
           `${option.number}番で進めてください。追記事項: `,
           `请按选项 ${option.number} 推进。补充说明：`,

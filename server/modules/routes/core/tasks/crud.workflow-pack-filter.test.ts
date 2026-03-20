@@ -133,7 +133,7 @@ function createTaskCrudHarness(): { db: DatabaseSync; routes: Map<string, RouteH
 }
 
 describe("task CRUD workflow pack filter", () => {
-  it("GET /api/tasks는 workflow_pack_key 필터를 적용한다", () => {
+  it("GET /api/tasks workflow_pack_key", () => {
     const { db, routes } = createTaskCrudHarness();
     try {
       db.prepare(
@@ -217,7 +217,7 @@ describe("task CRUD workflow pack filter", () => {
     }
   });
 
-  it("GET /api/tasks는 invalid workflow_pack_key에 400을 반환한다", () => {
+  it("GET /api/tasks invalid workflow_pack_key 400", () => {
     const { db, routes } = createTaskCrudHarness();
     try {
       const handler = routes.get("GET /api/tasks");
@@ -233,7 +233,7 @@ describe("task CRUD workflow pack filter", () => {
     }
   });
 
-  it("POST /api/tasks는 workflow_pack_key 미지정 시 프로젝트 default_pack_key를 상속한다", () => {
+  it("POST /api/tasks workflow_pack_key    default_pack_key", () => {
     const { db, routes } = createTaskCrudHarness();
     try {
       db.prepare(

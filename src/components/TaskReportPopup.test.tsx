@@ -15,10 +15,10 @@ const baseReport = {
     created_at: 1000,
     completed_at: 2000,
     agent_name: "Ari",
-    agent_name_ko: "아리",
+    agent_name_ko: "",
     agent_role: "team_leader",
     dept_name: "Planning",
-    dept_name_ko: "기획팀",
+    dept_name_ko: "",
   },
   logs: [
     { kind: "system", message: "Final branch verification: passed (ref=main, commits=1, files=1)", created_at: 1500 },
@@ -49,8 +49,8 @@ describe("TaskReportPopup", () => {
       <I18nProvider language="en">
         <TaskReportPopup
           report={baseReport as any}
-          agents={[{ id: "agent-1", name: "Ari", name_ko: "아리", avatar_emoji: "A" } as any]}
-          departments={[{ id: "planning", name: "Planning", name_ko: "기획팀", color: "#00aa88", icon: "P" } as any]}
+          agents={[{ id: "agent-1", name: "Ari", name_ko: "", avatar_emoji: "A" } as any]}
+          departments={[{ id: "planning", name: "Planning", name_ko: "", color: "#00aa88", icon: "P" } as any]}
           uiLanguage="en"
           onClose={() => {}}
         />

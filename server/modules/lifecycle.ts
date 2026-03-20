@@ -250,7 +250,7 @@ export function startLifecycle(ctx: RuntimeContext): void {
       const ageMs = lastTouchedAt > 0 ? Math.max(0, now - lastTouchedAt) : IN_PROGRESS_ORPHAN_GRACE_MS + 1;
       if (ageMs < IN_PROGRESS_ORPHAN_GRACE_MS) continue;
 
-      // 추가 안전장치 1: task_logs 활동이 최근 윈도우 내에 있으면 아직 활성 상태로 간주
+      // Safety check 1: if task_logs activity exists within the recent window, consider it still active
       const recentLog = db
         .prepare(
           `
@@ -264,8 +264,8 @@ export function startLifecycle(ctx: RuntimeContext): void {
         continue;
       }
 
-      // 추가 안전장치 2: 터미널 로그 파일이 최근까지 갱신됐다면 여전히 출력이 진행 중인 것으로 간주
-      // (예: 서버 리로드/재시작으로 in-memory process handle만 유실된 경우)
+      // Safety check 2: if the terminal log file was recently modified, consider output still in progress
+      // (e.g., server reload/restart may have lost only the in-memory process handle)
       try {
         const logPath = path.join(logsDir, `${task.id}.log`);
         const stat = fs.statSync(logPath);
@@ -274,7 +274,7 @@ export function startLifecycle(ctx: RuntimeContext): void {
           continue;
         }
       } catch {
-        // 로그 파일이 없거나 접근 불가하면 기존 복구 로직 진행
+        // If log file does not exist or is inaccessible, proceed with existing recovery logic
       }
 
       const latestRunLog = db

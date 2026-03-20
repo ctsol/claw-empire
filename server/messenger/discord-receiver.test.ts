@@ -48,7 +48,7 @@ describe("discord receiver", () => {
     vi.unstubAllGlobals();
   });
 
-  it("허용된 Discord 채널 메시지를 /api/inbox로 포워딩하고 커서를 저장한다", async () => {
+  it("Discord   /api/inbox", async () => {
     const routeKey = `${buildMessengerTokenKey("discord", "dc-token")}:123`;
     const dbPath = createTestDb({
       messengerChannels: {
@@ -130,7 +130,7 @@ describe("discord receiver", () => {
     }
   });
 
-  it("봇 메시지는 무시하고 커서만 갱신한다", async () => {
+  it("", async () => {
     const routeKey = `${buildMessengerTokenKey("discord", "dc-token")}:123`;
     const dbPath = createTestDb({
       messengerChannels: {
@@ -199,7 +199,7 @@ describe("discord receiver", () => {
     }
   });
 
-  it("토큰이 여러 개인 경우 source 힌트로 분리 포워딩한다", async () => {
+  it("source", async () => {
     const tokenAKey = buildMessengerTokenKey("discord", "token-a");
     const tokenBKey = buildMessengerTokenKey("discord", "token-b");
     const dbPath = createTestDb({

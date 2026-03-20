@@ -98,7 +98,7 @@ export function createReviewConsensusTools(deps: ReviewConsensusDeps) {
             pickL(
               l(
                 [
-                  `[CEO OFFICE] '${taskTitle}' 리뷰 라운드가 최대치(${REVIEW_MAX_ROUNDS})를 초과해 추가 보완은 중단하고 최종 승인 판단으로 전환합니다.`,
+                  `[CEO OFFICE] '${taskTitle}' exceeded max review rounds (${REVIEW_MAX_ROUNDS}). Additional revision rounds are closed and we are moving to final approval decision.`,
                 ],
                 [
                   `[CEO OFFICE] '${taskTitle}' exceeded max review rounds (${REVIEW_MAX_ROUNDS}). Additional revision rounds are closed and we are moving to final approval decision.`,
@@ -232,7 +232,7 @@ export function createReviewConsensusTools(deps: ReviewConsensusDeps) {
         callLeadersToCeoOffice(taskId, leaders, "review");
         const resumeNotice = isRound2Merge
           ? l(
-              [`[CEO OFFICE] '${taskTitle}' 리뷰 라운드 ${round} 재개. 라운드1 보완 결과 취합/머지 판단을 이어갑니다.`],
+              [`[CEO OFFICE] '${taskTitle}' review round ${round} resumed. Continuing consolidation and merge-readiness judgment from round 1 remediation.`],
               [
                 `[CEO OFFICE] '${taskTitle}' review round ${round} resumed. Continuing consolidation and merge-readiness judgment from round 1 remediation.`,
               ],
@@ -244,7 +244,7 @@ export function createReviewConsensusTools(deps: ReviewConsensusDeps) {
           : isFinalDecisionRound
             ? l(
                 [
-                  `[CEO OFFICE] '${taskTitle}' 리뷰 라운드 ${round} 재개. 추가 보완 없이 최종 승인과 문서 확정을 진행합니다.`,
+                  `[CEO OFFICE] '${taskTitle}' review round ${round} resumed. Final approval and documentation will be completed without additional remediation.`,
                 ],
                 [
                   `[CEO OFFICE] '${taskTitle}' review round ${round} resumed. Final approval and documentation will be completed without additional remediation.`,
@@ -257,7 +257,7 @@ export function createReviewConsensusTools(deps: ReviewConsensusDeps) {
                 ],
               )
             : l(
-                [`[CEO OFFICE] '${taskTitle}' 리뷰 라운드 ${round} 재개. 팀장 의견 수집 및 상호 승인 재진행합니다.`],
+                [`[CEO OFFICE] '${taskTitle}' review round ${round} resumed. Continuing team-lead feedback and mutual approvals.`],
                 [
                   `[CEO OFFICE] '${taskTitle}' review round ${round} resumed. Continuing team-lead feedback and mutual approvals.`,
                 ],
@@ -269,7 +269,7 @@ export function createReviewConsensusTools(deps: ReviewConsensusDeps) {
         const startNotice = isRound2Merge
           ? l(
               [
-                `[CEO OFFICE] '${taskTitle}' 리뷰 라운드 ${round} 시작. 라운드1 보완 작업 결과를 팀장회의에서 취합하고 머지 판단을 진행합니다.`,
+                `[CEO OFFICE] '${taskTitle}' review round ${round} started. Team leads are consolidating round 1 remediation outputs and making merge-readiness decisions.`,
               ],
               [
                 `[CEO OFFICE] '${taskTitle}' review round ${round} started. Team leads are consolidating round 1 remediation outputs and making merge-readiness decisions.`,
@@ -282,7 +282,7 @@ export function createReviewConsensusTools(deps: ReviewConsensusDeps) {
           : isFinalDecisionRound
             ? l(
                 [
-                  `[CEO OFFICE] '${taskTitle}' 리뷰 라운드 ${round} 시작. 추가 보완 없이 최종 승인 결과와 문서 패키지를 확정합니다.`,
+                  `[CEO OFFICE] '${taskTitle}' review round ${round} started. Final approval and documentation package will be finalized without additional remediation.`,
                 ],
                 [
                   `[CEO OFFICE] '${taskTitle}' review round ${round} started. Final approval and documentation package will be finalized without additional remediation.`,
@@ -295,7 +295,7 @@ export function createReviewConsensusTools(deps: ReviewConsensusDeps) {
                 ],
               )
             : l(
-                [`[CEO OFFICE] '${taskTitle}' 리뷰 라운드 ${round} 시작. 팀장 의견 수집 및 상호 승인 진행합니다.`],
+                [`[CEO OFFICE] '${taskTitle}' review round ${round} started. Collecting team-lead feedback and mutual approvals.`],
                 [
                   `[CEO OFFICE] '${taskTitle}' review round ${round} started. Collecting team-lead feedback and mutual approvals.`,
                 ],
@@ -518,7 +518,7 @@ export function createReviewConsensusTools(deps: ReviewConsensusDeps) {
         notifyCeo(
           pickL(
             l(
-              [`[CEO OFFICE] '${taskTitle}' 리뷰 라운드 처리 중 오류가 발생했습니다: ${msg}`],
+              [`[CEO OFFICE] Error while processing review round for '${taskTitle}': ${msg}`],
               [`[CEO OFFICE] Error while processing review round for '${taskTitle}': ${msg}`],
               [`[CEO OFFICE] '${taskTitle}' のレビューラウンド処理中にエラーが発生しました: ${msg}`],
               [`[CEO OFFICE] 处理'${taskTitle}'评审轮次时发生错误：${msg}`],

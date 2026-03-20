@@ -173,7 +173,7 @@ export function applyDefaultSeeds(db: DbLike): void {
       /* already exists */
     }
 
-    // UNIQUE 인덱스 일시 제거 → 값 갱신 → 인덱스 재생성 (충돌 방지)
+    // Temporarily drop UNIQUE index -> update values -> recreate index (prevent conflicts)
     try {
       db.exec("DROP INDEX IF EXISTS idx_departments_sort_order");
     } catch {

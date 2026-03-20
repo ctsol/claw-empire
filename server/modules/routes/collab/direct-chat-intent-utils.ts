@@ -75,12 +75,12 @@ export function isAffirmativeReply(text: string): boolean {
   if (!normalized) return false;
 
   const negativePatterns = [
-    /^(아니|아니요|아뇨|노|안됨|하지마|중지|멈춰|스탑|stop|no|nope|nah|don'?t|not now|later|아직|다음에|やめて|いいえ|不要|不用|不行|先不要)/i,
+    /^(|||||||||stop|no|nope|nah|don'?t|not now|later|아직|다음에|やめて|いいえ|不要|不用|不行|先不要)/i,
   ];
   if (negativePatterns.some((pattern) => pattern.test(normalized))) return false;
 
   const affirmativePatterns = [
-    /^(네|예|응|ㅇㅇ|좋아|좋아요|오케이|ok|okay|sure|yep|yeah|yes|go|go ahead|proceed|do it|start|let'?s go|let?s do it|진행|시작|착수|바로 해|콜|ㄱㄱ|고고)/i,
+    /^(네|예|응|ㅇㅇ|좋아|좋아요|오케이|ok|okay|sure|yep|yeah|yes|go|go ahead|proceed|do it|start|let'?s go|let?s do it|||| |||)/i,
     /^(はい|了解|お願いします|進めて|進めてください|開始して|いいよ|いいです|実行して)/i,
     /^(好|好的|可以|行|开始吧|继续|请开始|执行吧|马上开始)/i,
   ];
@@ -91,8 +91,8 @@ export function isAgentEscalationPrompt(text: string): boolean {
   const normalized = text.trim();
   if (!normalized) return false;
   const patterns = [
-    /(바로\s*)?(시작|진행|착수).*(할까요|할까|할게요\?|해도 될까요|진행해도 될까요)/i,
-    /(업무|작업|요청|평가|리뷰|검토).*(진행|시작).*(할까요|해볼까요|해도 될까요)/i,
+    /(\s*)?(||).*(||\?| | )/i,
+    /(|||||).*(|).*(|| )/i,
     /(shall i|should i|would you like me to|may i|can i).*(start|proceed|execute|run|begin)/i,
     /(start now|proceed now|go ahead\?)/i,
     /(開始|進行).*(しましょうか|していいですか|しますか)/i,
@@ -105,15 +105,15 @@ export function isAgentEscalationPrompt(text: string): boolean {
 export function isCancelReply(text: string): boolean {
   const normalized = text.trim().toLowerCase().replace(/\s+/g, " ");
   if (!normalized) return false;
-  return /^(취소|중지|멈춰|그만|나중에|cancel|stop|abort|later|not now|いいえ|中止|不要|先不要)/i.test(normalized);
+  return /^(|||||cancel|stop|abort|later|not now|いいえ|中止|不要|先不要)/i.test(normalized);
 }
 
 export function isNoPathReply(text: string): boolean {
   const normalized = text.trim().toLowerCase().replace(/\s+/g, " ");
   if (!normalized) return false;
   const patterns = [
-    /(경로|프로젝트).*없/,
-    /(모르겠|몰라|기억안)/,
+    /(|).*/,
+    /(||)/,
     /(no path|don't have.*path|no project path|without path|unknown path)/i,
     /(create new project|new project please|make new project)/i,
     /(路径).*没有|没有路径|新建项目|新项目/,
@@ -137,13 +137,13 @@ export function detectProjectKindChoice(text: string): "existing" | "new" | null
   const existingHit =
     /(?:기존\s*프로젝트|기존\b|기존으로|기존거|있던\s*거|원래\s*있던|existing\s*project|existing\s*one|\bexisting\b|already\s*project|already\s*existing|既存プロジェクト|既存|已有项目|已有)/i.test(
       raw,
-    ) || compact.includes("기존프로젝트");
+    ) || compact.includes("");
   const newHit =
     /(신규\s*프로젝트|신규\b|신규로|새\s*프로젝트|새로\s*프로젝트|새거|new\s*project|\bnew\b|新規プロジェクト|新規|新项目)/i.test(
       raw,
     ) ||
-    compact.includes("새프로젝트") ||
-    compact.includes("신규프로젝트") ||
+    compact.includes("") ||
+    compact.includes("") ||
     compact.includes("newproject");
 
   if (existingHit && !newHit) return "existing";

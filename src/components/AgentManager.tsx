@@ -118,6 +118,7 @@ export default function AgentManager({
         cli_provider: agent.cli_provider,
         avatar_emoji: agent.avatar_emoji,
         sprite_number: computed,
+        avatar_seed: agent.avatar_seed || "",
         personality: agent.personality || "",
       });
       setShowModal(true);
@@ -144,6 +145,7 @@ export default function AgentManager({
         cli_provider: form.cli_provider,
         avatar_emoji: form.avatar_emoji || "🤖",
         sprite_number: form.sprite_number,
+        avatar_seed: form.avatar_seed?.trim() || null,
         personality: form.personality.trim() || null,
       };
       if (isIsolatedPack) {
@@ -490,13 +492,13 @@ export default function AgentManager({
           className="px-3 py-2 rounded-lg text-sm font-medium transition-all hover:opacity-90 active:opacity-80 shadow-sm"
           style={{ background: "#7c3aed", color: "#ffffff", boxShadow: "0 1px 3px rgba(124,58,237,0.3)" }}
         >
-          + {tr("부서 추가", "Add Dept")}
+          + {tr("", "Add Dept")}
         </button>
         <button
           onClick={openCreate}
           className="px-4 py-2 rounded-lg text-sm font-medium transition-all bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white shadow-sm shadow-blue-600/20"
         >
-          + {tr("신규 채용", "Hire Agent")}
+          + {tr("", "Hire Agent")}
         </button>
       </div>
 
@@ -507,10 +509,10 @@ export default function AgentManager({
         {[
           {
             key: "agents" as const,
-            label: tr("직원관리", "Agents"),
+            label: tr("", "Agents"),
             icon: <StackedSpriteIcon sprites={randomIconSprites.tab} />,
           },
-          { key: "departments" as const, label: tr("부서관리", "Departments"), icon: "🏢" },
+          { key: "departments" as const, label: tr("", "Departments"), icon: "🏢" },
         ].map((tab) => (
           <button
             key={tab.key}

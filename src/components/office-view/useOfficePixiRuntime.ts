@@ -3,6 +3,7 @@ import { Application, Assets, TextureStyle, type Texture } from "pixi.js";
 import type { Agent, Department, SubAgent, Task } from "../../types";
 import { buildSpriteMap } from "../AgentAvatar";
 import { type Delivery, MIN_OFFICE_W, findScrollContainer } from "./model";
+import { preloadAvatarTextures } from "./avatar-texture-cache";
 import { runOfficeTickerStep, type OfficeTickerContext } from "./officeTicker";
 
 interface UseOfficePixiRuntimeParams {
@@ -140,6 +141,9 @@ export function useOfficePixiRuntime({
 
 
       await Promise.all(loads);
+
+      // Preload avataaars textures for all agents
+      await preloadAvatarTextures(dataRef.current.agents);
 
       if (initIdRef.current !== currentInitId) {
         try {

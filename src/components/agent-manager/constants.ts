@@ -14,10 +14,10 @@ export const CLI_PROVIDERS: CliProvider[] = [
 ];
 
 export const ROLE_LABEL: Record<string, { ko: string; en: string }> = {
-  team_leader: { ko: "팀장", en: "Leader" },
-  senior: { ko: "시니어", en: "Senior" },
-  junior: { ko: "주니어", en: "Junior" },
-  intern: { ko: "인턴", en: "Intern" },
+  team_leader: { ko: "", en: "Leader" },
+  senior: { ko: "", en: "Senior" },
+  junior: { ko: "", en: "Junior" },
+  intern: { ko: "", en: "Intern" },
 };
 
 export const ROLE_BADGE: Record<string, string> = {
@@ -38,22 +38,22 @@ export const ICON_SPRITE_POOL = Array.from({ length: 13 }, (_, i) => i + 1);
 
 export const EMOJI_GROUPS: { label: string; labelEn: string; emojis: string[] }[] = [
   {
-    label: "부서/업무",
+    label: "/",
     labelEn: "Work",
     emojis: ["📊", "💻", "🎨", "🔍", "🛡️", "⚙️", "📁", "🏢", "📋", "📈", "💼", "🗂️", "📌", "🎯", "🔧", "🧪"],
   },
   {
-    label: "사람/표정",
+    label: "/",
     labelEn: "People",
     emojis: ["🤖", "👤", "👥", "😊", "😎", "🤓", "🧑‍💻", "👨‍🔬", "👩‍🎨", "🧑‍🏫", "🦸", "🦊", "🐱", "🐶", "🐻", "🐼"],
   },
   {
-    label: "사물/기호",
+    label: "/",
     labelEn: "Objects",
     emojis: ["💡", "🚀", "⚡", "🔥", "💎", "🏆", "🎵", "🎮", "📱", "💾", "🖥️", "📡", "🔑", "🛠️", "📦", "🧩"],
   },
   {
-    label: "자연/색상",
+    label: "/",
     labelEn: "Nature",
     emojis: ["🌟", "⭐", "🌈", "🌊", "🌸", "🍀", "🌙", "☀️", "❄️", "🔵", "🟢", "🟡", "🔴", "🟣", "🟠", "⚪"],
   },
@@ -69,6 +69,7 @@ export const BLANK: FormData = {
   cli_provider: "claude",
   avatar_emoji: "🤖",
   sprite_number: null,
+  avatar_seed: "",
   personality: "",
 };
 

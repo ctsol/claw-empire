@@ -30,7 +30,7 @@ describe("[QA] Russian locale support — current status: NOT IMPLEMENTED", () =
   });
 
   it("pickLang falls back to English for unsupported 'ru' locale", () => {
-    const text: LangText = { ko: "안녕", en: "hello", ja: "こんにちは", zh: "你好" };
+    const text: LangText = { ko: "", en: "hello", ja: "こんにちは", zh: "你好" };
     // No "ru" key in LangText; runtime default branch returns English
     expect(pickLang("ru" as UiLanguage, text)).toBe("hello");
   });

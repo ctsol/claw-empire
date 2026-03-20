@@ -185,7 +185,7 @@ export default function AppHeaderBar({
           onClick={onToggleTheme}
           className="theme-toggle-btn"
           aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-          title={theme === "dark" ? "라이트 모드" : "다크 모드"}
+          title={theme === "dark" ? "" : ""}
         >
           <span className="theme-toggle-icon">
             {theme === "dark" ? (
@@ -234,7 +234,7 @@ export default function AppHeaderBar({
               background: "var(--th-bg-surface)",
               color: "var(--th-text-secondary)",
             }}
-            aria-label="더보기 메뉴"
+            aria-label=""
           >
             <svg
               width="18"

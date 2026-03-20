@@ -325,7 +325,7 @@ export function useAppActions({
       if (!matchedAgent) {
         window.alert(
           pickLang(normalizeLanguage(settings.language), {
-            ko: "요청 에이전트 정보를 찾지 못했습니다.",
+            ko: ".",
             en: "Could not find the requested agent.",
             ja: "対象エージェント情報が見つかりません。",
             zh: "未找到对应代理信息。",
@@ -354,7 +354,7 @@ export function useAppActions({
         if (item.kind === "agent_request") {
           if (!item.agentId) return;
           const replyContent = pickLang(locale, {
-            ko: `[의사결정 회신] ${option.number}번으로 진행해 주세요. (${option.label})`,
+            ko: `[Decision Reply] Please proceed with option ${option.number}. (${option.label})`,
             en: `[Decision Reply] Please proceed with option ${option.number}. (${option.label})`,
             ja: `[意思決定返信] ${option.number}番で進めてください。(${option.label})`,
             zh: `[决策回复] 请按选项 ${option.number} 推进。（${option.label}）`,
@@ -375,7 +375,7 @@ export function useAppActions({
             if (!note) {
               window.alert(
                 pickLang(locale, {
-                  ko: "추가요청사항이 비어 있습니다.",
+                  ko: ".",
                   en: "Additional request is empty.",
                   ja: "追加要請が空です。",
                   zh: "追加请求内容为空。",
@@ -401,14 +401,14 @@ export function useAppActions({
               blockedLines.length > 0
                 ? `\n\n${blockedLines.join("\n")}`
                 : pickLang(locale, {
-                    ko: "\n\n세부 사유는 태스크 로그를 확인해 주세요.",
+                    ko: "\n\nCheck task logs for details.",
                     en: "\n\nCheck task logs for details.",
                     ja: "\n\n詳細はタスクログを確認してください。",
                     zh: "\n\n请查看任务日志了解详情。",
                   });
             window.alert(
               pickLang(locale, {
-                ko: `팀장 회의 시작이 보류되었습니다. 필요한 게이트를 먼저 해소해 주세요.${blockedSummary}`,
+                ko: `Team-lead meeting start is on hold. Resolve required gates first.${blockedSummary}`,
                 en: `Team-lead meeting start is on hold. Resolve required gates first.${blockedSummary}`,
                 ja: `チームリーダー会議の開始は保留です。先に必要なゲートを解消してください。${blockedSummary}`,
                 zh: `组长评审会议暂缓启动。请先解决必要门禁。${blockedSummary}`,
@@ -425,7 +425,7 @@ export function useAppActions({
         console.error("Decision reply failed:", error);
         window.alert(
           pickLang(locale, {
-            ko: "의사결정 회신 전송에 실패했습니다. 잠시 후 다시 시도해 주세요.",
+            ko: ".     .",
             en: "Failed to send decision reply. Please try again.",
             ja: "意思決定返信の送信に失敗しました。もう一度お試しください。",
             zh: "发送决策回复失败，请稍后重试。",

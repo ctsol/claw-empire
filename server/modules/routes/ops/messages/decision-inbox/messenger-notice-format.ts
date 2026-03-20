@@ -14,7 +14,7 @@ export function createDecisionNoticeFormatter(deps: NoticeFormatterDeps) {
     if (lang === "en") return en;
     if (lang === "ja") return ja;
     if (lang === "zh") return zh;
-    return ko;
+    return en;
   }
 
   function truncateLine(value: string, max = 220): string {
@@ -51,16 +51,16 @@ export function createDecisionNoticeFormatter(deps: NoticeFormatterDeps) {
 
   function summarizeDecisionOptionStance(input: string): string {
     const text = summarizeDecisionText(input, 220);
-    if (!text || text === "-") return pickDecisionL10n("세부 내용 확인", "Check details", "詳細を確認", "查看详情");
+    if (!text || text === "-") return pickDecisionL10n("Check details", "Check details", "詳細を確認", "查看详情");
     if (/skip|다음\s*라운드|次のラウンド|下一轮/i.test(text)) {
-      return pickDecisionL10n("다음 라운드 진행", "Move to next round", "次ラウンドへ進行", "进入下一轮");
+      return pickDecisionL10n("Move to next round", "Move to next round", "次ラウンドへ進行", "进入下一轮");
     }
     if (/보류|보완|추가요청|미제출|hold|pending|rework|remediation|补充|保留|整改|保留|保留/i.test(text)) {
-      return pickDecisionL10n("보완 후 재검토", "Remediate then review", "補完後に再レビュー", "补充后再评审");
+      return pickDecisionL10n("Remediate then review", "Remediate then review", "補完後に再レビュー", "补充后再评审");
     }
     if (/승인|가능|완료|준비|approve|approved|ready|merge|go\b|통과|通过|承認|可行|可進行/i.test(text)) {
       return pickDecisionL10n(
-        "승인/즉시 진행 가능",
+        "Approved / ready now",
         "Approved / ready now",
         "承認済み・即時進行可",
         "已批准/可立即推进",
@@ -107,7 +107,7 @@ export function createDecisionNoticeFormatter(deps: NoticeFormatterDeps) {
 
     if (lines.length < 3) {
       const fallback = pickDecisionL10n(
-        `총 ${item.options.length}개 선택지 중 우선순위를 골라 회신하면 즉시 반영됩니다.`,
+        `Choose priority option(s) from ${item.options.length} choices to apply immediately.`,
         `Choose priority option(s) from ${item.options.length} choices to apply immediately.`,
         `${item.options.length}件の選択肢から優先順位を選ぶと即時反映されます。`,
         `从 ${item.options.length} 个选项中选择优先项后将立即生效。`,
@@ -157,7 +157,7 @@ export function createDecisionNoticeFormatter(deps: NoticeFormatterDeps) {
       return normalizeTextField(item.agent_name) || normalizeTextField(item.agent_name_ko) || "企画リード";
     if (lang === "zh")
       return normalizeTextField(item.agent_name) || normalizeTextField(item.agent_name_ko) || "企划组长";
-    return normalizeTextField(item.agent_name_ko) || normalizeTextField(item.agent_name) || "기획팀장";
+    return normalizeTextField(item.agent_name) || normalizeTextField(item.agent_name_ko) || "Planning Lead";
   }
 
   function resolveRecommendedOptions(item: DecisionInboxRouteItem): Array<{ number: number; title: string }> {
@@ -215,8 +215,8 @@ export function createDecisionNoticeFormatter(deps: NoticeFormatterDeps) {
       options.length > 0
         ? pickDecisionL10n(
             isMultiPick
-              ? `회신: 번호를 하나/여러 개 보내주세요 (예: ${defaultOption} 또는 ${defaultOption},3)`
-              : `회신: 숫자만 보내주세요 (예: ${defaultOption})`,
+              ? `Reply: send one or multiple option numbers (e.g., ${defaultOption} or ${defaultOption},3)`
+              : `Reply: send only the option number (e.g., ${defaultOption})`,
             isMultiPick
               ? `Reply: send one or multiple option numbers (e.g., ${defaultOption} or ${defaultOption},3)`
               : `Reply: send only the option number (e.g., ${defaultOption})`,
@@ -228,30 +228,30 @@ export function createDecisionNoticeFormatter(deps: NoticeFormatterDeps) {
               : `回复：仅发送选项编号（例如：${defaultOption}）`,
           )
         : pickDecisionL10n(
-            "회신: 선택 번호를 보내주세요",
+            "Reply with an option number",
             "Reply with an option number",
             "返信: 選択番号を送ってください",
             "回复：请发送选项编号",
           );
     const lines = [
-      `${pickDecisionL10n("의사결정 요청", "Decision Request", "意思決定リクエスト", "决策请求")}`,
-      `${pickDecisionL10n("프로젝트", "Project", "プロジェクト", "项目")}: ${projectLabel}`,
+      `${pickDecisionL10n("Decision Request", "Decision Request", "意思決定リクエスト", "决策请求")}`,
+      `${pickDecisionL10n("Project", "Project", "プロジェクト", "项目")}: ${projectLabel}`,
       ...(taskLabel
-        ? [`${pickDecisionL10n("태스크", "Task", "タスク", "任务")}: ${truncateLine(taskLabel, 140)}`]
+        ? [`${pickDecisionL10n("Task", "Task", "タスク", "任务")}: ${truncateLine(taskLabel, 140)}`]
         : []),
-      `${pickDecisionL10n("기획팀장 요약", "Planning lead summary", "企画リード要約", "企划组长摘要")}:`,
+      `${pickDecisionL10n("Planning lead summary", "Planning lead summary", "企画リード要約", "企划组长摘要")}:`,
       ...plannerSummaryLines.map((line) => `- ${line}`),
-      ...(options.length > 0 ? [pickDecisionL10n("선택지", "Options", "選択肢", "选项") + ":", ...options] : []),
+      ...(options.length > 0 ? [pickDecisionL10n("Options", "Options", "選択肢", "选项") + ":", ...options] : []),
       replyGuide,
       ...(recommendedOptions.length > 0
         ? [
-            `${pickDecisionL10n("기획팀장", "Planning lead", "企画リード", "企划组长")} ${planningLeadName}: ${pickDecisionL10n(
-              `제 소견은 이렇습니다. (${recommendedNumbers}번 추천)`,
+            `${pickDecisionL10n("Planning lead", "Planning lead", "企画リード", "企划组长")} ${planningLeadName}: ${pickDecisionL10n(
+              `My recommendation is this. (Recommend ${recommendedNumbers})`,
               `My recommendation is this. (Recommend ${recommendedNumbers})`,
               `私の所見はこうです。（${recommendedNumbers}を推奨）`,
               `我的建议如下。（推荐 ${recommendedNumbers}）`,
             )}`,
-            `${pickDecisionL10n("추천 선택지", "Recommended options", "推奨選択肢", "推荐选项")}: ${recommendedNumbers}`,
+            `${pickDecisionL10n("Recommended options", "Recommended options", "推奨選択肢", "推荐选项")}: ${recommendedNumbers}`,
           ]
         : []),
     ];

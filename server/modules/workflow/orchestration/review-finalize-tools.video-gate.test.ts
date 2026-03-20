@@ -35,7 +35,7 @@ function createDb(): DatabaseSync {
 }
 
 describe("review finalize video gate", () => {
-  it("video_preprod task는 final.mp4 확인 전 승인/머지를 진행하지 않는다", () => {
+  it("video_preprod task final.mp4   /", () => {
     const db = createDb();
     try {
       const taskId = "task-video-1";
@@ -68,7 +68,7 @@ describe("review finalize video gate", () => {
         mergeWorktree,
         cleanupWorktree: vi.fn(),
         findTeamLeader: vi.fn(() => null),
-        getAgentDisplayName: vi.fn(() => "팀장"),
+        getAgentDisplayName: vi.fn(() => ""),
         setTaskCreationAuditCompletion: vi.fn(),
         endTaskExecutionSession: vi.fn(),
         notifyTaskStatus: vi.fn(),
@@ -105,7 +105,7 @@ describe("review finalize video gate", () => {
     }
   });
 
-  it("video artifact가 있어도 Remotion 증빙이 없으면 승인/머지를 차단한다", () => {
+  it("video artifact  Remotion   /", () => {
     const db = createDb();
     const projectRoot = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-review-gate-"));
     const logsDir = fs.mkdtempSync(path.join(os.tmpdir(), "climpire-review-logs-"));
@@ -145,7 +145,7 @@ describe("review finalize video gate", () => {
         mergeWorktree,
         cleanupWorktree: vi.fn(),
         findTeamLeader: vi.fn(() => null),
-        getAgentDisplayName: vi.fn(() => "팀장"),
+        getAgentDisplayName: vi.fn(() => ""),
         setTaskCreationAuditCompletion: vi.fn(),
         endTaskExecutionSession: vi.fn(),
         notifyTaskStatus: vi.fn(),

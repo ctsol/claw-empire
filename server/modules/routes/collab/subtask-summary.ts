@@ -27,8 +27,8 @@ interface TaskSubtaskProgressSummary {
 }
 
 const REMEDIATION_SUBTASK_PREFIXES = [
-  "[보완계획]",
-  "[검토보완]",
+  "[Plan Item]",
+  "[Review Revision]",
   "[Plan Item]",
   "[Review Revision]",
   "[補完計画]",
@@ -37,7 +37,7 @@ const REMEDIATION_SUBTASK_PREFIXES = [
   "[评审整改]",
 ];
 
-const COLLABORATION_SUBTASK_PREFIXES = ["[협업]", "[Collaboration]", "[協業]", "[协作]"];
+const COLLABORATION_SUBTASK_PREFIXES = ["[Collaboration]", "[Collaboration]", "[協業]", "[协作]"];
 
 interface InitializeSubtaskSummaryArgs {
   db: DatabaseSync;
@@ -97,9 +97,9 @@ export function initializeSubtaskSummary({ db, l, pickL }: InitializeSubtaskSumm
     return pickL(
       l(
         [
-          `- 전체: ${summary.done}/${summary.total} 완료`,
-          `- 보완사항: ${summary.remediationDone}/${summary.remediationTotal} 완료`,
-          `- 협업사항: ${summary.collaborationDone}/${summary.collaborationTotal} 완료`,
+          `- Overall: ${summary.done}/${summary.total} done`,
+          `- Remediation: ${summary.remediationDone}/${summary.remediationTotal} done`,
+          `- Collaboration: ${summary.collaborationDone}/${summary.collaborationTotal} done`,
         ],
         [
           `- Overall: ${summary.done}/${summary.total} done`,

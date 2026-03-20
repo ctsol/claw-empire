@@ -32,7 +32,7 @@ function makeApiState(): ApiStateBundle {
       {
         id: "agent-dev",
         name: "Dev Lead",
-        name_ko: "개발 리드",
+        name_ko: "",
         department_id: "planning",
         workflow_pack_key: "development",
         role: "team_leader",
@@ -48,7 +48,7 @@ function makeApiState(): ApiStateBundle {
       {
         id: "agent-video",
         name: "Video Lead",
-        name_ko: "영상 리드",
+        name_ko: "",
         department_id: "planning",
         workflow_pack_key: "video_preprod",
         role: "team_leader",
@@ -66,7 +66,7 @@ function makeApiState(): ApiStateBundle {
       {
         id: "planning",
         name: "Planning",
-        name_ko: "기획",
+        name_ko: "",
         icon: "P",
         color: "#000000",
         description: null,
@@ -78,7 +78,7 @@ function makeApiState(): ApiStateBundle {
       {
         id: "planning",
         name: "Storyboard",
-        name_ko: "스토리보드",
+        name_ko: "",
         icon: "S",
         color: "#111111",
         description: null,

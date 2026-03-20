@@ -41,9 +41,9 @@ export function createMeetingPromptTools(deps: CreateMeetingPromptToolsDeps) {
         ? lang === "ko"
           ? [
               "[Video Runtime Invariant]",
-              "- 영상 기획/실행은 최종 렌더러를 Remotion으로 고정합니다.",
-              "- 기획 항목은 Remotion 기준(컴포지션/씬/타임라인/트랜지션)으로 작성하세요.",
-              "- Python(moviepy/Pillow) 등 비-Remotion 렌더 파이프라인 제안은 금지합니다.",
+              "-  /   Remotion .",
+              "-   Remotion (///) .",
+              "- Python(moviepy/Pillow)  -Remotion    .",
             ].join("\n")
           : lang === "ja"
             ? [
@@ -141,7 +141,7 @@ export function createMeetingPromptTools(deps: CreateMeetingPromptToolsDeps) {
     if (lang === "en") return `${name}: CLI response failed (${error || "unknown error"}).`;
     if (lang === "ja") return `${name}: CLI応答の生成に失敗しました（${error || "不明なエラー"}）。`;
     if (lang === "zh") return `${name}: CLI回复生成失败（${error || "未知错误"}）。`;
-    return `${name}: CLI 응답 생성에 실패했습니다 (${error || "알 수 없는 오류"}).`;
+    return ``;
   }
 
   return {

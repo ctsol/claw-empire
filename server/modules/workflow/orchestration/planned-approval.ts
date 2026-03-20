@@ -195,7 +195,7 @@ export function createPlannedApprovalTools(deps: CreatePlannedApprovalToolsDeps)
           pickL(
             l(
               [
-                `[CEO OFFICE] '${taskTitle}' Planned 계획 라운드 ${round} 시작. 부서별 보완점 수집 후 실행계획(SubTask)으로 정리합니다.`,
+                `[CEO OFFICE] '${taskTitle}' planned round ${round} started. Collecting supplement points and turning them into executable subtasks.`,
               ],
               [
                 `[CEO OFFICE] '${taskTitle}' planned round ${round} started. Collecting supplement points and turning them into executable subtasks.`,
@@ -310,7 +310,7 @@ export function createPlannedApprovalTools(deps: CreatePlannedApprovalToolsDeps)
           pickL(
             l(
               [
-                `[CEO OFFICE] '${taskTitle}' Planned 회의 종료. 보완점 ${planItems.length}건을 계획 항목으로 기록하고 In Progress로 진행합니다.`,
+                `[CEO OFFICE] Planned meeting for '${taskTitle}' is complete. Recorded ${planItems.length} improvement items and moving to In Progress.`,
               ],
               [
                 `[CEO OFFICE] Planned meeting for '${taskTitle}' is complete. Recorded ${planItems.length} improvement items and moving to In Progress.`,
@@ -344,7 +344,7 @@ export function createPlannedApprovalTools(deps: CreatePlannedApprovalToolsDeps)
         notifyCeo(
           pickL(
             l(
-              [`[CEO OFFICE] '${taskTitle}' Planned 회의 처리 중 오류가 발생했습니다: ${msg}`],
+              [`[CEO OFFICE] Error while processing planned meeting for '${taskTitle}': ${msg}`],
               [`[CEO OFFICE] Error while processing planned meeting for '${taskTitle}': ${msg}`],
               [`[CEO OFFICE] '${taskTitle}' のPlanned会議処理中にエラーが発生しました: ${msg}`],
               [`[CEO OFFICE] 处理'${taskTitle}'的 Planned 会议时发生错误：${msg}`],

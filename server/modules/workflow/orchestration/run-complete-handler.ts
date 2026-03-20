@@ -332,7 +332,7 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
               pickL(
                 l(
                   [
-                    `'${task.title}' 는 문서화/협업 정리가 남아 있어 영상 품질 게이트를 Review 단계에서 이어서 확인합니다. (미완료 subtask ${openSubtasks}건, 협업 task ${openChildTasks}건)`,
+                    `'${task.title}' still has documentation/collaboration work pending, so video quality gating will continue in Review stage. (open subtasks: ${openSubtasks}, open collaboration tasks: ${openChildTasks})`,
                   ],
                   [
                     `'${task.title}' still has documentation/collaboration work pending, so video quality gating will continue in Review stage. (open subtasks: ${openSubtasks}, open collaboration tasks: ${openChildTasks})`,
@@ -365,10 +365,10 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
                 pickL(
                   l(
                     [
-                      `'${task.title}' 의 최종 렌더 산출물이 확인되지 않아 실행을 실패 처리했습니다. Remotion으로 출력 파일을 생성한 뒤 다시 실행해 주세요.`,
+                      `Marked'${task.title}' as failed because final render output is missing/empty. Generate the file with Remotion and retry.`,
                     ],
                     [
-                      `Marked '${task.title}' as failed because final render output is missing/empty. Generate the file with Remotion and retry.`,
+                      `Marked'${task.title}' as failed because final render output is missing/empty. Generate the file with Remotion and retry.`,
                     ],
                     [
                       `'${task.title}' の最終レンダー成果物が未確認のため失敗処理しました。Remotion で出力を生成後に再実行してください。`,
@@ -389,10 +389,10 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
                 pickL(
                   l(
                     [
-                      `'${task.title}' 영상 산출물이 아직 확인되지 않았습니다. 검토 단계에서 \`${artifactProbe.videoArtifactSpec.relativePath}\` (또는 legacy \`${artifactProbe.videoArtifactSpec.legacyRelativePath}\`) 확인 후 승인해야 합니다.`,
+                      `Video artifact for'${task.title}' is not verified yet. In review stage, approval requires \`${artifactProbe.videoArtifactSpec.relativePath}\` (or legacy \`${artifactProbe.videoArtifactSpec.legacyRelativePath}\`).`,
                     ],
                     [
-                      `Video artifact for '${task.title}' is not verified yet. In review stage, approval requires \`${artifactProbe.videoArtifactSpec.relativePath}\` (or legacy \`${artifactProbe.videoArtifactSpec.legacyRelativePath}\`).`,
+                      `Video artifact for'${task.title}' is not verified yet. In review stage, approval requires \`${artifactProbe.videoArtifactSpec.relativePath}\` (or legacy \`${artifactProbe.videoArtifactSpec.legacyRelativePath}\`).`,
                     ],
                     [
                       `'${task.title}' の動画成果物はまだ未確認です。レビュー段階で \`${artifactProbe.videoArtifactSpec.relativePath}\`（または legacy \`${artifactProbe.videoArtifactSpec.legacyRelativePath}\`）確認後に承認してください。`,
@@ -479,6 +479,31 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
           },
           "Status → done (report workflow: review meeting skipped for documentation/report task)",
         );
+
+        // Send report to Telegram even for report-request tasks
+        void (async () => {
+          try {
+            let reportBody = "";
+            const logFile = path.join(logsDir, `${taskId}.log`);
+            if (fs.existsSync(logFile)) {
+              const raw = fs.readFileSync(logFile, "utf8");
+              const pretty = prettyStreamJson(raw);
+              reportBody = pretty.length > 500 ? "..." + pretty.slice(-500) : pretty;
+            }
+            const reportContent = `📄 ${task.title}\n${reportBody}`;
+            const deptRow = task.department_id
+              ? (db.prepare("SELECT name FROM departments WHERE id = ?").get(task.department_id) as
+                  | { name?: string }
+                  | undefined)
+              : undefined;
+            const teamLabel = deptRow?.name || task.department_id || "Team";
+            const preview = reportContent.length > 2000 ? `${reportContent.slice(0, 2000)}...` : reportContent;
+            await sendTelegramReportToChannel(db, teamLabel, preview);
+          } catch (err) {
+            console.warn("[run-complete] telegram report for report-task failed:", err);
+          }
+        })();
+
         return;
       }
     }
@@ -507,7 +532,7 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
           pickL(
             l(
               [
-                `'${task.title}' 협업 하위 태스크가 Review 대기 상태로 전환되었습니다. 상위 업무의 전체 취합 회의에서 일괄 검토/머지합니다.`,
+                `'${task.title}' collaboration child task is now waiting in Review. It will be consolidated in the parent task's single review/merge meeting.`,
               ],
               [
                 `'${task.title}' collaboration child task is now waiting in Review. It will be consolidated in the parent task's single review/merge meeting.`,
@@ -544,11 +569,11 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
         const leader = findTeamLeader(task.department_id);
         const leaderName = leader
           ? getAgentDisplayName(leader, lang)
-          : pickL(l(["팀장"], ["Team Lead"], ["チームリーダー"], ["组长"], ["Руководитель"]), lang);
+          : pickL(l(["Team Lead"], ["Team Lead"], ["チームリーダー"], ["组长"], ["Руководитель"]), lang);
         notifyCeo(
           pickL(
             l(
-              [`${leaderName}이(가) '${task.title}' 결과를 검토 중입니다.`],
+              [`${leaderName} is reviewing the result for '${task.title}'.`],
               [`${leaderName} is reviewing the result for '${task.title}'.`],
               [`${leaderName}が '${task.title}' の成果をレビュー中です。`],
               [`${leaderName} 正在审核 '${task.title}' 的结果。`],
@@ -598,7 +623,7 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
         let reportContent = reportBody
           ? pickL(
               l(
-                [`대표님, '${task.title}' 업무 완료 보고드립니다.\n\n📋 결과:\n${reportBody}`],
+                [`CEO, reporting completion for '${task.title}'.\n\n📋 Result:\n${reportBody}`],
                 [`CEO, reporting completion for '${task.title}'.\n\n📋 Result:\n${reportBody}`],
                 [`CEO、'${task.title}' の完了をご報告します。\n\n📋 結果:\n${reportBody}`],
                 [`CEO，汇报 '${task.title}' 已完成。\n\n📋 结果:\n${reportBody}`],
@@ -608,7 +633,7 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
             )
           : pickL(
               l(
-                [`대표님, '${task.title}' 업무 완료 보고드립니다. 작업이 성공적으로 마무리되었습니다.`],
+                [`CEO, reporting completion for '${task.title}'. The work has been finished successfully.`],
                 [`CEO, reporting completion for '${task.title}'. The work has been finished successfully.`],
                 [`CEO、'${task.title}' の完了をご報告します。作業は正常に完了しました。`],
                 [`CEO，汇报 '${task.title}' 已完成。任务已成功结束。`],
@@ -619,7 +644,7 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
 
         const subtaskProgressLabel = pickL(
           l(
-            ["📌 보완/협업 진행 요약"],
+            ["📌 Remediation/Collaboration Progress"],
             ["📌 Remediation/Collaboration Progress"],
             ["📌 補完/協業 進捗サマリー"],
             ["📌 整改/协作进度摘要"],
@@ -635,7 +660,7 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
         if (hasVisibleDiffSummary(diffSummary)) {
           reportContent += pickL(
             l(
-              [`\n\n📝 변경사항 (branch: ${wtInfo?.branchName}):\n${diffSummary}`],
+              [`\n\n📝 Changes (branch: ${wtInfo?.branchName}):\n${diffSummary}`],
               [`\n\n📝 Changes (branch: ${wtInfo?.branchName}):\n${diffSummary}`],
               [`\n\n📝 変更点 (branch: ${wtInfo?.branchName}):\n${diffSummary}`],
               [`\n\n📝 变更内容 (branch: ${wtInfo?.branchName}):\n${diffSummary}`],
@@ -704,10 +729,10 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
               ? pickL(
                   l(
                     [
-                      `대표님, '${task.title}' 작업에 문제가 발생했습니다 (종료코드: ${finalExitCode}).\n\n❌ 오류 내용:\n${errorBody}\n\n재배정하거나 업무 내용을 수정한 후 다시 시도해주세요.`,
+                      `CEO,'${task.title}' failed with an issue (exit code: ${finalExitCode}).\n\n❌ Error:\n${errorBody}\n\nPlease reassign the agent or revise the task, then try again.`,
                     ],
                     [
-                      `CEO, '${task.title}' failed with an issue (exit code: ${finalExitCode}).\n\n❌ Error:\n${errorBody}\n\nPlease reassign the agent or revise the task, then try again.`,
+                      `CEO,'${task.title}' failed with an issue (exit code: ${finalExitCode}).\n\n❌ Error:\n${errorBody}\n\nPlease reassign the agent or revise the task, then try again.`,
                     ],
                     [
                       `CEO、'${task.title}' の処理中に問題が発生しました (終了コード: ${finalExitCode})。\n\n❌ エラー内容:\n${errorBody}\n\n担当再割り当てまたはタスク内容を修正して再試行してください。`,
@@ -716,7 +741,7 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
                       `CEO，'${task.title}' 执行时发生问题（退出码：${finalExitCode}）。\n\n❌ 错误内容:\n${errorBody}\n\n请重新分配代理或修改任务后重试。`,
                     ],
                     [
-                      `Руководитель, задача '${task.title}' завершилась с ошибкой (код: ${finalExitCode}).\n\n❌ Ошибка:\n${errorBody}\n\nПереназначьте агента или измените задачу и повторите.`,
+                      `Руководитель, задача '${task.title}'завершилась с ошибкой (код: ${finalExitCode}).\n\n❌ Ошибка:\n${errorBody}\n\nПереназначьте агента или измените задачу и повторите.`,
                     ],
                   ),
                   failLang,
@@ -724,10 +749,10 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
               : pickL(
                   l(
                     [
-                      `대표님, '${task.title}' 작업에 문제가 발생했습니다 (종료코드: ${finalExitCode}). 에이전트를 재배정하거나 업무 내용을 수정한 후 다시 시도해주세요.`,
+                      `CEO,'${task.title}' failed with an issue (exit code: ${finalExitCode}). Please reassign the agent or revise the task, then try again.`,
                     ],
                     [
-                      `CEO, '${task.title}' failed with an issue (exit code: ${finalExitCode}). Please reassign the agent or revise the task, then try again.`,
+                      `CEO,'${task.title}' failed with an issue (exit code: ${finalExitCode}). Please reassign the agent or revise the task, then try again.`,
                     ],
                     [
                       `CEO、'${task.title}' の処理中に問題が発生しました (終了コード: ${finalExitCode})。担当再割り当てまたはタスク内容を修正して再試行してください。`,
@@ -749,8 +774,8 @@ export function createRunCompleteHandler(deps: CreateRunCompleteHandlerDeps) {
         notifyCeo(
           pickL(
             l(
-              [`'${task.title}' 작업 실패 (exit code: ${finalExitCode}).`],
-              [`Task '${task.title}' failed (exit code: ${finalExitCode}).`],
+              [`Task'${task.title}' failed (exit code: ${finalExitCode}).`],
+              [`Task'${task.title}' failed (exit code: ${finalExitCode}).`],
               [`'${task.title}' のタスクが失敗しました (exit code: ${finalExitCode})。`],
               [`任务 '${task.title}' 失败（exit code: ${finalExitCode}）。`],
               [`Задача '${task.title}' завершилась с ошибкой (exit code: ${finalExitCode}).`],

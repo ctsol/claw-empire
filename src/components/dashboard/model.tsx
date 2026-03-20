@@ -30,10 +30,10 @@ export function useNow(localeTag: string, t: TFunction) {
   const hour = now.getHours();
   const briefing =
     hour < 12
-      ? t({ ko: "오전 브리핑", en: "Morning Briefing", ja: "午前ブリーフィング", zh: "上午简报", ru: "Утренний брифинг" })
+      ? t({ ko: "", en: "Morning Briefing", ja: "午前ブリーフィング", zh: "上午简报", ru: "Утренний брифинг" })
       : hour < 18
-        ? t({ ko: "오후 운영 점검", en: "Afternoon Ops Check", ja: "午後運用点検", zh: "下午运行检查", ru: "Послеполуденная проверка" })
-        : t({ ko: "저녁 마감 점검", en: "Evening Wrap-up", ja: "夜間締め点検", zh: "晚间收尾检查", ru: "Вечерний итог" });
+        ? t({ ko: "", en: "Afternoon Ops Check", ja: "午後運用点検", zh: "下午运行检查", ru: "Послеполуденная проверка" })
+        : t({ ko: "", en: "Evening Wrap-up", ja: "夜間締め点検", zh: "晚间收尾检查", ru: "Вечерний итог" });
 
   return { date, time, briefing };
 }
@@ -51,19 +51,19 @@ export function timeAgo(timestamp: number, localeTag: string): string {
 }
 
 export const RANK_TIERS = [
-  { name: "BRONZE", nameKo: "브론즈", minXp: 0, color: "#CD7F32", glow: "rgba(205,127,50,0.35)", icon: "⚔️" },
-  { name: "SILVER", nameKo: "실버", minXp: 100, color: "#C0C0C0", glow: "rgba(192,192,192,0.35)", icon: "🛡️" },
-  { name: "GOLD", nameKo: "골드", minXp: 500, color: "#FFD700", glow: "rgba(255,215,0,0.35)", icon: "⭐" },
+  { name: "BRONZE", nameKo: "", minXp: 0, color: "#CD7F32", glow: "rgba(205,127,50,0.35)", icon: "⚔️" },
+  { name: "SILVER", nameKo: "", minXp: 100, color: "#C0C0C0", glow: "rgba(192,192,192,0.35)", icon: "🛡️" },
+  { name: "GOLD", nameKo: "", minXp: 500, color: "#FFD700", glow: "rgba(255,215,0,0.35)", icon: "⭐" },
   {
     name: "PLATINUM",
-    nameKo: "플래티넘",
+    nameKo: "",
     minXp: 2000,
     color: "#00c8b4",
     glow: "rgba(0,200,180,0.35)",
     icon: "💎",
   },
-  { name: "DIAMOND", nameKo: "다이아", minXp: 5000, color: "#7df9ff", glow: "rgba(125,249,255,0.35)", icon: "💠" },
-  { name: "MASTER", nameKo: "마스터", minXp: 15000, color: "#c45ff6", glow: "rgba(196,95,246,0.35)", icon: "👑" },
+  { name: "DIAMOND", nameKo: "", minXp: 5000, color: "#7df9ff", glow: "rgba(125,249,255,0.35)", icon: "💠" },
+  { name: "MASTER", nameKo: "", minXp: 15000, color: "#c45ff6", glow: "rgba(196,95,246,0.35)", icon: "👑" },
 ];
 
 export function getRankTier(xp: number) {
@@ -96,19 +96,19 @@ export const STATUS_LEFT_BORDER: Record<string, string> = {
 export function taskStatusLabel(status: string, t: TFunction) {
   switch (status) {
     case "inbox":
-      return t({ ko: "수신함", en: "Inbox", ja: "受信箱", zh: "收件箱", ru: "Входящие" });
+      return t({ ko: "", en: "Inbox", ja: "受信箱", zh: "收件箱", ru: "Входящие" });
     case "planned":
-      return t({ ko: "계획됨", en: "Planned", ja: "計画済み", zh: "已计划", ru: "Запланировано" });
+      return t({ ko: "", en: "Planned", ja: "計画済み", zh: "已计划", ru: "Запланировано" });
     case "in_progress":
-      return t({ ko: "진행 중", en: "In Progress", ja: "進行中", zh: "进行中", ru: "В процессе" });
+      return t({ ko: "", en: "In Progress", ja: "進行中", zh: "进行中", ru: "В процессе" });
     case "review":
-      return t({ ko: "검토 중", en: "Review", ja: "レビュー", zh: "审核", ru: "Проверка" });
+      return t({ ko: "", en: "Review", ja: "レビュー", zh: "审核", ru: "Проверка" });
     case "done":
-      return t({ ko: "완료", en: "Done", ja: "完了", zh: "完成", ru: "Готово" });
+      return t({ ko: "", en: "Done", ja: "完了", zh: "完成", ru: "Готово" });
     case "pending":
-      return t({ ko: "보류", en: "Pending", ja: "保留", zh: "待처理", ru: "Ожидание" });
+      return t({ ko: "", en: "Pending", ja: "保留", zh: "待理", ru: "Ожидание" });
     case "cancelled":
-      return t({ ko: "취소됨", en: "Cancelled", ja: "キャンセル", zh: "已取消", ru: "Отменено" });
+      return t({ ko: "", en: "Cancelled", ja: "キャンセル", zh: "已取消", ru: "Отменено" });
     default:
       return status;
   }

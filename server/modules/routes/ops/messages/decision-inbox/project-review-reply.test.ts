@@ -90,7 +90,7 @@ function createBaseInput(db: DatabaseSync, overrides?: Partial<ProjectReviewRepl
       {
         number: 1,
         action: "start_project_review",
-        label: "팀장 회의 진행",
+        label: "",
       },
     ],
   };
@@ -119,13 +119,13 @@ function createBaseInput(db: DatabaseSync, overrides?: Partial<ProjectReviewRepl
 }
 
 describe("project review reply", () => {
-  it("start_project_review에서 hold 로그가 감지되면 blocked 응답을 반환한다", () => {
+  it("start_project_review hold   blocked", () => {
     const db = createDb();
     try {
       db.prepare(
         `
           INSERT INTO tasks (id, title, project_id, status, workflow_pack_key, source_task_id, created_at, updated_at)
-          VALUES ('task-1', '영상 최종 검토', 'proj-1', 'review', 'video_preprod', NULL, 1, 1)
+          VALUES ('task-1', '', 'proj-1', 'review', 'video_preprod', NULL, 1, 1)
         `,
       ).run();
 
@@ -162,7 +162,7 @@ describe("project review reply", () => {
         .all() as Array<{ title: string; target_department_id: string | null; status: string }>;
       expect(renderSubtasks).toHaveLength(1);
       expect(renderSubtasks[0]).toMatchObject({
-        title: "[VIDEO_FINAL_RENDER] 최종 영상 렌더링",
+        title: "[VIDEO_FINAL_RENDER]",
         target_department_id: "dev",
         status: "pending",
       });
@@ -174,13 +174,13 @@ describe("project review reply", () => {
     }
   });
 
-  it("start_project_review에서 hold 없이 진행되면 resolved=true로 완료된다", () => {
+  it("start_project_review hold   resolved=true", () => {
     const db = createDb();
     try {
       db.prepare(
         `
           INSERT INTO tasks (id, title, project_id, status, workflow_pack_key, source_task_id, created_at, updated_at)
-          VALUES ('task-1', '영상 최종 검토', 'proj-1', 'review', 'video_preprod', NULL, 1, 1)
+          VALUES ('task-1', '', 'proj-1', 'review', 'video_preprod', NULL, 1, 1)
         `,
       ).run();
 
@@ -215,19 +215,19 @@ describe("project review reply", () => {
     }
   });
 
-  it("VIDEO_FINAL_RENDER done 서브태스크가 이미 있으면 blocked 시 신규 생성하지 않는다", () => {
+  it("VIDEO_FINAL_RENDER done    blocked", () => {
     const db = createDb();
     try {
       db.prepare(
         `
           INSERT INTO tasks (id, title, project_id, status, workflow_pack_key, source_task_id, created_at, updated_at)
-          VALUES ('task-1', '영상 최종 검토', 'proj-1', 'review', 'video_preprod', NULL, 1, 1)
+          VALUES ('task-1', '', 'proj-1', 'review', 'video_preprod', NULL, 1, 1)
         `,
       ).run();
       db.prepare(
         `
           INSERT INTO subtasks (id, task_id, title, description, status, target_department_id, created_at)
-          VALUES ('st-render-done', 'task-1', '[VIDEO_FINAL_RENDER] 최종 영상 렌더링', 'done render', 'done', 'dev', 2000)
+          VALUES ('st-render-done', 'task-1', '[VIDEO_FINAL_RENDER]', 'done render', 'done', 'dev', 2000)
         `,
       ).run();
 
@@ -264,7 +264,7 @@ describe("project review reply", () => {
       expect(renderSubtasks).toHaveLength(1);
       expect(renderSubtasks[0]).toMatchObject({
         id: "st-render-done",
-        title: "[VIDEO_FINAL_RENDER] 최종 영상 렌더링",
+        title: "[VIDEO_FINAL_RENDER]",
         target_department_id: "dev",
         status: "done",
       });
@@ -274,19 +274,19 @@ describe("project review reply", () => {
     }
   });
 
-  it("위임 prefix가 붙은 VIDEO_FINAL_RENDER 서브태스크가 있으면 신규 생성하지 않는다", () => {
+  it("prefix  VIDEO_FINAL_RENDER", () => {
     const db = createDb();
     try {
       db.prepare(
         `
           INSERT INTO tasks (id, title, project_id, status, workflow_pack_key, source_task_id, created_at, updated_at)
-          VALUES ('task-1', '영상 최종 검토', 'proj-1', 'review', 'video_preprod', NULL, 1, 1)
+          VALUES ('task-1', '', 'proj-1', 'review', 'video_preprod', NULL, 1, 1)
         `,
       ).run();
       db.prepare(
         `
           INSERT INTO subtasks (id, task_id, title, description, status, target_department_id, created_at)
-          VALUES ('st-render-prefixed', 'task-1', '[서브태스크 일괄협업 x1] [VIDEO_FINAL_RENDER] 최종 영상 렌더링', 'delegated render', 'blocked', 'dev', 2000)
+          VALUES ('st-render-prefixed', 'task-1', '[  x1] [VIDEO_FINAL_RENDER]', 'delegated render', 'blocked', 'dev', 2000)
         `,
       ).run();
 

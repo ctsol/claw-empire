@@ -46,7 +46,7 @@ describe("gateway client", () => {
     vi.unstubAllGlobals();
   });
 
-  it("notifyTaskStatus는 설정된 채널 세션으로 직접 전송한다", async () => {
+  it("notifyTaskStatus", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         telegram: {
@@ -80,7 +80,7 @@ describe("gateway client", () => {
       OPENCLAW_CONFIG: undefined,
     });
 
-    gateway.notifyTaskStatus("task-1", "테스트 작업", "in_progress", "ko");
+    gateway.notifyTaskStatus("task-1", "", "in_progress", "ko");
     await flushAsyncWork();
 
     expect(fetchMock).toHaveBeenCalledTimes(4);
@@ -104,7 +104,7 @@ describe("gateway client", () => {
     expect((whatsappCall?.[1]?.headers as Record<string, string>)?.authorization).toBe("Bearer wa-access-token");
   });
 
-  it("notifyTaskStatus는 agent 바인딩 세션으로는 전송하지 않는다", async () => {
+  it("notifyTaskStatus agent", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         telegram: {
@@ -138,7 +138,7 @@ describe("gateway client", () => {
     expect(body.chat_id).toBe("-100222");
   });
 
-  it("settings.messengerChannels 값이 있으면 확장 채널 세션을 런타임 목록으로 구성한다", async () => {
+  it("settings.messengerChannels", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         telegram: {
@@ -197,7 +197,7 @@ describe("gateway client", () => {
     ]);
   });
 
-  it("sendMessengerMessage는 지정 채널/대상으로 직접 전송한다", async () => {
+  it("sendMessengerMessage  /", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         discord: {
@@ -225,7 +225,7 @@ describe("gateway client", () => {
     expect(fetchMock.mock.calls[0]?.[0]).toBe("https://discord.com/api/v10/channels/123456/messages");
   });
 
-  it("listDiscordChannelsByToken은 Bot 토큰으로 길드 채널 목록을 자동 조회한다", async () => {
+  it("listDiscordChannelsByToken Bot", async () => {
     const dbPath = createTestDb();
     const fetchMock = vi.fn(async (url: string, init?: RequestInit) => {
       if (url.includes("/users/@me/guilds")) {
@@ -283,7 +283,7 @@ describe("gateway client", () => {
     ]);
   });
 
-  it("listDiscordChannelsByToken은 인증 실패 시 에러를 반환한다", async () => {
+  it("listDiscordChannelsByToken", async () => {
     const dbPath = createTestDb();
     const fetchMock = vi.fn().mockResolvedValue(new Response('{"message":"401: Unauthorized"}', { status: 401 }));
     vi.stubGlobal("fetch", fetchMock as unknown as typeof fetch);
@@ -296,7 +296,7 @@ describe("gateway client", () => {
     await expect(gateway.listDiscordChannelsByToken("invalid-token")).rejects.toThrow("discord api failed (401)");
   });
 
-  it("sendMessengerMessage는 대상 세션의 전용 토큰을 우선 사용한다", async () => {
+  it("sendMessengerMessage", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         telegram: {
@@ -331,7 +331,7 @@ describe("gateway client", () => {
     expect(fetchMock.mock.calls[0]?.[0]).toBe("https://api.telegram.org/bottg-session-token/sendMessage");
   });
 
-  it("sendMessengerSessionMessage는 세션 전용 토큰을 사용한다", async () => {
+  it("sendMessengerSessionMessage", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         telegram: {
@@ -359,7 +359,7 @@ describe("gateway client", () => {
     expect(fetchMock.mock.calls[0]?.[0]).toBe("https://api.telegram.org/bottg-session-token/sendMessage");
   });
 
-  it("sendMessengerMessage는 WhatsApp Cloud API로 전송한다", async () => {
+  it("sendMessengerMessage WhatsApp Cloud API", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         whatsapp: {
@@ -391,7 +391,7 @@ describe("gateway client", () => {
     expect(fetchMock.mock.calls[0]?.[0]).toBe("https://graph.facebook.com/v22.0/1234509876/messages");
   });
 
-  it("sendMessengerMessage는 Google Chat 웹훅 URL로 전송한다", async () => {
+  it("sendMessengerMessage Google Chat  URL", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         googlechat: {
@@ -421,7 +421,7 @@ describe("gateway client", () => {
     );
   });
 
-  it("sendMessengerMessage는 Signal RPC로 전송한다", async () => {
+  it("sendMessengerMessage Signal RPC", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         signal: {
@@ -454,7 +454,7 @@ describe("gateway client", () => {
     expect(fetchMock.mock.calls[0]?.[0]).toBe("http://127.0.0.1:8080/api/v1/rpc");
   });
 
-  it("sendMessengerTyping은 Telegram typing 액션을 보낸다", async () => {
+  it("sendMessengerTyping Telegram typing", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         telegram: {
@@ -491,7 +491,7 @@ describe("gateway client", () => {
     expect(body.action).toBe("typing");
   });
 
-  it("sendMessengerTyping은 대상 세션 토큰을 우선 사용한다", async () => {
+  it("sendMessengerTyping", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         telegram: {
@@ -522,7 +522,7 @@ describe("gateway client", () => {
     expect(fetchMock.mock.calls[0]?.[0]).toBe("https://api.telegram.org/bottg-session-token/sendChatAction");
   });
 
-  it("sendMessengerSessionTyping은 sessionKey 기준으로 typing을 전송한다", async () => {
+  it("sendMessengerSessionTyping sessionKey  typing", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         telegram: {
@@ -550,7 +550,7 @@ describe("gateway client", () => {
     expect(fetchMock.mock.calls[0]?.[0]).toBe("https://api.telegram.org/bottg-session-token/sendChatAction");
   });
 
-  it("sendMessengerTyping은 비타이핑 채널에서는 no-op이다", async () => {
+  it("sendMessengerTyping   no-op", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         whatsapp: {
@@ -575,7 +575,7 @@ describe("gateway client", () => {
     expect(fetchMock).toHaveBeenCalledTimes(0);
   });
 
-  it("sendMessengerTyping은 Signal sendTyping RPC를 호출한다", async () => {
+  it("sendMessengerTyping Signal sendTyping RPC", async () => {
     const dbPath = createTestDb({
       messengerChannels: {
         signal: {
@@ -606,7 +606,7 @@ describe("gateway client", () => {
     expect(fetchMock.mock.calls[0]?.[0]).toBe("http://127.0.0.1:8080/api/v1/rpc");
   });
 
-  it("gatewayHttpInvoke는 제거되었음을 명시적으로 반환한다", async () => {
+  it("gatewayHttpInvoke", async () => {
     const dbPath = createTestDb();
     const gateway = await importGatewayModule({
       DB_PATH: dbPath,

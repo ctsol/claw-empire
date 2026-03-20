@@ -63,7 +63,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
       const lang = getPreferredLanguage();
       const blockedReason = pickL(
         l(
-          [`${targetDeptName} 협업 대기`],
+          [``],
           [`Waiting for ${targetDeptName} collaboration`],
           [`${targetDeptName}の協業待ち`],
           [`等待${targetDeptName}协作`],
@@ -146,7 +146,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
       {
         title: pickL(
           l(
-            ["Planned 상세 실행 계획 확정"],
+            ["Planned"],
             ["Finalize detailed execution plan from planned meeting"],
             ["Planned会議の詳細実行計画を確定"],
             ["确定 Planned 会议的详细执行计划"],
@@ -155,7 +155,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
         ),
         description: pickL(
           l(
-            [`Planned 회의 기준으로 상세 작업 순서/산출물 기준을 확정합니다. (${task.title})`],
+            [``],
             [`Finalize detailed task sequence and deliverable criteria from the planned meeting. (${task.title})`],
             [`Planned会議を基準に、詳細な作業順序と成果物基準を確定します。(${task.title})`],
             [`基于 Planned 会议，确定详细任务顺序与交付物标准。（${task.title}）`],
@@ -186,7 +186,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
       items.push({
         title: pickL(
           l(
-            [`[보완계획] ${clippedTitle || "추가 보완 항목"}`],
+            [``],
             [`[Plan Item] ${clippedTitle || "Additional improvement item"}`],
             [`[補完計画] ${clippedTitle || "追加補完項目"}`],
             [`[计划项] ${clippedTitle || "补充改进事项"}`],
@@ -195,7 +195,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
         ),
         description: pickL(
           l(
-            [`Planned 회의 보완점을 실행 계획으로 반영합니다: ${detail}`],
+            [``],
             [`Convert this planned-meeting improvement note into an executable task: ${detail}`],
             [`Planned会議の補完項目を実行計画へ反映します: ${detail}`],
             [`将 Planned 会议补充项转为可执行任务：${detail}`],
@@ -207,7 +207,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
         blockedReason: targetDeptId
           ? pickL(
               l(
-                [`${targetDeptName} 협업 대기`],
+                [``],
                 [`Waiting for ${targetDeptName} collaboration`],
                 [`${targetDeptName}の協業待ち`],
                 [`等待${targetDeptName}协作`],
@@ -226,7 +226,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
       items.push({
         title: pickL(
           l(
-            [`[협업] ${deptName} 결과물 작성`],
+            [``],
             [`[Collaboration] Produce ${deptName} deliverable`],
             [`[協業] ${deptName}成果物を作成`],
             [`[协作] 编写${deptName}交付物`],
@@ -235,7 +235,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
         ),
         description: pickL(
           l(
-            [`Planned 회의 기준 ${deptName} 담당 결과물을 작성/공유합니다.`],
+            [``],
             [`Create and share the ${deptName}-owned deliverable based on the planned meeting.`],
             [`Planned会議を基準に、${deptName}担当の成果物を作成・共有します。`],
             [`基于 Planned 会议，完成并共享${deptName}负责的交付物。`],
@@ -246,7 +246,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
         assignedAgentId: crossLeader?.id ?? null,
         blockedReason: pickL(
           l(
-            [`${deptName} 협업 대기`],
+            [``],
             [`Waiting for ${deptName} collaboration`],
             [`${deptName}の協業待ち`],
             [`等待${deptName}协作`],
@@ -260,7 +260,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
     items.push({
       title: pickL(
         l(
-          ["부서 산출물 통합 및 최종 정리"],
+          [""],
           ["Consolidate department deliverables and finalize package"],
           ["部門成果物の統合と最終整理"],
           ["整合部门交付物并完成最终整理"],
@@ -269,7 +269,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
       ),
       description: pickL(
         l(
-          ["유관부서 산출물을 취합해 단일 결과물로 통합하고 Review 제출본을 준비합니다."],
+          ["Review  ."],
           ["Collect related-department outputs, merge into one package, and prepare the review submission."],
           ["関連部門の成果物を集約して単一成果物へ統合し、レビュー提出版を準備します。"],
           ["汇总相关部门产出，整合为单一成果，并准备 Review 提交版本。"],
@@ -282,32 +282,32 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
       targetDepartmentId: null,
     });
 
-    // video_preprod일 경우 최종 영상 렌더링 서브태스크 추가
+    // Add final video rendering subtask for video_preprod pack
     if (task.workflow_pack_key === "video_preprod") {
       const devLeader = findTeamLeader("dev", constrainedAgentIds);
       const devDeptName = getDeptName("dev", task.workflow_pack_key ?? null);
       items.push({
-        title: "[VIDEO_FINAL_RENDER] 최종 영상 렌더링",
+        title: "[VIDEO_FINAL_RENDER]",
         description: [
           "[VIDEO_FINAL_RENDER]",
-          `상위 업무: ${task.title}`,
-          "모든 문서/협업 산출물을 취합해 최종 소개 영상을 1회 렌더링하세요.",
-          "최종 렌더링 엔진은 반드시 Remotion만 사용하세요. Python(moviepy/Pillow) 기반 렌더링은 금지됩니다.",
-          "산출물 경로 규칙(project_department_final.mp4)을 지키고, 결과 파일 경로/용량 검증을 보고하세요.",
+          `Parent task: ${task.title}`,
+          "/      1 .",
+          "Remotion . Python(moviepy/Pillow)   .",
+          "(project_department_final.mp4) ,   /  .",
           "",
           "[QUALITY]",
-          "- 목표 길이 55~65초, 8~12 샷 이상 구성",
-          "- 시작 2~4초는 브랜드/마스코트 키비주얼 인트로",
-          "- 정적인 장면 3초 초과 금지, 샷별 모션(카메라/텍스트/레이아웃) 분리",
-          "- 자막/텍스트 safe area(좌우 8%, 상하 10%) 준수",
-          "- 화면 텍스트에서 \\n/\\t/백틱/마크다운 태그 문자 노출 금지 (정제 후 렌더)",
-          "- 결과 보고에 초 단위 씬 타임라인과 품질 체크리스트 포함",
+          "-   55~65, 8~12",
+          "-  2~4 /",
+          "-   3  ,  (//)",
+          "- / safe area( 8%,  10%)",
+          "-   \\n/\\t//     (  )",
+          "-",
         ].join("\n"),
         status: "blocked",
         assignedAgentId: devLeader?.id ?? null,
         blockedReason: pickL(
           l(
-            [`${devDeptName} 협업 대기`],
+            [``],
             [`Waiting for ${devDeptName} collaboration`],
             [`${devDeptName}の協業待ち`],
             [`等待${devDeptName}协作`],
@@ -348,7 +348,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
       pickL(
         l(
           [
-            `'${task.title}' Planned 회의 결과 기준 SubTask ${items.length}건을 생성하고 담당자/유관부서 협업을 배정했습니다.`,
+            ``,
           ],
           [
             `Created ${items.length} subtasks from the planned-meeting output for '${task.title}' and assigned owners/cross-department collaboration.`,
@@ -430,7 +430,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
       items.push({
         title: pickL(
           l(
-            [`[검토보완] ${clippedTitle || "추가 보완 항목"}`],
+            [``],
             [`[Review Revision] ${clippedTitle || "Additional revision item"}`],
             [`[レビュー補完] ${clippedTitle || "追加補完項目"}`],
             [`[评审整改] ${clippedTitle || "补充整改事项"}`],
@@ -439,7 +439,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
         ),
         description: pickL(
           l(
-            [`Review 회의 보완 요청을 반영합니다: ${detail}`],
+            [``],
             [`Apply the review-meeting revision request: ${detail}`],
             [`Review会議で要請された補完項目を反映します: ${detail}`],
             [`落实 Review 会议提出的整改项：${detail}`],
@@ -451,7 +451,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
         blockedReason: targetDeptId
           ? pickL(
               l(
-                [`${targetDeptName} 협업 대기`],
+                [``],
                 [`Waiting for ${targetDeptName} collaboration`],
                 [`${targetDeptName}の協業待ち`],
                 [`等待${targetDeptName}协作`],
@@ -466,7 +466,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
     items.push({
       title: pickL(
         l(
-          ["[검토보완] 반영 결과 통합 및 재검토 제출"],
+          ["[]"],
           ["[Review Revision] Consolidate updates and resubmit for review"],
           ["[レビュー補完] 反映結果を統合し再レビュー提出"],
           ["[评审整改] 整合更新并重新提交评审"],
@@ -475,7 +475,7 @@ export function createSubtaskSeedingTools(deps: SubtaskSeedingDeps) {
       ),
       description: pickL(
         l(
-          ["보완 반영 결과를 취합해 재검토 제출본을 정리합니다."],
+          ["."],
           ["Collect revision outputs and prepare the re-review submission package."],
           ["補完反映の成果を集約し、再レビュー提出版を整えます。"],
           ["汇总整改结果并整理重新评审提交包。"],

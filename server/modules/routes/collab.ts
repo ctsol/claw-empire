@@ -252,17 +252,17 @@ export function registerRoutesPartB(ctx: RuntimeContext): RouteCollabExports {
   }
 
   function buildMessengerReportIdentityIntro(agent: AgentRow, content: string, requestLine: string): string {
-    const hasKorean = /[가-힣]/.test(content);
+    const hasKorean = /[-]/.test(content);
     const hasJapanese = /[ぁ-んァ-ン一-龯]/.test(content);
     const hasChinese = /[\u4e00-\u9fff]/.test(content) && !hasJapanese;
-    const displayName = normalizeMessengerTextLine(agent.name_ko || agent.name || "Agent");
+    const displayName = normalizeMessengerTextLine(agent.name_ko || agent.name ||"Agent");
     const avatar = normalizeMessengerTextLine(agent.avatar_emoji || "🤖");
     const taskTitle = extractTaskTitleFromReportText(content, requestLine);
 
     if (hasKorean) {
       return taskTitle
-        ? `${avatar} ${displayName} 보고: '${taskTitle}' 완료 결과를 전달드려요.`
-        : `${avatar} ${displayName} 보고: 완료 결과를 전달드려요.`;
+        ? `${avatar} ${displayName} : '${taskTitle}'   .`
+        : `${avatar} ${displayName} :   .`;
     }
     if (hasJapanese) {
       return taskTitle
@@ -283,7 +283,7 @@ export function registerRoutesPartB(ctx: RuntimeContext): RouteCollabExports {
     const shouldSummarize =
       /\|\s*#\s*\|/i.test(content) ||
       /\|\s*1\s*\|/.test(content) ||
-      /📋\s*(결과|Result|結果|结果)\s*:/i.test(content) ||
+      /📋\s*(|Result|結果|结果)\s*:/i.test(content) ||
       content.length >= 900;
     if (!shouldSummarize) return content;
 
@@ -292,15 +292,15 @@ export function registerRoutesPartB(ctx: RuntimeContext): RouteCollabExports {
 
     const requestLine =
       plainLines.find((line) =>
-        /(업무 완료 보고드립니다|reporting completion|完了をご報告します|汇报.+已完成)/i.test(line),
-      ) ?? "";
+        /(  |reporting completion|完了をご報告します|汇报.+已完成)/i.test(line),
+      ) ??"";
     const identityIntro = buildMessengerReportIdentityIntro(agent, content, requestLine);
     const progressLine =
       plainLines.find((line) =>
-        /(?:전체|total)\s*:\s*\d+\s*\/\s*\d+|(?:완료율|completion|progress|진행)\s*[:：]?\s*(?:\d+\s*%|\d+\s*\/\s*\d+)/i.test(
+        /(?:|total)\s*:\s*\d+\s*\/\s*\d+|(?:|completion|progress|)\s*[:：]?\s*(?:\d+\s*%|\d+\s*\/\s*\d+)/i.test(
           line,
         ),
-      ) ?? "";
+      ) ??"";
 
     const tableItems: string[] = [];
     for (const line of rawLines) {
@@ -325,14 +325,14 @@ export function registerRoutesPartB(ctx: RuntimeContext): RouteCollabExports {
       const rawLine = rawLines[i] ?? "";
       const plain = plainLines[i] ?? "";
       if (!inResultSection) {
-        if (/📋\s*(결과|Result|結果|结果)\s*:?/i.test(rawLine) || /^(결과|result|結果|结果)\s*:?$/i.test(plain)) {
+        if (/📋\s*(|Result|結果|结果)\s*:?/i.test(rawLine) || /^(|result|結果|结果)\s*:?$/i.test(plain)) {
           inResultSection = true;
         }
         continue;
       }
-      if (!plain || plain === "...") continue;
+      if (!plain || plain ==="...") continue;
       if (/^[📌📝]/u.test(rawLine.trim())) break;
-      if (/(보완\/협업 진행 요약|Remediation\/Collaboration Progress|変更点|변경사항|Changes)/i.test(plain)) break;
+      if (/(\/  |Remediation\/Collaboration Progress|変更点||Changes)/i.test(plain)) break;
       if (rawLine.trim().startsWith("|")) continue;
       const cleaned = plain.replace(/^[-•]\s*/, "").trim();
       if (!cleaned) continue;
@@ -343,13 +343,13 @@ export function registerRoutesPartB(ctx: RuntimeContext): RouteCollabExports {
     const keyItems = tableItems.length > 0 ? tableItems : resultItems.map((line, idx) => `${idx + 1}. ${line}`);
     if (keyItems.length <= 0) return content;
 
-    const hasKorean = /[가-힣]/.test(content);
+    const hasKorean = /[-]/.test(content);
     const hasCyrillic = /[а-яёА-ЯЁ]/.test(content);
-    const title = hasKorean ? "업무 완료 요약" : hasCyrillic ? "Сводка завершения задачи" : "Task Completion Summary";
-    const keyLabel = hasKorean ? "핵심 결과" : hasCyrillic ? "Ключевые результаты" : "Key Results";
-    const progressLabel = hasKorean ? "진행 요약" : hasCyrillic ? "Ход выполнения" : "Progress";
+    const title = hasKorean ?"  " : hasCyrillic ? "Сводка завершения задачи" : "Task Completion Summary";
+    const keyLabel = hasKorean ? " " : hasCyrillic ? "Ключевые результаты" : "Key Results";
+    const progressLabel = hasKorean ? " " : hasCyrillic ? "Ход выполнения" : "Progress";
     const detailHint = hasKorean
-      ? "상세 내용은 Claw-Empire 채팅창에서 확인하세요."
+      ? "  Claw-Empire  ."
       : hasCyrillic
         ? "Подробности в чате Claw-Empire."
         : "See Claw-Empire chat for full details.";
@@ -435,7 +435,7 @@ export function registerRoutesPartB(ctx: RuntimeContext): RouteCollabExports {
       db.prepare(
         `
       INSERT INTO messages (id, sender_type, sender_id, receiver_type, receiver_id, content, message_type, task_id, created_at)
-      VALUES (?, 'agent', ?, ?, ?, ?, ?, ?, ?)
+      VALUES (?,'agent', ?, ?, ?, ?, ?, ?, ?)
     `,
       ).run(id, agent.id, receiverType, receiverId, content, messageType, persistedTaskId, t);
     } catch (err) {
@@ -529,14 +529,14 @@ export function registerRoutesPartB(ctx: RuntimeContext): RouteCollabExports {
     const deptIds: string[] = [];
     const agentIds: string[] = [];
 
-    // Match @부서이름 patterns (both with and without 팀 suffix)
+    // Match @ patterns (both with and without  suffix)
     const depts = db.prepare("SELECT id, name, name_ko FROM departments").all() as {
       id: string;
       name: string;
       name_ko: string;
     }[];
     for (const dept of depts) {
-      const nameKo = dept.name_ko.replace("팀", "");
+      const nameKo = dept.name_ko.replace("", "");
       if (
         message.includes(`@${dept.name_ko}`) ||
         message.includes(`@${nameKo}`) ||
@@ -547,7 +547,7 @@ export function registerRoutesPartB(ctx: RuntimeContext): RouteCollabExports {
       }
     }
 
-    // Match @에이전트이름 patterns
+    // Match @ patterns
     const agents = db.prepare("SELECT id, name, name_ko FROM agents").all() as {
       id: string;
       name: string;
@@ -569,17 +569,17 @@ export function registerRoutesPartB(ctx: RuntimeContext): RouteCollabExports {
     const crossDeptName = getDeptName(targetDeptId);
     const crossLeaderName = lang === "ko" ? crossLeader.name_ko || crossLeader.name : crossLeader.name;
     const originLeaderName = lang === "ko" ? originLeader.name_ko || originLeader.name : originLeader.name;
-    const taskTitle = ceoMessage.length > 60 ? ceoMessage.slice(0, 57) + "..." : ceoMessage;
+    const taskTitle = ceoMessage.length > 60 ? ceoMessage.slice(0, 57) + "...": ceoMessage;
 
     // Origin team leader sends mention request to target team leader
     const mentionReq = pickL(
       l(
         [
-          `${crossLeaderName}님! 대표님 지시입니다: "${taskTitle}" — ${crossDeptName}에서 처리 부탁드립니다! 🏷️`,
-          `${crossLeaderName}님, 대표님이 직접 요청하셨습니다. "${taskTitle}" 건, ${crossDeptName} 담당으로 진행해주세요!`,
+          `${crossLeaderName}!  :"${taskTitle}"— ${crossDeptName}  ! 🏷️`,
+          `${crossLeaderName},   ."${taskTitle}", ${crossDeptName}  !`,
         ],
         [
-          `${crossLeaderName}! CEO directive for ${crossDeptName}: "${taskTitle}" — please handle this! 🏷️`,
+          `${crossLeaderName}! CEO directive for ${crossDeptName}:"${taskTitle}" — please handle this! 🏷️`,
           `${crossLeaderName}, CEO requested this for your team: "${taskTitle}"`,
         ],
         [`${crossLeaderName}さん！CEO指示です："${taskTitle}" — ${crossDeptName}で対応お願いします！🏷️`],
@@ -609,22 +609,22 @@ export function registerRoutesPartB(ctx: RuntimeContext): RouteCollabExports {
     excludeId: string,
     candidateAgentIds?: string[] | null,
   ): AgentRow | null {
-    // candidateAgentIds가 지정되면 해당 목록에서만 선택 (manual 모드, 부서 고정)
+    // candidateAgentIds     (manual ,  )
     if (Array.isArray(candidateAgentIds)) {
       if (candidateAgentIds.length === 0) {
         return null;
       }
-      const placeholders = candidateAgentIds.map(() => "?").join(",");
+      const placeholders = candidateAgentIds.map(() =>"?").join(",");
       const agents = db
         .prepare(
-          `SELECT * FROM agents WHERE id IN (${placeholders}) AND department_id = ? AND id != ? AND role != 'team_leader' ORDER BY
+          `SELECT * FROM agents WHERE id IN (${placeholders}) AND department_id = ? AND id != ? AND role !='team_leader' ORDER BY
          CASE status WHEN 'idle' THEN 0 WHEN 'break' THEN 1 WHEN 'working' THEN 2 ELSE 3 END,
          CASE role WHEN 'senior' THEN 0 WHEN 'junior' THEN 1 WHEN 'intern' THEN 2 ELSE 3 END`,
         )
         .all(...candidateAgentIds, deptId, excludeId) as unknown as AgentRow[];
       return agents[0] ?? null;
     }
-    // 기존 로직: 부서 전체에서 선택
+    //  :   
     const agents = db
       .prepare(
         `SELECT * FROM agents WHERE department_id = ? AND id != ? AND role != 'team_leader' ORDER BY
@@ -637,7 +637,7 @@ export function registerRoutesPartB(ctx: RuntimeContext): RouteCollabExports {
 
   function findTeamLeader(deptId: string | null, candidateAgentIds?: string[] | null): AgentRow | null {
     if (!deptId) return null;
-    const isPlanningLookup = deptId === "planning";
+    const isPlanningLookup = deptId ==="planning";
     if (Array.isArray(candidateAgentIds)) {
       const scopedIds = [...new Set(candidateAgentIds.map((id) => String(id || "").trim()).filter(Boolean))];
       if (scopedIds.length === 0) return null;

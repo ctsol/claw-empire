@@ -149,7 +149,7 @@ export function createExecutionStartTaskTools(deps: CreateExecutionStartTaskTool
         pickL(
           l(
             [
-              `[WORKTREE REQUIRED] '${taskData.title}' 실행을 차단했습니다. 격리 worktree 생성에 실패해 프로젝트 루트 오염을 방지하기 위해 중단되었습니다.`,
+              ``,
             ],
             [
               `[WORKTREE REQUIRED] Blocked execution for '${taskData.title}'. Isolated worktree creation failed, so run was aborted to protect the project root.`,
@@ -190,7 +190,7 @@ export function createExecutionStartTaskTools(deps: CreateExecutionStartTaskTool
     const continuationInstruction = continuationCtx
       ? pickL(
           l(
-            ["연속 실행: 소유 컨텍스트를 유지하고 인사/착수 멘트 없이 미해결 검토 항목을 즉시 반영하세요."],
+            [":    /       ."],
             [
               "Continuation run: keep ownership, skip greetings/kickoff narration, and execute unresolved review items immediately.",
             ],
@@ -201,7 +201,7 @@ export function createExecutionStartTaskTools(deps: CreateExecutionStartTaskTool
         )
       : pickL(
           l(
-            ["긴 서론 없이 바로 실행하고, 메시지는 간결하게 유지하세요."],
+            [",   ."],
             ["Execute directly without long preamble and keep messages concise."],
             ["長い前置きなしで直ちに実行し、メッセージは簡潔にしてください。"],
             ["无需冗长前言，直接执行并保持消息简洁。"],
@@ -210,7 +210,7 @@ export function createExecutionStartTaskTools(deps: CreateExecutionStartTaskTool
         );
     const runInstruction = pickL(
       l(
-        ["위 작업을 충분히 완수하세요. 필요 시 연속 실행 요약과 대화 맥락을 참고하세요."],
+        [".        ."],
         [
           "Please complete the task above thoroughly. Use the continuation brief and conversation context above if relevant.",
         ],
@@ -309,7 +309,7 @@ export function createExecutionStartTaskTools(deps: CreateExecutionStartTaskTool
 
     const worktreeNote = pickL(
       l(
-        [` (격리 브랜치: climpire/${taskId.slice(0, 8)})`],
+        [``],
         [` (isolated branch: climpire/${taskId.slice(0, 8)})`],
         [` (分離ブランチ: climpire/${taskId.slice(0, 8)})`],
         [`（隔离分支: climpire/${taskId.slice(0, 8)}）`],
@@ -320,7 +320,7 @@ export function createExecutionStartTaskTools(deps: CreateExecutionStartTaskTool
     notifyCeo(
       pickL(
         l(
-          [`${execName}가 '${taskData.title}' 작업을 시작했습니다.${worktreeNote}`],
+          [``],
           [`${execName} started work on '${taskData.title}'.${worktreeNote}`],
           [`${execName}が '${taskData.title}' の作業を開始しました。${worktreeNote}`],
           [`${execName} 已开始处理 '${taskData.title}'。${worktreeNote}`],

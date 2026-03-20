@@ -62,12 +62,12 @@ export default function AgentsTab({
       <div className="grid grid-cols-3 gap-3">
         {[
           {
-            label: tr("전체 인원", "Total"),
+            label: tr("", "Total"),
             value: agents.length,
             icon: <StackedSpriteIcon sprites={randomIconSprites.total} />,
           },
-          { label: tr("근무 중", "Working"), value: workingCount, icon: "💼" },
-          { label: tr("부서", "Departments"), value: departments.length, icon: "🏢" },
+          { label: tr("", "Working"), value: workingCount, icon: "💼" },
+          { label: tr("", "Departments"), value: departments.length, icon: "🏢" },
         ].map((summary) => (
           <div
             key={summary.label}
@@ -92,7 +92,7 @@ export default function AgentsTab({
           }`}
           style={deptTab !== "all" ? { color: "var(--th-text-muted)" } : undefined}
         >
-          {tr("전체", "All")} <span className="opacity-60">{agents.length}</span>
+          {tr("", "All")} <span className="opacity-60">{agents.length}</span>
         </button>
         {departments.map((department) => {
           const count = deptCounts.get(department.id);
@@ -104,7 +104,7 @@ export default function AgentsTab({
                 e.preventDefault();
                 onEditDepartment(department);
               }}
-              title={tr("더블클릭: 부서 편집", "Double-click: edit dept")}
+              title={tr(":", "Double-click: edit dept")}
               className={`flex items-center gap-1 px-3 py-2 text-xs font-medium transition-colors ${
                 deptTab === department.id ? "text-blue-400 border-b-2 border-blue-400" : "hover:text-slate-200"
               }`}
@@ -119,7 +119,7 @@ export default function AgentsTab({
         <div className="ml-auto pb-1">
           <input
             type="text"
-            placeholder={`${tr("검색", "Search")}...`}
+            placeholder={`${tr("", "Search")}...`}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="px-3 py-1.5 rounded-lg text-xs outline-none focus:ring-2 focus:ring-blue-500/40 transition-shadow w-36"
@@ -135,7 +135,7 @@ export default function AgentsTab({
       {sortedAgents.length === 0 ? (
         <div className="text-center py-16" style={{ color: "var(--th-text-muted)" }}>
           <div className="text-3xl mb-2">🔍</div>
-          {tr("검색 결과 없음", "No agents found")}
+          {tr("", "No agents found")}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">

@@ -16,8 +16,8 @@ function baseWorkflowDecisionItem(item: DecisionInboxRouteItem): Omit<DecisionIn
       item.agent_name_ko ||
       item.agent_name ||
       (item.kind === "project_review_ready"
-        ? item.project_name || item.project_id || "기획팀장"
-        : item.task_title || item.task_id || "작업"),
+        ? item.project_name || item.project_id || ""
+        : item.task_title || item.task_id || ""),
     agentAvatar:
       item.agent_avatar ?? (item.kind === "project_review_ready" || item.kind === "review_round_pick" ? "🧑‍💼" : null),
     requestContent: item.summary,
@@ -37,7 +37,7 @@ function localizedOptionLabel(
   if (kind === "project_review_ready") {
     if (action === "start_project_review") {
       return pickLang(language, {
-        ko: "팀장 회의 진행",
+        ko: "",
         en: "Start Team-Lead Meeting",
         ja: "チームリーダー会議を進行",
         zh: "启动组长评审会议",
@@ -45,7 +45,7 @@ function localizedOptionLabel(
     }
     if (action === "keep_waiting") {
       return pickLang(language, {
-        ko: "대기 유지",
+        ko: "",
         en: "Keep Waiting",
         ja: "待機維持",
         zh: "保持等待",
@@ -53,7 +53,7 @@ function localizedOptionLabel(
     }
     if (action === "add_followup_request") {
       return pickLang(language, {
-        ko: "추가요청 입력",
+        ko: "",
         en: "Add Follow-up Request",
         ja: "追加要請を入力",
         zh: "输入追加请求",
@@ -63,7 +63,7 @@ function localizedOptionLabel(
   if (kind === "task_timeout_resume") {
     if (action === "resume_timeout_task") {
       return pickLang(language, {
-        ko: "이어서 진행 (재개)",
+        ko: "()",
         en: "Resume Task",
         ja: "続行する",
         zh: "继续执行",
@@ -71,7 +71,7 @@ function localizedOptionLabel(
     }
     if (action === "keep_inbox") {
       return pickLang(language, {
-        ko: "Inbox 유지",
+        ko: "Inbox",
         en: "Keep in Inbox",
         ja: "Inboxで保留",
         zh: "保留在 Inbox",
@@ -80,7 +80,7 @@ function localizedOptionLabel(
   }
   if (kind === "review_round_pick" && action === "skip_to_next_round") {
     return pickLang(language, {
-      ko: "다음 라운드로 SKIP",
+      ko: "SKIP",
       en: "Skip to Next Round",
       ja: "次ラウンドへスキップ",
       zh: "跳到下一轮",

@@ -44,7 +44,7 @@ describe("usePolling", () => {
     vi.restoreAllMocks();
   });
 
-  it("초기 로드 후 interval마다 fetcher를 재호출한다", async () => {
+  it("interval fetcher", async () => {
     const fetcher = vi.fn<() => Promise<string>>().mockResolvedValueOnce("initial").mockResolvedValueOnce("second");
     const snapshots: Array<PollSnapshot<string>> = [];
 
@@ -73,7 +73,7 @@ describe("usePolling", () => {
     });
   });
 
-  it("fetch 실패 시 error 상태를 노출한다", async () => {
+  it("fetch   error", async () => {
     const fetcher = vi.fn<() => Promise<string>>().mockRejectedValue(new Error("boom"));
     const snapshots: Array<PollSnapshot<string>> = [];
 
@@ -86,7 +86,7 @@ describe("usePolling", () => {
     expect(snapshots.some((snapshot) => snapshot.error === "boom")).toBe(true);
   });
 
-  it("문서가 hidden이면 interval을 멈추고 visible에서 즉시 재개한다", async () => {
+  it("hidden interval  visible", async () => {
     const fetcher = vi.fn<() => Promise<string>>().mockResolvedValue("ok");
     const snapshots: Array<PollSnapshot<string>> = [];
 

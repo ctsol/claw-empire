@@ -88,7 +88,7 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
           pendingProjectBindingByAgent.delete(agent.id);
           const cancelMsg = pickL(
             l(
-              ["알겠습니다. 프로젝트 지정 대기는 취소했습니다."],
+              [".    ."],
               ["Understood. I canceled the pending project binding request."],
               ["承知しました。プロジェクト指定待ちはキャンセルしました。"],
               ["已了解。已取消项目绑定等待。"],
@@ -122,8 +122,8 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
               l(
                 [
                   recentLines.length > 0
-                    ? `기존 프로젝트를 선택해주세요. 최근 프로젝트 ${RECENT_EXISTING_PROJECT_LIMIT}개입니다.\n${recentLines.join("\n")}\n번호(1-${recentLines.length}) 또는 프로젝트 이름/절대경로를 보내주세요.`
-                    : "기존 프로젝트 목록이 비어 있습니다. 프로젝트 절대경로(예: /Users/classys/Projects/climpire) 또는 기존 프로젝트 이름을 보내주세요.",
+                    ? ``
+                    : ".  (: /Users/classys/Projects/climpire)     .",
                 ],
                 [
                   recentLines.length > 0
@@ -162,7 +162,7 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
             });
             const askNewName = pickL(
               l(
-                ["신규 프로젝트 이름을 먼저 알려주세요."],
+                ["."],
                 ["Please provide the new project name first."],
                 ["新規プロジェクト名を先に教えてください。"],
                 ["请先提供新项目名称。"],
@@ -182,7 +182,7 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
           const askKindAgain = (): void => {
             const askKind = pickL(
               l(
-                ["기존 프로젝트인가요, 신규 프로젝트인가요?\n1️⃣ 기존 프로젝트\n2️⃣ 신규 프로젝트"],
+                [",  ?\n1️⃣  \n2️⃣"],
                 ["Is this an existing project or a new project?\n1️⃣ Existing project\n2️⃣ New project"],
                 ["既存プロジェクトですか？新規プロジェクトですか？\n1️⃣ 既存\n2️⃣ 新規"],
                 ["这是已有项目还是新项目？\n1️⃣ 已有项目\n2️⃣ 新项目"],
@@ -271,8 +271,8 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
               l(
                 [
                   recentLines.length > 0
-                    ? `기존 프로젝트를 찾지 못했습니다. 아래 목록에서 번호(1-${recentLines.length}) 또는 정확한 프로젝트 이름/절대경로를 다시 보내주세요.\n${recentLines.join("\n")}`
-                    : "기존 프로젝트를 찾지 못했습니다. 프로젝트 절대경로나 정확한 프로젝트 이름을 다시 보내주세요.",
+                    ? ``
+                    : ".       .",
                 ],
                 [
                   recentLines.length > 0
@@ -318,7 +318,7 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
           if (!newProjectName) {
             const askNameAgain = pickL(
               l(
-                ["신규 프로젝트 이름을 다시 알려주세요. 예: climpire-redesign"],
+                [". : climpire-redesign"],
                 ["Please provide the new project name again. Example: climpire-redesign"],
                 ["新規プロジェクト名をもう一度送ってください。例: climpire-redesign"],
                 ["请重新提供新项目名称。例如：climpire-redesign"],
@@ -344,7 +344,7 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
           });
           const askNewPath = pickL(
             l(
-              ["신규 프로젝트 절대경로를 보내주세요. 예: /Users/classys/Projects/climpire-redesign"],
+              [". : /Users/classys/Projects/climpire-redesign"],
               ["Send the new project's absolute path. Example: /Users/classys/Projects/climpire-redesign"],
               ["新規プロジェクトの絶対パスを送ってください。例: /Users/classys/Projects/climpire-redesign"],
               ["请发送新项目绝对路径。例如：/Users/classys/Projects/climpire-redesign"],
@@ -367,7 +367,7 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
           if (!providedPath) {
             const askPathAgain = pickL(
               l(
-                ["절대경로 형식으로 다시 보내주세요. 예: /Users/classys/Projects/climpire-redesign"],
+                [". : /Users/classys/Projects/climpire-redesign"],
                 ["Please send it again as an absolute path. Example: /Users/classys/Projects/climpire-redesign"],
                 ["絶対パス形式で再送してください。例: /Users/classys/Projects/climpire-redesign"],
                 ["请用绝对路径格式重新发送。例如：/Users/classys/Projects/climpire-redesign"],
@@ -398,7 +398,7 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
           if (!binding) {
             const askPathFail = pickL(
               l(
-                ["프로젝트 생성에 실패했습니다. 신규 프로젝트 절대경로를 다시 보내주세요."],
+                [".     ."],
                 ["Failed to create the project. Please send the new project's absolute path again."],
                 ["プロジェクト作成に失敗しました。新規プロジェクトの絶対パスを再送してください。"],
                 ["创建项目失败。请重新发送新项目绝对路径。"],
@@ -514,7 +514,7 @@ export function createDirectChatHandlers(deps: DirectChatDeps) {
         const askProject = pickL(
           l(
             [
-              "프로젝트를 먼저 정해야 합니다. 기존 프로젝트인가요, 신규 프로젝트인가요?\n1️⃣ 기존 프로젝트\n2️⃣ 신규 프로젝트",
+              ".  ,  ?\n1️⃣  \n2️⃣",
             ],
             [
               "I need to fix the project first. Is this an existing project or a new project?\n1️⃣ Existing project\n2️⃣ New project",

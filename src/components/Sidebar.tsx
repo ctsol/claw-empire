@@ -33,13 +33,13 @@ export default function Sidebar({ currentView, onChangeView, departments, agents
   const tr = (ko: string, en: string, ja = en, zh = en, ru = en) => t({ ko, en, ja, zh, ru });
 
   const navLabels: Record<View, string> = {
-    office: tr("오피스", "Office", "オフィス", "办公室", "Офис"),
-    agents: tr("직원관리", "Agents", "社員管理", "员工管理", "Агенты"),
-    skills: tr("문서고", "Library", "ライブラリ", "文档库", "Навыки"),
-    dashboard: tr("대시보드", "Dashboard", "ダッシュボード", "仪表盘", "Дашборд"),
-    tasks: tr("업무 관리", "Tasks", "タスク管理", "任务管理", "Задачи"),
-    settings: tr("설정", "Settings", "設定", "设置", "Настройки"),
-    "ceo-meeting": tr("심층 회의", "Meeting", "会議", "会议", "Совещание"),
+    office: tr("", "Office", "オフィス", "办公室", "Офис"),
+    agents: tr("", "Agents", "社員管理", "员工管理", "Агенты"),
+    skills: tr("", "Library", "ライブラリ", "文档库", "Навыки"),
+    dashboard: tr("", "Dashboard", "ダッシュボード", "仪表盘", "Дашборд"),
+    tasks: tr("", "Tasks", "タスク管理", "任务管理", "Задачи"),
+    settings: tr("", "Settings", "設定", "设置", "Настройки"),
+    "ceo-meeting": tr("", "Meeting", "会議", "会议", "Совещание"),
   };
 
   return (
@@ -104,7 +104,7 @@ export default function Sidebar({ currentView, onChangeView, departments, agents
             className="text-[10px] uppercase font-semibold mb-1.5 tracking-widest px-1"
             style={{ color: "var(--th-text-muted)" }}
           >
-            {tr("부서 현황", "Departments", "部門", "部门", "Отделы")}
+            {tr("", "Departments", "部門", "部门", "Отделы")}
           </div>
           {departments.map((d) => {
             const deptAgents = agents.filter((a) => a.department_id === d.id);
@@ -137,8 +137,8 @@ export default function Sidebar({ currentView, onChangeView, departments, agents
         {!collapsed && (
           <span className="text-[10px] truncate" style={{ color: "var(--th-text-muted)" }}>
             {connected
-              ? `${tr("연결됨", "Online", "接続中", "已连接", "Онлайн")} · ${workingCount}/${totalAgents} ${tr("근무중", "active", "稼働中", "工作中", "активны")}`
-              : tr("연결 끊김", "Offline", "接続なし", "已断开", "Офлайн")}
+              ? `${tr("", "Online", "接続中", "已连接", "Онлайн")} · ${workingCount}/${totalAgents} ${tr("", "active", "稼働中", "工作中", "активны")}`
+              : tr("", "Offline", "接続なし", "已断开", "Офлайн")}
           </span>
         )}
       </div>

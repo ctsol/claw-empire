@@ -72,7 +72,7 @@ export function useProjectSaveHandler({
             pathTools.setFormFeedback({
               tone: "error",
               message: t({
-                ko: "해당 경로는 폴더가 아닙니다. 디렉터리 경로를 입력해주세요.",
+                ko: ".   .",
                 en: "This path is not a directory. Please enter a directory path.",
                 ja: "このパスはフォルダではありません。ディレクトリパスを入力してください。",
                 zh: "该路径不是文件夹，请输入目录路径。",
@@ -100,7 +100,7 @@ export function useProjectSaveHandler({
             pathTools.setFormFeedback({
               tone: "error",
               message: pathTools.resolvePathHelperErrorMessage(err, {
-                ko: "프로젝트 경로 확인에 실패했습니다.",
+                ko: ".",
                 en: "Failed to verify project path.",
                 ja: "プロジェクトパスの確認に失敗しました。",
                 zh: "项目路径校验失败。",
@@ -155,9 +155,7 @@ export function useProjectSaveHandler({
           pathTools.setFormFeedback({
             tone: "info",
             message: t({
-              ko: existingProjectName
-                ? `동일 경로가 이미 '${existingProjectName}' 프로젝트에 등록되어 있습니다. (${existingProjectPath || "path"})`
-                : "동일 경로가 이미 다른 프로젝트에 등록되어 있습니다.",
+              ko: "",
               en: existingProjectName
                 ? `This path is already registered by '${existingProjectName}'. (${existingProjectPath || "path"})`
                 : "This path is already registered by another project.",
@@ -192,7 +190,7 @@ export function useProjectSaveHandler({
         pathTools.setFormFeedback({
           tone: "error",
           message: pathTools.resolvePathHelperErrorMessage(err, {
-            ko: "프로젝트 저장에 실패했습니다. 입력값을 확인해주세요.",
+            ko: ".  .",
             en: "Failed to save project. Please check your inputs.",
             ja: "プロジェクト保存に失敗しました。入力値を確認してください。",
             zh: "项目保存失败，请检查输入值。",

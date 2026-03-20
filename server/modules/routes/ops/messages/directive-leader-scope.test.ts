@@ -35,7 +35,7 @@ function sorted(values: string[] | null): string[] | null {
 }
 
 describe("resolveDirectiveLeaderCandidateScope", () => {
-  it("활성 오피스팩(비 development)이 있으면 프로젝트 기본팩보다 우선한다", () => {
+  it("( development)", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO settings (key, value) VALUES (?, ?)").run("officeWorkflowPack", "video_preprod");
@@ -81,7 +81,7 @@ describe("resolveDirectiveLeaderCandidateScope", () => {
     }
   });
 
-  it("활성 오피스팩이 development면 프로젝트 기본팩 스코프를 사용한다", () => {
+  it("development", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO settings (key, value) VALUES (?, ?)").run("officeWorkflowPack", "development");
@@ -116,7 +116,7 @@ describe("resolveDirectiveLeaderCandidateScope", () => {
     }
   });
 
-  it("활성 오피스팩/프로젝트 스코프가 없으면 null을 반환한다", () => {
+  it("/   null", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO settings (key, value) VALUES (?, ?)").run("officeWorkflowPack", "development");

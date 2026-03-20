@@ -113,7 +113,7 @@ function createHarness(db: DatabaseSync) {
 }
 
 describe("ops settings seed init guard", () => {
-  it("서버 재시작 시 officePackProfiles가 있어도 seed agent를 대량 주입하지 않는다", () => {
+  it("officePackProfiles  seed agent", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO settings (key, value) VALUES (?, ?)").run(
@@ -147,7 +147,7 @@ describe("ops settings seed init guard", () => {
     }
   });
 
-  it("PUT /api/settings 로 officePackProfiles 저장해도 seed agent를 주입하지 않는다", () => {
+  it("PUT /api/settings  officePackProfiles  seed agent", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO agents (id, name) VALUES (?, ?)").run("dev-leader", "Dev Leader");
@@ -190,19 +190,19 @@ describe("ops settings seed init guard", () => {
     }
   });
 
-  it("GET /api/settings 시 활성 오피스팩 seed를 1회 hydrate한다", () => {
+  it("GET /api/settings    seed 1 hydrate", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO settings (key, value) VALUES (?, ?)").run(
         "officePackProfiles",
         JSON.stringify({
           video_preprod: {
-            departments: [{ id: "planning", name: "Planning", name_ko: "기획팀", icon: "🎬", color: "#f59e0b" }],
+            departments: [{ id: "planning", name: "Planning", name_ko: "", icon: "🎬", color: "#f59e0b" }],
             agents: [
               {
                 id: "video_preprod-seed-1",
                 name: "Rian",
-                name_ko: "리안",
+                name_ko: "",
                 department_id: "planning",
                 role: "team_leader",
                 cli_provider: "claude",
@@ -241,7 +241,7 @@ describe("ops settings seed init guard", () => {
     }
   });
 
-  it("officeWorkflowPack 첫 선택 시 해당 팩 seed를 1회 hydrate한다", () => {
+  it("officeWorkflowPack      seed 1 hydrate", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO agents (id, name) VALUES (?, ?)").run("dev-leader", "Dev Leader");
@@ -259,7 +259,7 @@ describe("ops settings seed init guard", () => {
                   {
                     id: "planning",
                     name: "Planning",
-                    name_ko: "기획팀",
+                    name_ko: "",
                     icon: "🎬",
                     color: "#f59e0b",
                   },
@@ -268,7 +268,7 @@ describe("ops settings seed init guard", () => {
                   {
                     id: "video_preprod-seed-1",
                     name: "Rian",
-                    name_ko: "리안",
+                    name_ko: "",
                     department_id: "planning",
                     role: "team_leader",
                     cli_provider: "claude",
@@ -301,7 +301,7 @@ describe("ops settings seed init guard", () => {
     }
   });
 
-  it("이미 hydrate된 팩은 재선택해도 재주입하지 않는다", () => {
+  it("hydrate", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO agents (id, name) VALUES (?, ?)").run("dev-leader", "Dev Leader");
@@ -309,12 +309,12 @@ describe("ops settings seed init guard", () => {
         "officePackProfiles",
         JSON.stringify({
           video_preprod: {
-            departments: [{ id: "planning", name: "Planning", name_ko: "기획팀", icon: "🎬", color: "#f59e0b" }],
+            departments: [{ id: "planning", name: "Planning", name_ko: "", icon: "🎬", color: "#f59e0b" }],
             agents: [
               {
                 id: "video_preprod-seed-1",
                 name: "Rian",
-                name_ko: "리안",
+                name_ko: "",
                 department_id: "planning",
                 role: "team_leader",
                 cli_provider: "claude",
@@ -351,7 +351,7 @@ describe("ops settings seed init guard", () => {
     }
   });
 
-  it("이미 hydrate된 팩은 officePackProfiles와 함께 저장해도 재주입하지 않는다", () => {
+  it("hydrate  officePackProfiles", () => {
     const db = setupDb();
     try {
       db.prepare("INSERT INTO agents (id, name) VALUES (?, ?)").run("dev-leader", "Dev Leader");
@@ -359,12 +359,12 @@ describe("ops settings seed init guard", () => {
         "officePackProfiles",
         JSON.stringify({
           video_preprod: {
-            departments: [{ id: "planning", name: "Planning", name_ko: "기획팀", icon: "🎬", color: "#f59e0b" }],
+            departments: [{ id: "planning", name: "Planning", name_ko: "", icon: "🎬", color: "#f59e0b" }],
             agents: [
               {
                 id: "video_preprod-seed-1",
                 name: "Rian",
-                name_ko: "리안",
+                name_ko: "",
                 department_id: "planning",
                 role: "team_leader",
                 cli_provider: "claude",
@@ -393,12 +393,12 @@ describe("ops settings seed init guard", () => {
             officeWorkflowPack: "video_preprod",
             officePackProfiles: {
               video_preprod: {
-                departments: [{ id: "planning", name: "Planning", name_ko: "기획팀", icon: "🎬", color: "#f59e0b" }],
+                departments: [{ id: "planning", name: "Planning", name_ko: "", icon: "🎬", color: "#f59e0b" }],
                 agents: [
                   {
                     id: "video_preprod-seed-1",
                     name: "Rian",
-                    name_ko: "리안",
+                    name_ko: "",
                     department_id: "planning",
                     role: "team_leader",
                     cli_provider: "gemini",
