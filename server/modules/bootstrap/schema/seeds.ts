@@ -227,42 +227,54 @@ export function applyDefaultSeeds(db: DbLike): void {
       console.warn("[Claw-Empire] Failed to recreate idx_departments_sort_order:", err);
     }
 
-    const insertAgentIfMissing = db.prepare(
-      `INSERT OR IGNORE INTO agents (id, name, name_ko, department_id, role, cli_provider, avatar_emoji, personality)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-    );
+    // One-time agent migration: only runs if not already marked as done
+    const agentMigV1Done = db
+      .prepare("SELECT 1 FROM settings WHERE key = 'agentsMigrationV1Done' LIMIT 1")
+      .get() as { 1: number } | undefined;
 
-    // Check which agents exist by name to avoid duplicates
-    const existingNames = new Set(
-      (db.prepare("SELECT name FROM agents").all() as { name: string }[]).map((r) => r.name),
-    );
+    if (!agentMigV1Done) {
+      const insertAgentIfMissing = db.prepare(
+        `INSERT OR IGNORE INTO agents (id, name, name_ko, department_id, role, cli_provider, avatar_emoji, personality)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      );
 
-    const newAgents: [string, string, string, string, string, string, string][] = [
-      // [name, name_ko, dept, role, provider, emoji, personality]
-      ["Luna", "루나", "design", "junior", "gemini", "🌙", "감성적인 UI 디자이너"],
-      ["Clio", "클리오", "planning", "senior", "claude", "📝", "데이터 기반 기획자"],
-      ["Turbo", "터보", "operations", "senior", "codex", "🚀", "자동화 전문가"],
-      ["Hawk", "호크", "qa", "team_leader", "claude", "🦅", "날카로운 품질 감시자"],
-      ["Lint", "린트", "qa", "senior", "opencode", "🔬", "꼼꼼한 테스트 전문가"],
-      ["Vault", "볼트S", "devsecops", "team_leader", "claude", "🛡️", "보안 아키텍트"],
-      ["Pipe", "파이프", "devsecops", "senior", "codex", "🔧", "CI/CD 파이프라인 전문가"],
-    ];
+      // Check which agents exist by name to avoid duplicates
+      const existingNames = new Set(
+        (db.prepare("SELECT name FROM agents").all() as { name: string }[]).map((r) => r.name),
+      );
 
-    let added = 0;
-    for (const [name, nameKo, dept, role, provider, emoji, personality] of newAgents) {
-      if (!existingNames.has(name)) {
-        if (!existingDeptIds.has(dept)) {
-          console.warn(`[Claw-Empire] Skip adding agent "${name}": missing department "${dept}"`);
-          continue;
-        }
-        try {
-          insertAgentIfMissing.run(randomUUID(), name, nameKo, dept, role, provider, emoji, personality);
-          added++;
-        } catch (err) {
-          console.warn(`[Claw-Empire] Skip adding agent "${name}":`, err);
+      const newAgents: [string, string, string, string, string, string, string][] = [
+        // [name, name_ko, dept, role, provider, emoji, personality]
+        ["Luna", "루나", "design", "junior", "gemini", "🌙", "감성적인 UI 디자이너"],
+        ["Clio", "클리오", "planning", "senior", "claude", "📝", "데이터 기반 기획자"],
+        ["Turbo", "터보", "operations", "senior", "codex", "🚀", "자동화 전문가"],
+        ["Hawk", "호크", "qa", "team_leader", "claude", "🦅", "날카로운 품질 감시자"],
+        ["Lint", "린트", "qa", "senior", "codex", "🔬", "꼼꼼한 테스트 전문가"],
+        ["Vault", "볼트S", "devsecops", "team_leader", "claude", "🛡️", "보안 아키텍트"],
+        ["Pipe", "파이프", "devsecops", "senior", "codex", "🔧", "CI/CD 파이프라인 전문가"],
+      ];
+
+      let added = 0;
+      for (const [name, nameKo, dept, role, provider, emoji, personality] of newAgents) {
+        if (!existingNames.has(name)) {
+          if (!existingDeptIds.has(dept)) {
+            console.warn(`[Claw-Empire] Skip adding agent "${name}": missing department "${dept}"`);
+            continue;
+          }
+          try {
+            insertAgentIfMissing.run(randomUUID(), name, nameKo, dept, role, provider, emoji, personality);
+            added++;
+          } catch (err) {
+            console.warn(`[Claw-Empire] Skip adding agent "${name}":`, err);
+          }
         }
       }
+      if (added > 0) console.log(`[Claw-Empire] Added ${added} new agents`);
+
+      // Mark migration as done so it never re-runs
+      db.prepare(
+        "INSERT INTO settings (key, value) VALUES ('agentsMigrationV1Done', 'true') ON CONFLICT(key) DO UPDATE SET value = 'true'",
+      ).run();
     }
-    if (added > 0) console.log(`[Claw-Empire] Added ${added} new agents`);
   }
 }
