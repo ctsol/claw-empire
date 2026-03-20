@@ -2,7 +2,7 @@ import type { Dispatch, MutableRefObject, SetStateAction } from "react";
 import type { Application, AnimatedSprite, Container, Graphics, Sprite, Text, Texture } from "pixi.js";
 import type { Agent, Department, SubAgent, Task } from "../../types";
 import type { ThemeMode } from "../../ThemeContext";
-import type { Delivery, RoomRect, SubCloneBurstParticle, WallClockVisual } from "./model";
+import type { AnimMode, Delivery, RoomRect, SubCloneBurstParticle, WallClockVisual } from "./model";
 import type { SupportedLocale } from "./themes-locale";
 
 export interface DataSnapshot {
@@ -85,5 +85,6 @@ export interface BuildOfficeSceneContext {
   breakBubblesRef: MutableRefObject<Container[]>;
   wallClocksRef: MutableRefObject<WallClockVisual[]>;
   wallClockSecondRef: MutableRefObject<number>;
+  animModeRef: MutableRefObject<AnimMode>;
   setSceneRevision: Dispatch<SetStateAction<number>>;
 }

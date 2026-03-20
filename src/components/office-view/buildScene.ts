@@ -52,6 +52,7 @@ export function buildOfficeScene(context: BuildOfficeSceneContext): void {
     breakBubblesRef,
     wallClocksRef,
     wallClockSecondRef,
+    animModeRef,
     setSceneRevision,
   } = context;
 
@@ -192,6 +193,7 @@ export function buildOfficeScene(context: BuildOfficeSceneContext): void {
     removedSubBurstsByParent,
     addedWorkingSubIds,
     nextSubSnapshot,
+    animMode: animModeRef.current,
   });
   subCloneSnapshotRef.current = nextSubSnapshot;
 

@@ -7,7 +7,9 @@ import {
   MAX_VISIBLE_SUB_CLONES_PER_AGENT,
   SUB_CLONE_FIREWORK_INTERVAL,
   TARGET_CHAR_H,
+  type AnimMode,
   type SubCloneBurstParticle,
+  ANIM_PROFILES,
   emitSubCloneFireworkBurst,
   emitSubCloneSmokeBurst,
 } from "./model";
@@ -33,6 +35,7 @@ interface RenderDeskAgentAndSubClonesParams {
   addedWorkingSubIds: Set<string>;
   nextSubSnapshot: Map<string, { parentAgentId: string; x: number; y: number }>;
   themeAccent: number;
+  animMode?: AnimMode;
 }
 
 export function renderDeskAgentAndSubClones({
@@ -54,7 +57,9 @@ export function renderDeskAgentAndSubClones({
   addedWorkingSubIds,
   nextSubSnapshot,
   themeAccent,
+  animMode = "game",
 }: RenderDeskAgentAndSubClonesParams): void {
+  const fireworkInterval = ANIM_PROFILES[animMode].subCloneFireworkInterval;
   const spriteNum = spriteMap.get(agent.id) ?? (hashStr(agent.id) % 13) + 1;
   const charContainer = new Container();
   charContainer.position.set(ax, charFeetY);
@@ -198,8 +203,8 @@ export function renderDeskAgentAndSubClones({
 
       nextSubSnapshot.set(sub.id, { parentAgentId: agent.id, x: sx, y: sy });
       if (addedWorkingSubIds.has(sub.id)) {
-        emitSubCloneSmokeBurst(room, subCloneBurstParticlesRef.current, sx, sy, "spawn");
-        emitSubCloneFireworkBurst(room, subCloneBurstParticlesRef.current, sx, sy - 24);
+        emitSubCloneSmokeBurst(room, subCloneBurstParticlesRef.current, sx, sy, "spawn", animMode);
+        emitSubCloneFireworkBurst(room, subCloneBurstParticlesRef.current, sx, sy - 24, animMode);
         addedWorkingSubIds.delete(sub.id);
       }
 
@@ -213,7 +218,7 @@ export function renderDeskAgentAndSubClones({
         baseX: sx,
         baseY: sy,
         phase: (hashStr(sub.id) % 360) / 57.2958 + index * 0.3,
-        fireworkOffset: Math.abs(hashStr(`${sub.id}:firework`)) % SUB_CLONE_FIREWORK_INTERVAL,
+        fireworkOffset: Math.abs(hashStr(`${sub.id}:firework`)) % fireworkInterval,
       });
     });
 
